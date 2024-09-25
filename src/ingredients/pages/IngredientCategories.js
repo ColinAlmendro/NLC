@@ -1,0 +1,16 @@
+export const categories = [
+					"Beef",
+					"Pork",
+					"Lamb",
+					"Poultry",
+					"Seafood",
+					"Vegetable",
+					"Dairy",
+					"Grain",
+					"Pasta",
+					"Herbs & Spice",
+					"Oil",
+					"Sauce",
+					"Canned",
+					"Other",
+				];

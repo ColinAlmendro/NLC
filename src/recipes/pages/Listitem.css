@@ -1,0 +1,65 @@
+fieldset {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-bottom: 12px;
+	width: 200px;
+}
+
+.section-row {
+	display: flex;
+	width: 100%;
+
+	div {
+		display: flex;
+		margin-bottom: 0.5rem;
+
+		&:first-child {
+			width: 50%;
+		}
+
+		&:last-child {
+			width: 50%;
+		}
+	}
+}
+
+.title-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+form {
+	width: 100%;
+}
+
+.submit-form {
+	display: flex;
+	margin: 24px 0 auto 0;
+}
+
+.error {
+	display: flex;
+	width: 100%;
+	margin-top: 0.25rem;
+	font-size: 0.875em;
+	color: #dc3545;
+}
+
+label {
+	display: flex;
+}
+
+.button-row {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
