@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DaysForm from "./DaysForm";
-import PageHeader from "../../components/PageHeader";
+import PageHeader from "../../../components/PageHeader";
 import PeopleOutlineTwoToneIcon from "@mui/icons-material/PeopleOutlineTwoTone";
 import {
 	Paper,
@@ -11,16 +11,16 @@ import {
 	InputAdornment,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import useTable from "../../components/useTable";
+import useTable from "../../../components/useTable";
 // import * as daysController from "../controllers/daysController";
-import Controls from "../../components/controls/Controls";
+import Controls from "../../../components/controls/Controls";
 // import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import Popup from "../../components/Popup";
+import Popup from "../../../components/Popup";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import CloseIcon from "@mui/icons-material/Close";
-import Notification from "../../components/Notification";
-import ConfirmDialog from "../../components/ConfirmDialog";
+import Notification from "../../../components/Notification";
+import ConfirmDialog from "../../../components/ConfirmDialog";
 
 const useStyles = makeStyles((theme) => ({
 	pageContent: {

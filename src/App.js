@@ -3,8 +3,9 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 
 //import Navbar from "./shared/components/NavigationX/MainNavigation.js";
 //import Navbar from "./shared/components/Navigation/Navbar/Header.jsx";
-import Navbar from "./shared/components/Navigation/Navbar/Navbar.jsx";
 //import Navbar from "./shared/components/Navigation/Navbar/Nav";
+import Navbar from "./shared/components/Navigation/Navbar/Navbar.jsx";
+
 import LoadingSpinner from "./shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
@@ -15,34 +16,43 @@ import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 //import { AppProvider } from "./shared/context/app-context";
 
 // import ContextProvider from "./shared/context/ContextProvider";
-import { Recipe } from "./recipes/recipeForms/Steps/Recipe.js";
-import { IngredientsList } from "./recipes/recipeForms/Steps/Ingredients.js";
-import { Instructions } from "./recipes/recipeForms/Steps/Instructions.js";
-import { Details } from "./recipes/recipeForms/Steps/Details.js";
-import { Confirm } from "./recipes/recipeForms/Steps/Confirm.js";
+// import { Recipe } from "./recipes/recipeForms/Steps/Recipe.js";
+// import { IngredientsList } from "./recipes/recipeForms/Steps/Ingredients.js";
+// import { Instructions } from "./recipes/recipeForms/Steps/Instructions.js";
+// import { Details } from "./recipes/recipeForms/Steps/Details.js";
+// import { Confirm } from "./recipes/recipeForms/Steps/Confirm.js";
 // import { Stepper } from "./recipes/recipeForms/Steps/Stepper";
 
 import "./App.css";
 
 const Home = React.lazy(() => import("./shared/home/pages/Home"));
 const Users = React.lazy(() => import("./user/pages/Users"));
-
 const AppSettings = React.lazy(() => import("./appSettings/AppSettings.jsx"));
+const IngredientManager = React.lazy(() =>
+	import("./ingredients/pages/ManageIngredients.jsx")
+);
+const RecipeManager = React.lazy(() => import("./recipes/pages/Recipes.js"));
+const CustomerManager = React.lazy(() =>
+	import("./customers/pages/Customers.js")
+);
+const OrderManager = React.lazy(() => import("./orders/pages/Orders.js"));
+const MenuManager = React.lazy(() => import("./menus/pages/Menu.js"));
+const PromotionManager = React.lazy(() =>
+	import("./promotions/pages/Promotions.js")
+);
+const About = React.lazy(() => import("./about/About.jsx"));
+const Auth = React.lazy(() => import("./user/pages/Auth"));
 
-const Ingredients = React.lazy(() => import("./ingredients/pages/Ingredients"));
-
+// const Ingredients = React.lazy(() => import("./ingredients/pages/Ingredients"));
+// const EditIngredient = React.lazy(() =>
+// 	import("./ingredients/pages/EditIngredient")
+// );
 // const NewIngredient = React.lazy(() =>
 // 	import("./ingredients/pages/NewIngredient")
 // );
 // const NewIngredient = React.lazy(() =>
 // 	import("./ingredients/pages/AddIngredient.jsx")
 // );
-const NewIngredient = React.lazy(() =>
-	import("./ingredients/pages/ManageIngredients.jsx")
-);
-const EditIngredient = React.lazy(() =>
-	import("./ingredients/pages/EditIngredient")
-);
 // const RecipeManager = React.lazy(() =>
 // 	import("./recipes/pages/ManageRecipes.jsx")
 // );
@@ -56,39 +66,23 @@ const EditIngredient = React.lazy(() =>
 // const RecipeManager = React.lazy(() =>
 // 	import("./recipes/recipeSteps/organisms/FormRegistration.jsx")
 // );
-
-const RecipeManager = React.lazy(() => import("./recipes/pages/Recipes.js"));
-const CustomerManager = React.lazy(() =>
-	import("./customers/pages/Customers.js")
-);
-const OrderManager = React.lazy(() => import("./orders/pages/Orders.js"));
-const RecipeForm = React.lazy(() => import("./recipes/manager/RecipeForm.jsx"));
+// const MUI = React.lazy(() =>
+// 	// import("./recipes/recipeSteps/organisms/FormRegistration.jsx")
+// 	import("./recipes/recipeSteps/organisms/FormRecipe.jsx")
+// );
+// const RecipeForm = React.lazy(() => import("./recipes/manager/RecipeForm.jsx"));
 // const RecipeManager = React.lazy(() =>
 // 	import("./recipes/pages/AddRecipe.jsx")
 // );
-const Recipes = React.lazy(() => import("./recipesX/pages/Recipes"));
+// const Recipes = React.lazy(() => import("./recipesX/pages/Recipes"));
 
-const NewRecipe = React.lazy(() => import("./recipesX/pages/NewRecipe"));
-const EditRecipe = React.lazy(() => import("./recipesX/pages/EditRecipe.js"));
-const MenuManager = React.lazy(() => import("./menus/pages/Menu.js"));
+// const NewRecipe = React.lazy(() => import("./recipesX/pages/NewRecipe"));
+// const EditRecipe = React.lazy(() => import("./recipesX/pages/EditRecipe.js"));
 
-const EmployeeManager = React.lazy(() =>
-	import("./employees/pages/Employees/Employees.js")
-);
-const Kyoto = React.lazy(() => import("./Kyoto/Menu.js"));
-
-const PromotionsManager = React.lazy(() =>
-	import("./promotions/pages/Promotions.js")
-);
-
-const About = React.lazy(() => import("./about/About.jsx"));
-
-const MUI = React.lazy(() =>
-	// import("./recipes/recipeSteps/organisms/FormRegistration.jsx")
-	import("./recipes/recipeSteps/organisms/FormRecipe.jsx")
-);
-
-const Auth = React.lazy(() => import("./user/pages/Auth"));
+// const EmployeeManager = React.lazy(() =>
+// 	import("./employees/pages/Employees/Employees.js")
+// );
+// const Kyoto = React.lazy(() => import("./Kyoto/Menu.js"));
 
 const theme = createTheme({
 	palette: {
@@ -167,30 +161,18 @@ const App = () => {
 			<Routes>
 				<Route path='/' element={<Home />} exact='true' />
 				<Route path='/users' element={<Users />} exact='true' />
-				{/* <Route
-					path='/kyoto'
-					element={<Kyoto />}
-					exact='true'
-				></Route> */}
-
-				<Route path='/about' element={<About />} exact='true'></Route>
+				<Route path='/about' element={<About />} exact='true' />
+				<Route path='/appsettings' element={<AppSettings />} exact='true' />
+				<Route path='/recipes' element={<RecipeManager />} exact='true' />
+				<Route path='/customers' element={<CustomerManager />} exact='true' />
+				<Route path='/orders' element={<OrderManager />} exact='true' />
+				<Route path='/menus' element={<MenuManager />} exact='true' />
+				<Route path='/promotions' element={<PromotionManager />} exact='true' />
 				<Route
-					path='/appsettings'
-					element={<AppSettings />}
+					path='/ingredients'
+					element={<IngredientManager />}
 					exact='true'
-				></Route>
-
-				<Route path='/recipes' element={<RecipeManager />} exact='true'></Route>
-				<Route
-					path='/customers'
-					element={<CustomerManager />}
-					exact='true'
-				></Route>
-				<Route
-					path='/orders'
-					element={<OrderManager />}
-					exact='true'
-				></Route>
+				/>
 
 				{/* <Route path='/recipes/manager' element={<RecipeManager />} exact='true'>
 					<Route
@@ -217,23 +199,18 @@ const App = () => {
 				/>
 				<Route path='/recipes/details' element={<Details ref={buttonRef} />} />
 				<Route path='/recipes/confirm' element={<Confirm />} /> */}
-				<Route path='/menus' element={<MenuManager />} exact='true' />
-				<Route
-					path='/promotions'
-					element={<PromotionsManager />}
-					exact='true'
-				/>
-				<Route
+
+				{/* <Route
 					path='/ingredients/list'
 					element={<Ingredients />}
 					exact='true'
-				/>
-				<Route
+				/> */}
+				{/* <Route
 					path='/ingredients/new'
 					element={<NewIngredient />}
 					exact='true'
-				/>
-				<Route
+				/> */}
+				{/* <Route
 					path='/ingredients/edit/:ingredientId'
 					element={<EditIngredient />}
 					exact={"true"}
@@ -244,11 +221,16 @@ const App = () => {
 					path='/recipes/edit/:recipeId'
 					element={<EditRecipe />}
 					exact={"true"}
-				/>
+				/> */}
 
-				<Route path='/mui/recipes' element={<RecipeManager />} exact='true' />
-				<Route path='/mui/tools' element={<MUI />} exact='true' />
-				<Route path='/employees' element={<EmployeeManager />} exact='true' />
+				{/* <Route path='/mui/recipes' element={<RecipeManager />} exact='true' /> */}
+				{/* <Route path='/mui/tools' element={<MUI />} exact='true' /> */}
+				{/* <Route path='/employees' element={<EmployeeManager />} exact='true' /> */}
+				{/* <Route
+					path='/kyoto'
+					element={<Kyoto />}
+					exact='true'
+				></Route> */}
 
 				<Route path='*' element={<Navigate to='/' replace />} />
 			</Routes>

@@ -178,7 +178,7 @@ function Navbar() {
 							>
 								Ingredients <i className='fas fa-caret-down'></i>
 							</NavLink>
-							{dropdownIngredients && <DropdownIngredients />}
+							{/* {dropdownIngredients && <DropdownIngredients />} */}
 						</li>
 					)}
 					{/* Customers */}

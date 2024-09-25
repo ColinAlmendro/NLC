@@ -14,7 +14,7 @@ import {
 	CardMedia,
 	IconButton,
 } from "@mui/material";
-// import IconButton from "@mui/material/IconButton";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import {
@@ -144,6 +144,14 @@ const [meal, setMeal] = useState({
 										{main_recipes.map((item) => (
 											<MenuItem key={item._id} value={item._id}>
 												{item.name}
+												{item.premium > 0 && (
+													
+														<StarOutlineIcon
+															style={{ color: "green" }}
+															sx={{ pb: 1, ml: 1 }}
+														/>
+													
+												)}
 											</MenuItem>
 										))}
 									</TextField>
@@ -209,10 +217,8 @@ const [meal, setMeal] = useState({
 									color='primary'
 									type='button'
 									onClick={() => {
-										
 										append({
 											...meal,
-										
 										}),
 											setMeal({
 												image: "",
@@ -255,7 +261,9 @@ const [meal, setMeal] = useState({
 								},
 								index
 							) => {
-								{/* console.log("List", fields[0]); */}
+								{
+									/* console.log("List", fields[0]); */
+								}
 								return (
 									<ListItem>
 										<Grid width='95%'>
@@ -312,7 +320,7 @@ const [meal, setMeal] = useState({
 																		sidename: "",
 																		sidedescription: "",
 																	}),
-																//	console.log("appendedmeal", meal),
+																	//	console.log("appendedmeal", meal),
 																	(document.getElementById(
 																		"dayMainDescInput"
 																	).value = ""),

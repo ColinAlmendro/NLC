@@ -312,14 +312,14 @@ function OrdersForm(props) {
 														return (
 															<TextField
 																select
-																value={defaultOrder.menu}
+																value={value}
 																onChange={(event) => {
-															onChange();
-															dispatchMenu({
-															type: "SET_SELECTED_MENU",
-															id: event.target.value,
-														});
-														}}
+																	onChange(event.target.value);
+																	dispatchMenu({
+																		type: "SET_SELECTED_MENU",
+																		id: event.target.value,
+																	});
+																}}
 																label='Menu'
 																name='menu'
 																size='small'
@@ -347,8 +347,10 @@ function OrdersForm(props) {
 														return (
 															<TextField
 																select
-																value={defaultOrder.customer}
-																onChange={onChange}
+																value={value}
+																onChange={(event) => {
+																	onChange(event.target.value);
+																}}
 																label='Customer'
 																name='customer'
 																size='small'
@@ -368,22 +370,18 @@ function OrdersForm(props) {
 									</Grid>
 									{/* <Divider sx={{ my: 6 }} /> */}
 									{/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&&&&&&&&&&&&&&&&              NEW ITEM INPUT */}
-								{ selected_menu[0] &&
-										
-											<Grid item xs={12} lg={12}>
-										
-										<OrderDay weekday='monday' />
-										<OrderDay weekday='tuesday' />
-										<OrderDay weekday='wednesday' />
-										<OrderDay weekday='thursday' />
-										<OrderDay weekday='friday' />
-									</Grid>
-										
-									}
-									
+									{selected_menu[0] && (
+										<Grid item xs={12} lg={12}>
+											<OrderDay weekday='monday' />
+											<OrderDay weekday='tuesday' />
+											<OrderDay weekday='wednesday' />
+											<OrderDay weekday='thursday' />
+											<OrderDay weekday='friday' />
+										</Grid>
+									)}
+
 									{/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */}
 								</Grid>
-								
 							</form>
 						</FormProvider>
 					</Box>

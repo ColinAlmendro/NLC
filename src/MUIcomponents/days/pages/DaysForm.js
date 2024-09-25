@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
-import Controls from "../../components/controls/Controls";
-import { useForm, Form } from "../../components/useForm";
+import Controls from "../../../components/controls/Controls";
+import { useForm, Form } from "../../../components/useForm";
 // import * as daysController from "../controllers/daysController";
-import Meal from "../../meal/pages/Meal";
+import Meal from "../../../meal/pages/Meal";
 
 const dayOptions = [
 	{ id: "monday", name: "Monday" },
@@ -20,7 +20,6 @@ const initialFValues = {
 	mainDescription: "",
 	side: "",
 	sideDescription: "",
-
 };
 
 export default function DaysForm(props) {
@@ -29,7 +28,7 @@ export default function DaysForm(props) {
 	const validate = (fieldValues = values) => {
 		let temp = { ...errors };
 		if ("day" in fieldValues)
-		 	temp.day = fieldValues.day ? "" : "Day is required.";
+			temp.day = fieldValues.day ? "" : "Day is required.";
 		// if ("email" in fieldValues)
 		// 	temp.email = /$^|.+@.+..+/.test(fieldValues.email)
 		// 		? ""
@@ -58,7 +57,7 @@ export default function DaysForm(props) {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log("submitday",values)
+		console.log("submitday", values);
 		if (validate()) {
 			addOrEdit(values, resetForm);
 		}
@@ -84,7 +83,7 @@ export default function DaysForm(props) {
 						error={errors.day}
 					/>
 					<Meal />
-			
+
 					<div>
 						<Controls.Button type='submit' text='Save' />
 						<Controls.Button text='Reset' color='primary' onClick={resetForm} />

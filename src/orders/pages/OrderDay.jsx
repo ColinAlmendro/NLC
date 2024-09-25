@@ -15,6 +15,7 @@ import {
 	IconButton,
 } from "@mui/material";
 // import IconButton from "@mui/material/IconButton";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import {
@@ -58,6 +59,7 @@ let menuOptions = [];
 switch (weekday) {
 	case "monday":
 		//fields = [...record.vegies];
+		console.log("selected_menu[0].monday", selected_menu[0].monday);
 		menuOptions = [...selected_menu[0].monday];
 		break;
 	case "tuesday":
@@ -87,15 +89,15 @@ console.log("CCCCC",weekday, menuOptions);
 		name: `${weekday}`,
 	});
 
-	// const [meal, setMeal] = useState({
-	// 	// id: 0,
-	// 	item: "",
-	// 	category: "",
-	// 	description: "",
-	// 	premium: "",
-	// 	qty: "",
-	// 	price: "",
-	// });
+	const [order, setOrder] = useState({
+		// id: 0,
+		item: "",
+		category: "",
+		description: "",
+		premium: "",
+		qty: "",
+		price: "",
+	});
 
 	// const dayMainChange = (e) => {
 	// 	let obj = main_recipes.find((o) => o._id === e.target.value);
@@ -174,19 +176,21 @@ console.log("CCCCC",weekday, menuOptions);
 														</Card>
 													</Grid>
 													<Grid item xs={6} lg={6}>
-														<Typography fontWeight='700'>
-															{main.name}
-														</Typography>
-														{menuOptions.indexOf("side" > -1) && (
+														<Stack direction='row'>
 															<Typography fontWeight='700'>
-																&nbsp; {`& ${sidedescription}`}
+																{main.name}
 															</Typography>
-														)}
-														{main.premium > 0 && (
-															<Typography fontWeight='700'>
-																&nbsp; {` *`}
-															</Typography>
-														)}
+															{menuOptions.indexOf("side" > -1) && (
+																<Typography fontWeight='700'>
+																	&nbsp; {`& ${sidedescription}`}
+																</Typography>
+															)}
+															{main.premium > 0 && (
+																<Typography fontWeight='700'>
+																	<StarOutlineIcon style={{color:"green"}} sx={{pb:1,ml:1}}/>
+																</Typography>
+															)}
+														</Stack>
 													</Grid>
 													<Grid item xs={3} lg={3}>
 														<Stack direction='row'>
