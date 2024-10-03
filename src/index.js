@@ -8,6 +8,7 @@ import PromotionsProvider from "./shared/context/PromotionsProvider";
 import RecipeProvider from "./shared/context/RecipeProvider";
 import CustomersProvider from "./shared/context/CustomersProvider";
 import OrdersProvider from "./shared/context/OrdersProvider";
+import CartContextProvider from "./shared/context/CartProvider";
 
 import "./index.css";
 
@@ -24,15 +25,17 @@ root.render(
 						<CustomersProvider>
 							<MenuProvider>
 								<OrdersProvider>
-									<App />
-								</OrdersProvider>
-							</MenuProvider>
-						</CustomersProvider>
-					</RecipeProvider>
-				</PromotionsProvider>
-			</AppProvider>
-		</SettingsProvider>
-	</>
-
+									<CartContextProvider>
+										<App />
+									</CartContextProvider>
+									</OrdersProvider>
+								</MenuProvider>
+							</CustomersProvider>
+						</RecipeProvider>
+					</PromotionsProvider>
+				</AppProvider>
+			</SettingsProvider>
+		</>
+		//{" "}
 	// </React.StrictMode>
 );

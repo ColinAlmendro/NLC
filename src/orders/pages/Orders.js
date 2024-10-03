@@ -30,6 +30,7 @@ import { AuthContext } from "../../shared/context/auth-context.js";
 import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
+
 // import "./OrderTable.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -342,7 +343,7 @@ export default function Order() {
 					<TblContainer>
 						<TblHead />
 						<TableBody>
-							{recordsAfterPagingAndSorting().map((item) => { 
+							{recordsAfterPagingAndSorting().map((item) => {
 								orderDate = new Date(item.date).toLocaleDateString();
 								menuDate = new Date(item.menu.date).toLocaleDateString();
 								return (
@@ -369,7 +370,7 @@ export default function Order() {
 															type: "SET_SELECTED_CUSTOMER",
 															id: item.customer.id,
 														});
-														setOpenPopup(true);
+													setOpenPopup(true);
 													// openInPopup(item);
 												}}
 											>
@@ -392,7 +393,8 @@ export default function Order() {
 											</Controls.ActionButton>
 										</TableCell>
 									</TableRow>
-								);})}
+								);
+							})}
 						</TableBody>
 					</TblContainer>
 					<TblPagination />
@@ -403,9 +405,7 @@ export default function Order() {
 				openPopup={openPopup}
 				setOpenPopup={setOpenPopup}
 			>
-				{/* <OrderForm /> */}
 				<OrdersForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
-				{/* <OrderForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
 			</Popup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog

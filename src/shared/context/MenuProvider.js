@@ -24,209 +24,209 @@ const initialState = {
 			// 	"Soups (500ml) – R50",
 			// ],
 			monday: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "curry",
-					maindescription: "monday 1 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidedescription: "monday side chow",
-					_id: "66bf9b79ebba9d60d8d3d786",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "spagetti",
-					maindescription: "monday 2 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidedescription: "monday side chow",
-					_id: "66bf9b79ebba9d60d8d3d787",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "curry",
+				// 	maindescription: "monday 1 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidedescription: "monday side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d786",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "spagetti",
+				// 	maindescription: "monday 2 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidedescription: "monday side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d787",
+				// },
 			],
 			tuesday: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "stirfry",
-					maindescription: "tuesday 1 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidename: "noodles",
-					sidedescription: "tuesday 1 side chow",
-					_id: "66bf9b79ebba9d60d8d3d788",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "lasagne",
-					maindescription: "tuesday 2 main chow",
-					side: "",
-					sidename: "",
-					_id: "66bf9b79ebba9d60d8d3d789",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "stirfry",
+				// 	maindescription: "tuesday 1 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidename: "noodles",
+				// 	sidedescription: "tuesday 1 side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d788",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "lasagne",
+				// 	maindescription: "tuesday 2 main chow",
+				// 	side: "",
+				// 	sidename: "",
+				// 	_id: "66bf9b79ebba9d60d8d3d789",
+				// },
 			],
 			wednesday: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "steak",
-					maindescription: "wednesday 1 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidename: "chips",
-					sidedescription: "wednesday 1 side chow",
-					_id: "66bf9b79ebba9d60d8d3d78a",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "spagetti",
-					maindescription: "wednesday 2 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidename: "noodles",
-					sidedescription: "wednesday 2 side chow",
-					_id: "66bf9b79ebba9d60d8d3d78b",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "steak",
+				// 	maindescription: "wednesday 1 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidename: "chips",
+				// 	sidedescription: "wednesday 1 side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d78a",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "spagetti",
+				// 	maindescription: "wednesday 2 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidename: "noodles",
+				// 	sidedescription: "wednesday 2 side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d78b",
+				// },
 			],
 			thursday: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "thursday 1 pasta",
-					maindescription: "thursday 1 main chow",
-					side: "",
-					sidename: "",
-					sidedescription: "",
-					_id: "66bf9b79ebba9d60d8d3d78c",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "moussaka",
-					maindescription: "thursday 2 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidename: "salad",
-					sidedescription: "thursday 2 side chow",
-					_id: "66bf9b79ebba9d60d8d3d78d",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "vegetarian",
-					maindescription: "thursday 3 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidename: "couscous",
-					sidedescription: "thursday 3 side chow",
-					_id: "66bf9b79ebba9d60d8d3d78e",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "thursday 1 pasta",
+				// 	maindescription: "thursday 1 main chow",
+				// 	side: "",
+				// 	sidename: "",
+				// 	sidedescription: "",
+				// 	_id: "66bf9b79ebba9d60d8d3d78c",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "moussaka",
+				// 	maindescription: "thursday 2 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidename: "salad",
+				// 	sidedescription: "thursday 2 side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d78d",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "vegetarian",
+				// 	maindescription: "thursday 3 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidename: "couscous",
+				// 	sidedescription: "thursday 3 side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d78e",
+				// },
 			],
 			friday: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "curry",
-					maindescription: "friday 1 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidename: "rice",
-					sidedescription: "friday 1 side chow",
-					_id: "66bf9b79ebba9d60d8d3d78f",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					main: "665ee0cfaf6b9d78b8a13d2e",
-					mainname: "fish",
-					maindescription: "friday 2 main chow",
-					side: "665ee0cfaf6b9d78b8a13d2e",
-					sidename: "mash",
-					sidedescription: "friday 2 side chow",
-					_id: "66bf9b79ebba9d60d8d3d790",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "curry",
+				// 	maindescription: "friday 1 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidename: "rice",
+				// 	sidedescription: "friday 1 side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d78f",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	main: "665ee0cfaf6b9d78b8a13d2e",
+				// 	mainname: "fish",
+				// 	maindescription: "friday 2 main chow",
+				// 	side: "665ee0cfaf6b9d78b8a13d2e",
+				// 	sidename: "mash",
+				// 	sidedescription: "friday 2 side chow",
+				// 	_id: "66bf9b79ebba9d60d8d3d790",
+				// },
 			],
 			vegies: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					veg: "665ee0cfaf6b9d78b8a13d2e",
-					vegname: "carrots",
-					vegdescription: "carrots",
-					_id: "66bf9b79ebba9d60d8d3d791",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					veg: "665ee0cfaf6b9d78b8a13d2e",
-					vegname: "broccoli",
-					vegdescription: "brocolli",
-					_id: "66bf9b79ebba9d60d8d3d792",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					veg: "665ee0cfaf6b9d78b8a13d2e",
-					vegname: "peas",
-					vegdescription: "peas",
-					_id: "66bf9b79ebba9d60d8d3d793",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	veg: "665ee0cfaf6b9d78b8a13d2e",
+				// 	vegname: "carrots",
+				// 	vegdescription: "carrots",
+				// 	_id: "66bf9b79ebba9d60d8d3d791",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	veg: "665ee0cfaf6b9d78b8a13d2e",
+				// 	vegname: "broccoli",
+				// 	vegdescription: "brocolli",
+				// 	_id: "66bf9b79ebba9d60d8d3d792",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	veg: "665ee0cfaf6b9d78b8a13d2e",
+				// 	vegname: "peas",
+				// 	vegdescription: "peas",
+				// 	_id: "66bf9b79ebba9d60d8d3d793",
+				// },
 			],
 			salads: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					salad: "665ee0cfaf6b9d78b8a13d2e",
-					saladname: "mixed salad",
-					saladdescription: "carrots",
-					_id: "66bf9b79ebba9d60d8d3d794",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					salad: "665ee0cfaf6b9d78b8a13d2e",
-					saladname: "greek",
-					_id: "66bf9b79ebba9d60d8d3d795",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					salad: "665ee0cfaf6b9d78b8a13d2e",
-					saladname: "tabbouleh",
-					saladdescription: "peas",
-					_id: "66bf9b79ebba9d60d8d3d796",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	salad: "665ee0cfaf6b9d78b8a13d2e",
+				// 	saladname: "mixed salad",
+				// 	saladdescription: "carrots",
+				// 	_id: "66bf9b79ebba9d60d8d3d794",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	salad: "665ee0cfaf6b9d78b8a13d2e",
+				// 	saladname: "greek",
+				// 	_id: "66bf9b79ebba9d60d8d3d795",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	salad: "665ee0cfaf6b9d78b8a13d2e",
+				// 	saladname: "tabbouleh",
+				// 	saladdescription: "peas",
+				// 	_id: "66bf9b79ebba9d60d8d3d796",
+				// },
 			],
 			soups: [
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					soup: "665ee0cfaf6b9d78b8a13d2e",
-					soupname: "chicken",
-					soupdescription: "chicken",
-					_id: "66bf9b79ebba9d60d8d3d797",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					soup: "665ee0cfaf6b9d78b8a13d2e",
-					soupname: "tomato",
-					soupdescription: "tomato",
-					_id: "66bf9b79ebba9d60d8d3d798",
-				},
-				{
-					image:
-						"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
-					soup: "665ee0cfaf6b9d78b8a13d2e",
-					soupname: "pea",
-					soupdescription: "pea",
-					_id: "66bf9b79ebba9d60d8d3d799",
-				},
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	soup: "665ee0cfaf6b9d78b8a13d2e",
+				// 	soupname: "chicken",
+				// 	soupdescription: "chicken",
+				// 	_id: "66bf9b79ebba9d60d8d3d797",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	soup: "665ee0cfaf6b9d78b8a13d2e",
+				// 	soupname: "tomato",
+				// 	soupdescription: "tomato",
+				// 	_id: "66bf9b79ebba9d60d8d3d798",
+				// },
+				// {
+				// 	image:
+				// 		"https://res.cloudinary.com/dhezas2ju/image/upload/v1722072960/jjnzje6s…",
+				// 	soup: "665ee0cfaf6b9d78b8a13d2e",
+				// 	soupname: "pea",
+				// 	soupdescription: "pea",
+				// 	_id: "66bf9b79ebba9d60d8d3d799",
+				// },
 			],
 			// note: "Bla bla bla",
 			_id: "66bf9b79ebba9d60d8d3d785",

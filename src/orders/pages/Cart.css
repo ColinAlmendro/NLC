@@ -1,0 +1,49 @@
+/* @import "../../utils.scss"; */
+
+.container {
+  display: flex;
+  gap: rem(30px);
+
+  .cart_icon {
+    position: relative;
+
+    button {
+      background: transparent;
+      border: none;
+      width: rem(40px);
+
+      /* img {
+        @include respimg;
+      } */
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .item_count {
+      position: absolute;
+      top: -15px;
+      right: -15px;
+      width: 30px;
+      height: 30px;
+      padding: 5px;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      background: #333;
+    }
+  }
+
+  .menu_icon {
+    width: rem(30px);
+
+    /* img {
+      @include respimg;
+    } */
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

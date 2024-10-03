@@ -1,0 +1,50 @@
+/* @import '../utils.scss'; */
+
+/* .cartBtn {
+    background: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    width: rem(22px);
+    height: rem(22px);
+    border: 1px solid #333;
+    font-size: rem(16px);
+
+    &.rem {
+        margin-right: rem(4px);
+    }
+
+    &.add {
+        margin-left: rem(4px);
+
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+} */
+ .cartBtnRem :hover {
+    cursor: pointer;
+    background: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    width: rem(22px);
+    height: rem(22px);
+    border: 1px solid #333;
+    font-size: rem(16px);
+     margin-right: rem(4px);
+}
+ .cartBtnAdd :hover {
+    cursor: pointer;
+    background: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    width: rem(22px);
+    height: rem(22px);
+    border: 1px solid #333;
+    font-size: rem(16px);
+     margin-left: rem(4px);
+}
+  
+.count {
+    font-size: rem(18px);
+}

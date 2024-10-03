@@ -5,7 +5,7 @@ import {
 	Stack,
 	TextField,
 	Button,
-	// MenuItem,
+	MenuItem,
 	List,
 	ListItem,
 	Grid,
@@ -27,7 +27,7 @@ import {
 } from "react-hook-form";
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import { DevTool } from "@hookform/devtools";
-import MenuItem from "./MenuItem";
+
 import "./Listitem.css";
 
 const OrderDay = ({ weekday }) => {
@@ -95,7 +95,7 @@ console.log("CCCCC",weekday, menuOptions);
 		category: "",
 		description: "",
 		premium: "",
-		count: "",
+		qty: "",
 		price: "",
 	});
 
@@ -159,13 +159,11 @@ console.log("CCCCC",weekday, menuOptions);
 						control={control}
 						render={({ fieldState: { error } }) => (
 							<List>
-								{menuOptions.map((item, i) => {
-                                    return <MenuItem data={item} id={i} key={i} />;
-
+								{menuOptions.map(({ image, main,side,sidedescription }, index) => {
 									{/* console.log("recordlists", menuOptions); */}
-									{/* return (
-										<ListItem key={index}> */}
-											{/* <Grid width='95%'>
+									return (
+										<ListItem key={index}>
+											<Grid width='95%'>
 												<Stack direction='row' width='100%'>
 													<Grid item xs={1} lg={1}>
 														<Card sx={{ width: 50, p: 0.5 }}>
@@ -232,9 +230,9 @@ console.log("CCCCC",weekday, menuOptions);
 														</Stack>
 													</Grid>
 												</Stack>
-											</Grid> */}
-										{/* </ListItem> */}
-									{/* ); */}
+											</Grid>
+										</ListItem>
+									);
 								})}
 							</List>
 						)}

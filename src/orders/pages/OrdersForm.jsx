@@ -34,6 +34,11 @@ import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useNavigate } from "react-router-dom";
+import Cart from "./Cart";
+import CartContext from "../../shared/context/cart-context";
+import CartList from "./CartList";
+import CartPopup from "./CartPopup.js";
+
 import {
 	FormProvider,
 	useFormContext,
@@ -56,6 +61,7 @@ function OrdersForm(props) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(false);
+	const [openCartPopup, setOpenCartPopup] = useState(false);
 	const {
 		menuState: { menus, selected_menu },
 		dispatchMenu,
@@ -83,6 +89,8 @@ function OrdersForm(props) {
 	const menuOptions = [...menus].sort((a, b) =>
 		new Date(a.date) < new Date(b.date) ? -1 : 1
 	);
+
+	//  let { items, isCartShowing } = useContext(CartContext);
 
 	let defaultOrder = {};
 	if (record) {
@@ -241,6 +249,9 @@ function OrdersForm(props) {
 	return (
 		<>
 			{/* // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555 */}
+
+			{/* {isCartShowing && items.length > 0 && <CartList />} */}
+
 			<Container sx={{ border: "none" }}>
 				<Paper>
 					{isLoading && <LoadingSpinner asOverlay />}
@@ -272,6 +283,10 @@ function OrdersForm(props) {
 											</Grid>
 											<Grid item xs={12} lg={2}>
 												<Stack direction='row'>
+													<Cart
+														openCartPopup={openCartPopup}
+														setOpenCartPopup={setOpenCartPopup}
+													/>
 													<Button
 														sx={{ gap: "1rem" }}
 														// width='100px'
@@ -390,6 +405,16 @@ function OrdersForm(props) {
 			</Container>
 			{/* </DialogContent>
 			</Dialog> */}
+			<CartPopup
+				title='Order Cart'
+				openCartPopup={openCartPopup}
+				setOpenCartPopup={setOpenCartPopup}
+			>
+				<CartList
+					openCartPopup={openCartPopup}
+					setOpenCartPopup={setOpenCartPopup}
+				/>
+			</CartPopup>
 		</>
 	);
 }
