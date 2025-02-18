@@ -3,98 +3,105 @@ import { AuthContext } from "../../../context/auth-context";
 import { useValue } from "../../../context/SettingsProvider";
 import { NavLink } from "react-router-dom";
 import Button from "../Button/Button";
-import DropdownMenus from "../Dropdown/DropdownMenus";
-import DropdownIngredients from "../Dropdown/DropdownIngredients";
-import DropdownRecipes from "../Dropdown/DropdownRecipes";
-import DropdownMUI from "../Dropdown/DropdownMUI";
+import DropdownAdmin from "../Dropdown/DropdownAdmin";
+import MenuIcon from "@mui/icons-material/Menu";
+import {
+	// Typography,
+	// Box,
+	// Divider,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
+	// Container,
+	// Paper,
+	// Stack,
+	// TextField,
+	// InputLabel,
+	// Button,
+	// MenuItem,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
+	// Grid,
+	// GridItem,
+	Card,
+	CardMedia,
+} from "@mui/material";
+// import DropdownMenus from "../Dropdown/DropdownMenus";
+// import DropdownIngredients from "../Dropdown/DropdownIngredients";
+// import DropdownRecipes from "../Dropdown/DropdownRecipes";
+// import DropdownMUI from "../Dropdown/DropdownMUI";
 import "./Navbar.css";
 
 function Navbar() {
 	const { state, dispatch } = useValue();
 	const auth = useContext(AuthContext);
-	// console.log("loggedin:",auth.isLoggedIn);
+	//console.log("loggedin:", auth);
 
 	// State click menu-icon
 	const [click, setClick] = useState(false);
 	// State dropdown
-	const [dropdownMenus, setDropdownMenus] = useState(false);
-	const [dropdownIngredients, setDropdownIngredients] = useState(false);
-	const [dropdownRecipes, setDropdownRecipes] = useState(false);
-	const [dropdownMui, setDropdownMui] = useState(false);
-	// const [dropdown, setDropdown] = useState(false);
+	const [dropdownAdmin, setDropdownAdmin] = useState(false);
+
 	// Toggle menu-icon
 	const handleClick = () => setClick(!click);
 	const closeMobileMenu = () => setClick(false);
 
-	const onMouseEnterMenus = () => {
+	const onMouseEnterAdmin = () => {
 		if (window.innerWidth < 800) {
-			setDropdownMenus(true);
+			setDropdownAdmin(true);
 		} else {
-			setDropdownMenus(true);
+			setDropdownAdmin(true);
 		}
 	};
-	const onMouseLeaveMenus = () => {
+	const onMouseLeaveAdmin = () => {
 		if (window.innerWidth < 800) {
-			setDropdownMenus(false);
+			setDropdownAdmin(false);
 		} else {
-			setDropdownMenus(false);
-		}
-	};
-
-	const onMouseEnterIngredients = () => {
-		if (window.innerWidth < 800) {
-			setDropdownIngredients(true);
-		} else {
-			setDropdownIngredients(true);
-		}
-	};
-	const onMouseLeaveIngredients = () => {
-		if (window.innerWidth < 800) {
-			setDropdownIngredients(false);
-		} else {
-			setDropdownIngredients(false);
-		}
-	};
-	const onMouseEnterRecipes = () => {
-		if (window.innerWidth < 800) {
-			setDropdownRecipes(true);
-		} else {
-			setDropdownRecipes(true);
-		}
-	};
-	const onMouseLeaveRecipes = () => {
-		if (window.innerWidth < 800) {
-			setDropdownRecipes(false);
-		} else {
-			setDropdownRecipes(false);
-		}
-	};
-	const onMouseEnterMui = () => {
-		if (window.innerWidth < 800) {
-			setDropdownMui(true);
-		} else {
-			setDropdownMui(true);
-		}
-	};
-	const onMouseLeaveMui = () => {
-		if (window.innerWidth < 800) {
-			setDropdownMui(false);
-		} else {
-			setDropdownMui(false);
+			setDropdownAdmin(false);
 		}
 	};
 
 	return (
 		<>
 			<nav className='navbar'>
+				{/* <Card sx={{ maxWidth: 100 }}>
+					<CardMedia component='img' image={state.app_logo} alt='Menu Logo' />
+				</Card> */}
 				<NavLink to='/' className='navbar-logo'>
 					{state.app_title}
 					{/* Next Level Cuisine */}
 				</NavLink>
+
 				<div className='menu-icon' onClick={handleClick}>
+					<MenuIcon />
 					<i className={click ? "fas fa-times" : "fas fa-bars"} />
 				</div>
+
 				<ul className={click ? "nav-menu active" : "nav-menu"}>
+					{/* Admin */}
+					{auth.isLoggedIn && auth.admin && (
+						<li
+							className='nav-item'
+							onMouseEnter={onMouseEnterAdmin}
+							onMouseLeave={onMouseLeaveAdmin}
+						>
+							<NavLink
+								to='/admin'
+								className='nav-links'
+								// onClick={closeMobileMenu}
+							>
+								Admin <i className='fas fa-caret-down'></i>
+							</NavLink>
+							{dropdownAdmin && (
+								<DropdownAdmin closeMobileMenu={closeMobileMenu} />
+							)}
+						</li>
+					)}
+
 					{/* Home */}
 					<li className='nav-item'>
 						<NavLink to='/' className='nav-links' onClick={closeMobileMenu}>
@@ -112,119 +119,7 @@ function Navbar() {
 						</NavLink>
 					</li>
 
-					{/* Menus */}
-					{auth.isLoggedIn && (
-						<li
-							className='nav-item'
-							onMouseEnter={onMouseEnterMenus}
-							onMouseLeave={onMouseLeaveMenus}
-						>
-							<NavLink
-								to='/menus'
-								className='nav-links'
-								onClick={closeMobileMenu}
-							>
-								Menus <i className='fas fa-caret-down'></i>
-							</NavLink>
-							<li className='nav-item'>
-								<NavLink
-									to='/promotions'
-									className='nav-links'
-									onClick={closeMobileMenu}
-								>
-									Promotions
-								</NavLink>
-							</li>
-							<li className='nav-item'>
-								<NavLink
-									to='/appsettings'
-									className='nav-links'
-									onClick={closeMobileMenu}
-								>
-									Settings
-								</NavLink>
-							</li>
-							{/* {dropdownMenus && <DropdownMenus />} */}
-						</li>
-					)}
-					{/* Recipes */}
-					{auth.isLoggedIn && (
-						<li
-							className='nav-item'
-							onMouseEnter={onMouseEnterRecipes}
-							onMouseLeave={onMouseLeaveRecipes}
-						>
-							<NavLink
-								to='/recipes'
-								className='nav-links'
-								onClick={closeMobileMenu}
-							>
-								Recipes <i className='fas fa-caret-down'></i>
-							</NavLink>
-							{/* {dropdownRecipes && <DropdownRecipes />} */}
-						</li>
-					)}
-					{/* Ingredients */}
-					{auth.isLoggedIn && (
-						<li
-							className='nav-item'
-							onMouseEnter={onMouseEnterIngredients}
-							onMouseLeave={onMouseLeaveIngredients}
-						>
-							<NavLink
-								to='/ingredients'
-								className='nav-links'
-								onClick={closeMobileMenu}
-							>
-								Ingredients <i className='fas fa-caret-down'></i>
-							</NavLink>
-							{/* {dropdownIngredients && <DropdownIngredients />} */}
-						</li>
-					)}
-					{/* Customers */}
-					{auth.isLoggedIn && (
-						<li
-							className='nav-item'
-							onMouseEnter={onMouseEnterMui}
-							onMouseLeave={onMouseLeaveMui}
-						>
-							<NavLink
-								to='/customers'
-								className='nav-links'
-								onClick={closeMobileMenu}
-							>
-								Customers <i className='fas fa-caret-down'></i>
-							</NavLink>
-
-						</li>
-					)}
-					{/* Orders */}
-					{auth.isLoggedIn && (
-						<li
-							className='nav-item'
-							onMouseEnter={onMouseEnterMui}
-							onMouseLeave={onMouseLeaveMui}
-						>
-							<NavLink
-								to='/orders'
-								className='nav-links'
-								onClick={closeMobileMenu}
-							>
-								Orders <i className='fas fa-caret-down'></i>
-							</NavLink>
-
-						</li>
-					)}
-					{/* Users */}
-					<li className='nav-item'>
-						<NavLink
-							to='/users'
-							className='nav-links'
-							onClick={closeMobileMenu}
-						>
-							Users
-						</NavLink>
-					</li>
+					{/* 55555555555555555555555555555555555555555555555555555555555     LOGIN   */}
 					{/* Login */}
 					{!auth.isLoggedIn && (
 						<li className='nav-item'>
@@ -242,15 +137,17 @@ function Navbar() {
 							<NavLink
 								to='/'
 								className='nav-links'
-								//onClick={closeMobileMenu}
-								onClick={auth.logout}
+								onClick={() => {
+									auth.logout();
+									closeMobileMenu();
+								}}
+
+								//onClick={auth.logout}
 							>
 								Logout
 							</NavLink>
-							{/* <Button onClick={auth.logout}>Logout</Button> */}
 						</li>
 					)}
-					{/* <Button /> */}
 				</ul>
 			</nav>
 		</>

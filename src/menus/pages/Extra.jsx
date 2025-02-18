@@ -63,6 +63,9 @@ const Extra = ({ extra }) => {
 		main: "",
 		mainname: "",
 		maindescription: "",
+		count:1,
+		cost:0,
+		price:0,
 	});
 
 	//console.log("extra", extra);
@@ -88,69 +91,27 @@ const Extra = ({ extra }) => {
 		default:
 			fields = [];
 	}
-	//console.log("extraFields", extraFields);
-
-	// const [meal, setMeal] = useState({
-	// 	image: "",
-	// 	main: "",
-	// 	mainname: "",
-	// 	maindescription: "",
-	// });
-
-	// const extraAppend = (meal) => {
-	// //	console.log("Extraappend", extra);
-
-	// 	switch (extra) {
-	// 		case "vegies":
-	// 			dispatch({ type: "UPDATE_VEGIES", meal })
-	// 			break;
-	// 		case "salads":
-	// 			dispatch({ type: "UPDATE_SALADS", meal })
-	// 			break;
-	// 		case "soups":
-	// 			dispatch({ type: "UPDATE_SOUPS", meal })
-	// 			break;
-	// 		default:
-	// 			console.log("Invalid extra")
-	// 	}
-	// };
-	// const extraRemove = (main) => {
-	// //	console.log("Extraremove",extra)
-	// 	switch (extra) {
-	// 		case "vegies":
-	// 			dispatch({ type: "DELETE_VEGIES", main });
-	// 			break;
-	// 		case "salads":
-	// 			dispatch({ type: "DELETE_SALADS", main });
-	// 			break;
-	// 		case "soups":
-	// 			dispatch({ type: "DELETE_SOUPS", main });
-	// 			break;
-	// 		default:
-	// 			console.log("Invalid extra");
-	// 	}
-	// };
 
 	const extraMainChange = (e) => {
-	//	console.log("E", e.target.value)
-		let obj = {}
+		//	console.log("E", e.target.value)
+		let obj = {};
 
-switch (extra) {
-	case "vegies":
-		obj = vegie_recipes.find((o) => o._id === e.target.value);
-		break;
-	case "salads":
-		obj = salad_recipes.find((o) => o._id === e.target.value);
-		break;
-	case "soups":
-		obj = soup_recipes.find((o) => o._id === e.target.value);
-		break;
-	case "sides":
-		obj = side_recipes.find((o) => o._id === e.target.value);
-		break;
-	default:
-		obj = {};
-}
+		switch (extra) {
+			case "vegies":
+				obj = vegie_recipes.find((o) => o._id === e.target.value);
+				break;
+			case "salads":
+				obj = salad_recipes.find((o) => o._id === e.target.value);
+				break;
+			case "soups":
+				obj = soup_recipes.find((o) => o._id === e.target.value);
+				break;
+			case "sides":
+				obj = side_recipes.find((o) => o._id === e.target.value);
+				break;
+			default:
+				obj = {};
+		}
 
 		let extraItems = {};
 		extraItems = {
@@ -158,6 +119,9 @@ switch (extra) {
 			main: e.target.value,
 			mainname: obj.name,
 			maindescription: obj.description,
+			count:1,
+			cost:obj.cost,
+			price:obj.price,
 		};
 		setMeal((meal) => ({
 			...meal,
@@ -165,11 +129,8 @@ switch (extra) {
 		}));
 
 		document.getElementById("extraMainDescInput").value = obj.description;
-	//	console.log("GETMealmain", meal);
+		//	console.log("GETMealmain", meal);
 	};
-
-
-	// const onSubmit = (data) => console.log(data);
 
 	return (
 		<Grid item xs={12} lg={12}>
@@ -184,47 +145,70 @@ switch (extra) {
 						}}
 					>
 						<Typography fontWeight='700' variant='h6'>
-							~ {extra.charAt(0).toUpperCase() + extra.slice(1)} ~
+							{extra.charAt(0).toUpperCase() + extra.slice(1)}
 						</Typography>
 					</Box>
 				</Grid>
 				<Grid item xs={12} lg={12}>
 					<Stack>
-						<Stack direction='row'>
+						<Stack direction='row' spacing={2}>
 							<Grid item xs={5} lg={5}>
 								<Stack>
-									<TextField
-										select
-										value={meal.main}
-										name='extramain'
-										label='Main meal'
-										size='small'
-										sx={{ width: "100%" }}
-										// error={!!error}
-										onChange={(event) => {
-											extraMainChange(event);
-										}}
-									>
-										{extraOptions.map((item) => (
-											<MenuItem key={item._id} value={item._id}>
-												{item.name}
-											</MenuItem>
-										))}
-									</TextField>
-									<TextField
-										id='extraMainDescInput'
-										defaultValue={meal.maindescription}
-										onChange={(e) => {
-											setMeal({
-												...meal,
-												maindescription: e.target.value,
-											});
-										}}
-										size='small'
-										fullWidth
-										minRows={3}
-										multiline
-									/>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											select
+											value={meal.main}
+											name='extramain'
+											label='Main meal'
+											size='small'
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+											// error={!!error}
+											onChange={(event) => {
+												extraMainChange(event);
+											}}
+										>
+											{extraOptions.map((item) => (
+												<MenuItem key={item._id} value={item._id}>
+													{item.name}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											id='extraMainDescInput'
+											defaultValue={meal.maindescription}
+											onChange={(e) => {
+												setMeal({
+													...meal,
+													maindescription: e.target.value,
+												});
+											}}
+											size='small'
+											fullWidth
+											minRows={3}
+											multiline
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+										/>
+									</Box>
 								</Stack>
 							</Grid>
 

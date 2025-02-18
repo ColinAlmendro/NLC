@@ -91,17 +91,8 @@ const Promotion = () => {
 			: []
 	);
 
-	// const handleAddPromotion = () => {
-	// 	setTogglePromotionInput(true);
-	// };
-	// const handleRemovePromotion = () => {
-	// 	setTogglePromotionInput(false);
-	// 	setSelectedPromotion([]);
-	// 	document.getElementById("promotionInput").value = "none";
-	// 	//setRecord({...record,promotion:""})
-	// };
 
-	// let itemArray = []
+
 	const handelPromotionChange = (value) => {
 		//	console.log("promovalue:", value.target.value);
 		if (value.target.value !== "none") {
@@ -118,17 +109,9 @@ const Promotion = () => {
 		<div>
 			<Grid>
 				<Grid item xs={12} lg={12}>
-					{/* {!togglePromotionInput ? (
-						<Grid item xs={12} lg={12}>
-							<Button onClick={handleAddPromotion}>Add Promotion</Button>
-						</Grid>
-					) : ( */}
+
 					<>
 						<Grid item xs={12} lg={12} mt={2}>
-							{/* <Stack direction='row'> */}
-							{/* <Button onClick={handleRemovePromotion}>
-										Remove Promotion
-									</Button> */}
 
 							<Controller
 								name={`promotion`}
@@ -138,31 +121,44 @@ const Promotion = () => {
 									field: { onChange, value },
 									fieldState: { error },
 								}) => (
-									<TextField
-										select
-										// {...field}
-										name={`promotion`}
-										id='promotionInput'
-										value={value}
-										//defaultValue="none"
-										label='Promotion'
-										//onChange={onChange}
-										onChange={(value) => {
-											onChange(value), handelPromotionChange(value);
-										}}
-										size='small'
-										sx={{ width: "75%" }}
-										error={!!error}
-										required
-									>
-										<MenuItem value='none'>None</MenuItem>
+									<Box bgcolor='primary.light' p={0} sx={{ width: "25%" }}>
+										<TextField
+											select
+											// {...field}
+											name={`promotion`}
+											id='promotionInput'
+											value={value}
+											//defaultValue="none"
+											label='Promotion'
+											//onChange={onChange}
+											onChange={(value) => {
+												console.log('promo',value)
+												onChange(value), handelPromotionChange(value);
+											}}
+											size='small'
+											//sx={{ width: "100%" }}
+											error={!!error}
+										//	required
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+										>
+											<MenuItem value='none'>None</MenuItem>
 
-										{promotionsList.map((item) => (
-											<MenuItem key={item._id} value={item._id}>
-												{item.promotion}
-											</MenuItem>
-										))}
-									</TextField>
+											{promotionsList.map((item) => (
+												<MenuItem key={item._id} value={item._id}>
+													{item.promotion}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
 								)}
 							/>
 							{/* </Stack> */}

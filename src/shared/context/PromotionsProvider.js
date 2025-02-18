@@ -17,6 +17,7 @@ const initialState = {
 		},
 	],
 	selected_promotion: {},
+	promo_recipes: [],
 };
 
 const Context = createContext(initialState);

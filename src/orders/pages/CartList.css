@@ -82,7 +82,7 @@ ul {
 } */
 .items_wrapper {
   max-height: 435px;
-  overflow: scroll;
+  /* overflow: scroll; */
   padding: 20px 20px 0;
 
   ul {

@@ -32,7 +32,7 @@ export default function CartPopup(props) {
 				classes={{ paper: classes.dialogWrapper }}
 				
 			>
-				<DialogTitle className={classes.dialogTitle}>
+				{/* <DialogTitle className={classes.dialogTitle}>
 					<div style={{ display: "flex" }}>
 						<Typography variant='h4' component='div' style={{ flexGrow: 1 }}>
 							{title}
@@ -46,7 +46,7 @@ export default function CartPopup(props) {
 							<CloseIcon />
 						</ActionButton>
 					</div>
-				</DialogTitle>
+				</DialogTitle> */}
 				<DialogContent dividers>{children}</DialogContent>
 			</Dialog>
 		);

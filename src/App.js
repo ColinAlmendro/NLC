@@ -4,6 +4,8 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 //import Navbar from "./shared/components/NavigationX/MainNavigation.js";
 //import Navbar from "./shared/components/Navigation/Navbar/Header.jsx";
 //import Navbar from "./shared/components/Navigation/Navbar/Nav";
+
+//import Navbar from "./shared/components/Navigation/Navbar/Navbarmenu";
 import Navbar from "./shared/components/Navigation/Navbar/Navbar.jsx";
 
 import LoadingSpinner from "./shared/components/UIElements/LoadingSpinner";
@@ -26,22 +28,33 @@ import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 import "./App.css";
 
 const Home = React.lazy(() => import("./shared/home/pages/Home"));
-const Users = React.lazy(() => import("./user/pages/Users"));
+const Users = React.lazy(() => import("./user/pages/old_Users.js"));
 const AppSettings = React.lazy(() => import("./appSettings/AppSettings.jsx"));
+// const IngredientManager = React.lazy(() =>
+// 	import("./ingredients/pages/ManageIngredients.jsx")
+// );
 const IngredientManager = React.lazy(() =>
-	import("./ingredients/pages/ManageIngredients.jsx")
+	import("./ingredients/pages/Ingredients.js")
 );
 const RecipeManager = React.lazy(() => import("./recipes/pages/Recipes.js"));
 const CustomerManager = React.lazy(() =>
 	import("./customers/pages/Customers.js")
 );
 const OrderManager = React.lazy(() => import("./orders/pages/Orders.js"));
+const OrdersPerDay = React.lazy(() => import("./orders/pages/OrdersPerDay.jsx"));
 const MenuManager = React.lazy(() => import("./menus/pages/Menu.js"));
 const PromotionManager = React.lazy(() =>
 	import("./promotions/pages/Promotions.js")
 );
 const About = React.lazy(() => import("./about/About.jsx"));
 const Auth = React.lazy(() => import("./user/pages/Auth"));
+
+import { Toaster } from "sonner";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
+import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import { toast } from "sonner";
 
 // const Ingredients = React.lazy(() => import("./ingredients/pages/Ingredients"));
 // const EditIngredient = React.lazy(() =>
@@ -124,11 +137,11 @@ const App = () => {
 	const auth = useContext(AuthContext);
 	const buttonRef = useRef();
 
-	const onStepChange = () => {
-		buttonRef.current?.click();
-	};
+	// const onStepChange = () => {
+	// 	buttonRef.current?.click();
+	// };
 
-	const { token, login, logout, userId } = useAuth();
+	const { token, admin, login, logout, userId } = useAuth();
 	/////////////////////////////
 	useEffect(() => {
 		async function fetchAppSettings() {
@@ -143,7 +156,7 @@ const App = () => {
 				}
 			);
 			const data = await response.json();
-			console.log("AppSettings list :", data.settings);
+			//	console.log("AppSettings list :", data.settings);
 
 			dispatch({ type: "UPDATE_APP_SETTINGS", data });
 		}
@@ -153,7 +166,7 @@ const App = () => {
 	////////////////////////////////
 
 	let routes;
-	// console.log(token);
+	//	 console.log("app auth",token, admin);
 	if (token) {
 		{
 		}
@@ -162,18 +175,30 @@ const App = () => {
 				<Route path='/' element={<Home />} exact='true' />
 				<Route path='/users' element={<Users />} exact='true' />
 				<Route path='/about' element={<About />} exact='true' />
-				<Route path='/appsettings' element={<AppSettings />} exact='true' />
-				<Route path='/recipes' element={<RecipeManager />} exact='true' />
-				<Route path='/customers' element={<CustomerManager />} exact='true' />
-				<Route path='/orders' element={<OrderManager />} exact='true' />
-				<Route path='/menus' element={<MenuManager />} exact='true' />
-				<Route path='/promotions' element={<PromotionManager />} exact='true' />
-				<Route
-					path='/ingredients'
-					element={<IngredientManager />}
-					exact='true'
-				/>
-
+				{admin && (
+					<>
+						<Route path='/appsettings' element={<AppSettings />} exact='true' />
+						<Route path='/recipes' element={<RecipeManager />} exact='true' />
+						<Route
+							path='/customers'
+							element={<CustomerManager />}
+							exact='true'
+						/>
+						<Route path='/orders' element={<OrderManager />} exact='true' />
+						<Route path='/daysorders' element={<OrdersPerDay />} exact='true' />
+						<Route path='/menus' element={<MenuManager />} exact='true' />
+						<Route
+							path='/promotions'
+							element={<PromotionManager />}
+							exact='true'
+						/>
+						<Route
+							path='/ingredients'
+							element={<IngredientManager />}
+							exact='true'
+						/>
+					</>
+				)}
 				{/* <Route path='/recipes/manager' element={<RecipeManager />} exact='true'>
 					<Route
 						//index
@@ -240,8 +265,10 @@ const App = () => {
 			<Routes>
 				{/* <Route path='/' element={<Users />} exact='true' /> */}
 				<Route path='/' element={<Home />} exact='true' />
+				<Route path='/about' element={<About />} exact='true' />
 				<Route path='/auth' element={<Auth />} exact='true' />
-				<Route path='*' element={<Navigate to='/auth' replace />} />
+				{/* <Route path='*' element={<Navigate to='/auth' replace />} /> */}
+				<Route path='*' element={<Navigate to='/' replace />} />
 			</Routes>
 		);
 	}
@@ -251,6 +278,7 @@ const App = () => {
 			value={{
 				isLoggedIn: !!token,
 				token: token,
+				admin: admin,
 				userId: userId,
 				login: login,
 				logout: logout,
@@ -258,12 +286,19 @@ const App = () => {
 		>
 			{" "}
 			<div className='App'>
-				{/* <ContextProvider value={{ state, dispatch }}> */}
-				{/* <MenuProvider> */}
+
 				<ThemeProvider theme={theme}>
 					<BrowserRouter>
 						<Navbar />
-
+						<Toaster
+							position='top-center'
+							icons={{
+								success: <CheckCircleRoundedIcon />,
+								info: <InfoRoundedIcon />,
+								warning: <WarningRoundedIcon />,
+								error: <ErrorRoundedIcon />,
+							}}
+						/>
 						<main>
 							<Suspense
 								fallback={
@@ -278,8 +313,7 @@ const App = () => {
 					</BrowserRouter>
 					<CssBaseline />
 				</ThemeProvider>
-				{/* </MenuProvider> */}
-				{/* </ContextProvider> */}
+
 			</div>
 		</AuthContext.Provider>
 	);

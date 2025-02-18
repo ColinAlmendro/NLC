@@ -81,41 +81,41 @@ const Example = () => {
 						}),
 				},
 			},
-			{
-				accessorKey: "unit",
-				header: "Unit",
-				muiEditTextFieldProps: {
-					// type: "unit",
-					required: true,
-					error: !!validationErrors?.unit,
-					helperText: validationErrors?.unit,
-					//remove any previous validation errors when user focuses on the input
-					onFocus: () =>
-						setValidationErrors({
-							...validationErrors,
-							unit: undefined,
-						}),
-				},
-			},
-			{
-				accessorKey: "volume",
-				header: "Volume",
-				muiEditTextFieldProps: {
-					// type: "volume",
-					required: true,
-					error: !!validationErrors?.volume,
-					helperText: validationErrors?.volume,
-					//remove any previous validation errors when user focuses on the input
-					onFocus: () =>
-						setValidationErrors({
-							...validationErrors,
-							volume: undefined,
-						}),
-				},
-			},
+			// {
+			// 	accessorKey: "unit",
+			// 	header: "Unit",
+			// 	muiEditTextFieldProps: {
+			// 		// type: "unit",
+			// 		required: true,
+			// 		error: !!validationErrors?.unit,
+			// 		helperText: validationErrors?.unit,
+			// 		//remove any previous validation errors when user focuses on the input
+			// 		onFocus: () =>
+			// 			setValidationErrors({
+			// 				...validationErrors,
+			// 				unit: undefined,
+			// 			}),
+			// 	},
+			// },
+			// {
+			// 	accessorKey: "volume",
+			// 	header: "Volume",
+			// 	muiEditTextFieldProps: {
+			// 		// type: "volume",
+			// 		required: true,
+			// 		error: !!validationErrors?.volume,
+			// 		helperText: validationErrors?.volume,
+			// 		//remove any previous validation errors when user focuses on the input
+			// 		onFocus: () =>
+			// 			setValidationErrors({
+			// 				...validationErrors,
+			// 				volume: undefined,
+			// 			}),
+			// 	},
+			// },
 			{
 				accessorKey: "price",
-				header: "Price",
+				header: "Unit Price",
 				muiEditTextFieldProps: {
 					required: true,
 					error: !!validationErrors?.price,
@@ -127,6 +127,7 @@ const Example = () => {
 							price: undefined,
 						}),
 				},
+				// style: { textAlign: "right" },
 			},
 		],
 		[validationErrors]
@@ -470,8 +471,8 @@ function validateIngredient(ingredient) {
 		description: !validateRequired(ingredient.description)
 			? "Description is Required"
 			: "",
-		unit: !validateRequired(ingredient.unit) ? "Description is Required" : "",
-		volume: !validateNumber(ingredient.volume) ? "Volume is Required" : "",
+		//unit: !validateRequired(ingredient.unit) ? "Description is Required" : "",
+		//volume: !validateNumber(ingredient.volume) ? "Volume is Required" : "",
 		price: !validateDecimal(ingredient.price) ? "Price is Required" : "",
 	};
 }

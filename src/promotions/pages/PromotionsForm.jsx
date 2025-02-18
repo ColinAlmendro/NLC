@@ -45,17 +45,30 @@ import { DevTool } from "@hookform/devtools";
 import "./Listitem.css";
 import { File } from "buffer";
 
+import { makeStyles } from "@mui/styles";
+import { toast } from "sonner";
+
+const useStyles = makeStyles({
+	label: {
+		color: "#212121",
+		"&.Mui-focused": {
+			color: "darkred",
+		},
+	},
+});
+
 const validationSchema = Yup.object()
 	.shape({})
 	.required();
 
 function PromotionsForm(props) {
+	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(false);
 	const {
-		promotionsState: { promotions, selected_promotion },
+		promotionsState: { promotions, selected_promotion, promo_recipes },
 		dispatch,
 	} = usePromotionsValue();
 
@@ -79,7 +92,7 @@ function PromotionsForm(props) {
 			items: [],
 		};
 	}
-	// console.log("defaultPromotion",defaultPromotion)
+	
 	const formProps = useForm({
 		defaultValues: defaultPromotion,
 		resolver: yupResolver(validationSchema),
@@ -116,20 +129,23 @@ function PromotionsForm(props) {
 
 	const [promoItem, setPromoItem] = useState({
 		image: "",
+		recipe: "",
 		name: "",
 		description: "",
 		volume: "",
+		count: 1,
 		price: "",
 	});
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 	const handelImageChange = (event) => {
 		let file = event.target.files[0];
-	//	console.log("handlechangefile:", file);
+		//	console.log("handlechangefile:", file);
 		if (file) {
 			let reader = new FileReader();
 			reader.onloadend = () => {
-				setPromoImage(reader.result), setPromoImagePreview(file),
-				uploadFile(file);
+				setPromoImage(reader.result),
+					setPromoImagePreview(file),
+					uploadFile(file);
 
 				setPromoItem({
 					...promoItem,
@@ -145,8 +161,20 @@ function PromotionsForm(props) {
 				});
 		}
 	};
+	const handelRecipeChange = (e) => {
+		// console.log("Recipes", promo_recipes)
+		const selected_recipe = promo_recipes.filter((recipe) => recipe._id === e.target.value);
+		// console.log("selected_recipe", selected_recipe[0]);
+		setPromoItem({
+			...promoItem,
+			recipe: e.target.value,
+			name: selected_recipe[0].name,
+			description:selected_recipe[0].description,
+			image:selected_recipe[0].image,
+		});
+		// console.log("setPromoItem", promoItem);
+	};
 
-	
 	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 	const uploadFile = async (file) => {
 		setIsLoading(true);
@@ -158,9 +186,9 @@ function PromotionsForm(props) {
 			imgFile.append("cloud_name", process.env.REACT_APP_CLOUDINARY_NAME);
 			imgFile.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
 
-			for (var [key, value] of imgFile.entries()) {
-				console.log("imgFile »", key, value);
-			}
+			// for (var [key, value] of imgFile.entries()) {
+			// 	console.log("imgFile »", key, value);
+			// }
 
 			const response = await fetch(
 				`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,
@@ -172,7 +200,7 @@ function PromotionsForm(props) {
 			const imgData = await response.json();
 
 			imageUrl = imgData.url.toString();
-			console.log("cloudinary url:", imageUrl);
+		//	console.log("cloudinary url:", imageUrl);
 			setPromoItem({
 				...promoItem,
 				image: imageUrl,
@@ -181,6 +209,12 @@ function PromotionsForm(props) {
 			return imageUrl;
 		} catch (error) {
 			console.log("cloudinary upload error:", error);
+			toast.error(err, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -189,11 +223,10 @@ function PromotionsForm(props) {
 		// e.preventDefault();
 		console.log("clicked", data);
 
-
 		if (record) {
 			try {
 				setIsLoading(true);
-				console.log("in edit submit");
+			//	console.log("in edit submit");
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/promotions/edit/${record._id}`,
 					{
@@ -212,16 +245,28 @@ function PromotionsForm(props) {
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
 					console.log("response error", dataEdit.message);
+					toast.error(dataEdit.message, {
+						style: {
+							background: "red",
+							color: "white",
+						},
+					});
 					return data;
 				}
-				console.log("UpDate", data);
+			//	console.log("UpDate", data);
 
 				setIsLoading(false);
 
 				setOpen(false);
 				setOpenPopup(false);
 				history("/promotions");
-				alert("Promotion updated");
+				// alert("Promotion updated");
+				toast.success("Promotion updated", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
 				return data.promotions;
 			} catch (err) {
 				console.log("Update err:", err);
@@ -229,35 +274,47 @@ function PromotionsForm(props) {
 			}
 		} else {
 			try {
-						setIsLoading(true);
-						console.log("in new submit");
+				setIsLoading(true);
+				//console.log("in new submit");
 
-						const responseNew = await fetch(
-							process.env.REACT_APP_BACKEND_URL + "/promotions/new",
-							{
-								method: "POST",
-								headers: {
-									"Content-Type": "application/json",
-									Authorization: "Bearer " + auth.token,
-								},
-							
-								body: JSON.stringify({
-									promotion: data.promotion,
-									items: data.items,
-								}),
-							}
-						);
-						const dataNew = await responseNew.json();
-						console.log("ret data", dataNew);
+				const responseNew = await fetch(
+					process.env.REACT_APP_BACKEND_URL + "/promotions/new",
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + auth.token,
+						},
 
-						setIsLoading(false);
-						history("/promotions");
-						alert("New promotion added");
-						setOpen(false);
-						setOpenPopup(false);
-						return dataNew;
-					} catch (err) {
+						body: JSON.stringify({
+							promotion: data.promotion,
+							items: data.items,
+						}),
+					}
+				);
+				const dataNew = await responseNew.json();
+				console.log("ret data", dataNew);
+
+				setIsLoading(false);
+				history("/promotions");
+				// alert("New promotion added");
+				toast.success("New promotion added", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
+				setOpen(false);
+				setOpenPopup(false);
+				return dataNew;
+			} catch (err) {
 				console.log("SubmitNew err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -274,20 +331,6 @@ function PromotionsForm(props) {
 
 	return (
 		<>
-			{/* <Dialog
-				open={open}
-				onClose={() => {
-					setOpen(false), setOpenPopup(false);
-				}}
-				aria-labelledby='dialog-title'
-				aria-describedby='dialog-description'
-				fullWidth
-				maxWidth='lg'
-			>
-				<DialogContent>
-					<DialogActions></DialogActions> */}
-
-			{/* // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555 */}
 			<Container sx={{ border: "none" }}>
 				<Paper>
 					{isLoading && <LoadingSpinner asOverlay />}
@@ -358,18 +401,34 @@ function PromotionsForm(props) {
 														fieldState: { error },
 													}) => {
 														return (
-															<TextField
-																type='text'
-																onChange={onChange}
-																value={value}
-																//	defaultValue={value ? value : ""}
-																label='Promotion Name'
-																size='small'
-																// helperText={`${error?.message ? error?.message : ""}`}
-																// error={!!error}
-																fullWidth
-																required
-															/>
+															<>
+																<InputLabel
+																	sx={{ textAlign: "left" }}
+																	className={classes.label}
+																>
+																	Promotion Name
+																</InputLabel>
+																<Box bgcolor='primary.light' p={0}>
+																	<TextField
+																		type='text'
+																		onChange={onChange}
+																		value={value}
+																		size='small'
+																		// helperText={`${error?.message ? error?.message : ""}`}
+																		// error={!!error}
+																		fullWidth
+																		sx={{
+																			"& fieldset": { border: "none" },
+																			"& .MuiInputBase-root": {
+																				"& input": {
+																					textAlign: "left",
+																				},
+																			},
+																			border: "1px solid",
+																		}}
+																	/>
+																</Box>
+															</>
 														);
 													}}
 												/>
@@ -383,7 +442,29 @@ function PromotionsForm(props) {
 									<Grid item xs={12} lg={12}>
 										<Stack direction='row'>
 											<Grid item xs={12} lg={2}>
-												<Stack>
+												<Box
+													sx={{
+														"& fieldset": { border: "none" },
+														"& .MuiInputBase-root": {
+															"& input": {
+																textAlign: "left",
+															},
+														},
+														border: "none",
+														width: "100px",
+													}}
+												>
+												{promoItem.image && (
+													<Card sx={{ maxWidth: 150 }}>
+														<CardMedia
+															component='img'
+															image={promoItem.image}
+															alt='Image'
+														/>
+													</Card>
+												)}
+												</Box>
+												{/* <Stack>
 													<Grid item xs={12} lg={12}>
 														{promoImage && (
 															<Box
@@ -421,84 +502,200 @@ function PromotionsForm(props) {
 																			textAlign: "left",
 																		},
 																	},
-																	border: "none",
+																	border: "1px solid",
 																}}
 																onChange={(event) => {
 																	handelImageChange(event);
-																	//	toggleAddItemButton();
 																}}
 																type='file'
 															/>
 														</div>
 													</Grid>
-												</Stack>
+												</Stack> */}
 											</Grid>
 											<Grid item xs={12} lg={8}>
 												<Stack>
-													<TextField
-														name='name'
-														control={control}
-														label='Name'
-														value={promoItem.name}
-														onChange={(e) => {
-															setPromoItem({
-																...promoItem,
-																name: e.target.value,
-															});
-															//toggleAddItemButton();
-														}}
-														size='small'
-														fullWidth
-													/>
-													<TextField
-														name='description'
-														control={control}
-														label='Description'
-														value={promoItem.description}
-														onChange={(e) => {
-															setPromoItem({
-																...promoItem,
-																description: e.target.value,
-															});
-															//toggleAddItemButton();
-														}}
-														size='small'
-														fullWidth
-														minRows={3}
-														multiline
-													/>
-													<Stack direction='row'>
-														<TextField
-															name='volume'
-															control={control}
-															label='Volume'
-															value={promoItem.volume}
-															onChange={(e) => {
-																setPromoItem({
-																	...promoItem,
-																	volume: e.target.value,
-																});
-																//toggleAddItemButton();
-															}}
-															size='small'
-															fullWidth
-														/>
-														<TextField
-															name='price'
-															control={control}
-															label='Price'
-															value={promoItem.price}
-															onChange={(e) => {
-																setPromoItem({
-																	...promoItem,
-																	price: e.target.value,
-																});
-																//toggleAddItemButton();
-															}}
-															size='small'
-															fullWidth
-														/>
-													</Stack>
+													<>
+														<InputLabel
+															sx={{ textAlign: "left" }}
+															className={classes.label}
+														>
+															Recipe
+														</InputLabel>
+														{/* <Box bgcolor='primary.light' p={0}>
+															<TextField
+																name='name'
+																control={control}
+																//	label='Name'
+																value={promoItem.name}
+																onChange={(e) => {
+																	setPromoItem({
+																		...promoItem,
+																		name: e.target.value,
+																	});
+																	//toggleAddItemButton();
+																}}
+																size='small'
+																fullWidth
+																sx={{
+																	"& fieldset": { border: "none" },
+																	"& .MuiInputBase-root": {
+																		"& input": {
+																			textAlign: "left",
+																		},
+																	},
+																	border: "1px solid",
+																}}
+															/>
+														</Box> */}
+														<Box bgcolor='primary.light' p={0}>
+															<TextField
+																select
+																value={promoItem.recipe}
+																name='name'
+																size='small'
+																sx={{
+																	"& fieldset": { border: "none" },
+																	"& .MuiInputBase-root": {
+																		"& input": {
+																			textAlign: "left",
+																		},
+																	},
+																	width: "100%",
+																	border: "1px solid",
+																}}
+																// error={!!error}
+																onChange={(event) => {
+																	handelRecipeChange(event);
+																}}
+																// onChange={(e, index) => {
+																// 	console.log("e.target", e.target);
+																// 	setPromoItem({
+																// 		...promoItem,
+																// 		recipe: e.target.value,
+																// 		name:
+																// 			e.target.options[
+																// 				e.target.selectedIndex
+																// 			].text,
+																// 	});
+																// 	console.log("PP", promoItem);
+																// }}
+															>
+																{promo_recipes.map((item) => (
+																	<MenuItem key={item._id} value={item._id}>
+																		{item.name}
+																		{item.premium > 0 && (
+																			<StarOutlineIcon
+																				style={{ color: "green" }}
+																				sx={{ pb: 1, ml: 1 }}
+																			/>
+																		)}
+																	</MenuItem>
+																))}
+															</TextField>
+														</Box>
+
+														<InputLabel
+															sx={{ textAlign: "left" }}
+															className={classes.label}
+														>
+															Description
+														</InputLabel>
+														<Box bgcolor='primary.light' p={0}>
+															<TextField
+																name='description'
+																control={control}
+																value={promoItem.description}
+																onChange={(e) => {
+																	setPromoItem({
+																		...promoItem,
+																		description: e.target.value,
+																	});
+																}}
+																size='small'
+																fullWidth
+																minRows={3}
+																multiline
+																sx={{
+																	"& fieldset": { border: "none" },
+																	"& .MuiInputBase-root": {
+																		"& input": {
+																			textAlign: "left",
+																		},
+																	},
+																	border: "1px solid",
+																}}
+															/>
+														</Box>
+														<Stack direction='row' spacing={4}>
+															<Stack>
+																<InputLabel
+																	sx={{ textAlign: "left" }}
+																	className={classes.label}
+																>
+																	Volume
+																</InputLabel>
+																<Box bgcolor='primary.light' p={0}>
+																	<TextField
+																		name='volume'
+																		control={control}
+																		value={promoItem.volume}
+																		onChange={(e) => {
+																			setPromoItem({
+																				...promoItem,
+																				volume: e.target.value,
+																			});
+																		}}
+																		size='small'
+																		fullWidth
+																		sx={{
+																			"& fieldset": { border: "none" },
+																			"& .MuiInputBase-root": {
+																				"& input": {
+																					textAlign: "left",
+																				},
+																			},
+																			border: "1px solid",
+																		}}
+																	/>
+																</Box>
+															</Stack>
+															<Stack>
+																<InputLabel
+																	sx={{ textAlign: "left" }}
+																	className={classes.label}
+																>
+																	Price
+																</InputLabel>
+																<Box bgcolor='primary.light' p={0}>
+																	<TextField
+																		name='price'
+																		control={control}
+																		//label='Price'
+																		value={promoItem.price}
+																		onChange={(e) => {
+																			setPromoItem({
+																				...promoItem,
+																				price: e.target.value,
+																			});
+																		}}
+																		size='small'
+																		fullWidth
+																		sx={{
+																			"& fieldset": { border: "none" },
+																			"& .MuiInputBase-root": {
+																				"& input": {
+																					textAlign: "left",
+																				},
+																			},
+
+																			border: "1px solid",
+																		}}
+																	/>
+																</Box>
+															</Stack>
+														</Stack>
+													</>
 												</Stack>
 											</Grid>
 
@@ -525,9 +722,11 @@ function PromotionsForm(props) {
 																setPromoImage(null),
 																setPromoItem({
 																	image: "",
+																	recipe: "",
 																	name: "",
 																	description: "",
 																	volume: "",
+																	count: 1,
 																	price: "",
 																});
 															//	setAddItemDisabled(true),
@@ -552,7 +751,12 @@ function PromotionsForm(props) {
 										<Divider sx={{ my: 2 }} />
 
 										<Grid item xs={12} lg={12}>
-											<InputLabel>Promotion Items</InputLabel>
+											<InputLabel
+												sx={{ textAlign: "left" }}
+												className={classes.label}
+											>
+												Promotion Items
+											</InputLabel>
 										</Grid>
 
 										<Box border='1px solid'>
@@ -567,7 +771,7 @@ function PromotionsForm(props) {
 																index
 															) => {
 																{
-																	/* console.log("List", extraFields); */
+																	console.log("List", fields);
 																}
 																return (
 																	<ListItem key={index}>
@@ -593,7 +797,7 @@ function PromotionsForm(props) {
 																							</Grid>
 																							<Grid item xs={1} lg={1}>
 																								<Typography fontWeight='300'>
-																									{`R ${price}`}
+																									{`R${price}`}
 																								</Typography>
 																							</Grid>
 																						</Stack>
@@ -626,6 +830,7 @@ function PromotionsForm(props) {
 																										name: "",
 																										description: "",
 																										volume: "",
+																										count: 1,
 																										price: "",
 																									});
 																							}}
@@ -653,8 +858,6 @@ function PromotionsForm(props) {
 					{control && <DevTool control={control} />}
 				</Paper>
 			</Container>
-			{/* </DialogContent>
-			</Dialog> */}
 		</>
 	);
 }

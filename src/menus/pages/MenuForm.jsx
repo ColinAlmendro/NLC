@@ -28,6 +28,7 @@ import {
 
 import Intro from "./Intro.jsx";
 import Day from "./Day.jsx";
+import Frozen from "./Frozen.jsx";
 import Extra from "./Extra.jsx";
 // import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner.js";
 
@@ -45,14 +46,26 @@ import {
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
-
+import "./Menu.css";
 import "./Listitem.css";
+import { makeStyles } from "@mui/styles";
+import { toast } from "sonner";
+
+const useStyles = makeStyles({
+	label: {
+		color: "#212121",
+		"&.Mui-focused": {
+			color: "darkred",
+		},
+	},
+});
 
 const validationSchema = Yup.object()
 	.shape({})
 	.required();
 
 function MenuForm(props) {
+	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const history = useNavigate();
@@ -60,13 +73,14 @@ function MenuForm(props) {
 	const {
 		menuState: {
 			menus,
-			prices,
+			// prices,
 			selected_menu,
 			main_recipes,
 			side_recipes,
 			vegie_recipes,
 			salad_recipes,
 			soup_recipes,
+			frozen_recipes,
 			week,
 			period,
 			introduction,
@@ -76,8 +90,11 @@ function MenuForm(props) {
 	} = useMenuValue();
 
 	const { state } = useValue(); //app state
+	console.log("state", state);
 	const [record, setRecord] = useState(selected_menu[0]);
 	const [open, setOpen] = useState(false);
+	const [prices, setPrices] = useState(state.price_list);
+	console.log("stateprices", state);
 
 	let defaultMenu = {};
 	if (record) {
@@ -103,6 +120,7 @@ function MenuForm(props) {
 			wednesday: [],
 			thursday: [],
 			friday: [],
+			frozen: [],
 			vegies: [],
 			salads: [],
 			soups: [],
@@ -164,6 +182,7 @@ function MenuForm(props) {
 							wednesday: data.wednesday,
 							thursday: data.thursday,
 							friday: data.friday,
+							frozen: data.frozen,
 							vegies: data.vegies,
 							salads: data.salads,
 							soups: data.soups,
@@ -174,6 +193,12 @@ function MenuForm(props) {
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
 					console.log("response error", dataEdit.message);
+					toast.error(dataEdit.message, {
+						style: {
+							background: "red",
+							color: "white",
+						},
+					});
 					return data;
 				}
 				console.log("UpDate", data);
@@ -183,10 +208,22 @@ function MenuForm(props) {
 				setOpen(false);
 				setOpenPopup(false);
 				history("/menus");
-				alert("Menu updated");
+				//alert("Menu updated");
+				toast.success("Menu updated", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
 				return data.menus;
 			} catch (err) {
 				console.log("Update err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		} else {
@@ -211,6 +248,7 @@ function MenuForm(props) {
 							wednesday: data.wednesday,
 							thursday: data.thursday,
 							friday: data.friday,
+							frozen: data.frozen,
 							vegies: data.vegies,
 							salads: data.salads,
 							soups: data.soups,
@@ -223,16 +261,27 @@ function MenuForm(props) {
 
 				setIsLoading(false);
 				history("/menus");
-				alert("New menu added");
+				//alert("New menu added");
+				toast.success("New menu added", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
 				setOpen(false);
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
 				console.log("SubmitNew err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
-
 	};
 	if (isLoading) {
 		return (
@@ -244,23 +293,9 @@ function MenuForm(props) {
 
 	return (
 		<>
-			{/* <Dialog
-				open={open}
-				onClose={() => {
-					setOpen(false), setOpenPopup(false);
-				}}
-				aria-labelledby='dialog-title'
-				aria-describedby='dialog-description'
-				fullWidth
-				maxWidth='lg'
-			>
-				<DialogContent>
-					<DialogActions></DialogActions> */}
-
-			{/* // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555 */}
-			<Container sx={{ border: "none" }}>
+			<Container sx={{ border: "none" }} id='container'>
 				<Paper>
-					{isLoading && <LoadingSpinner asOverlay />}
+					{/* {isLoading && <LoadingSpinner asOverlay />} */}
 
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
@@ -298,6 +333,7 @@ function MenuForm(props) {
 											</Button>
 										</Stack>
 									</Grid>
+									{/* &&&&&&&&&&&&&&&&&&&&&&&&&&&7     INTRO */}
 									<Intro />
 
 									{/* ************************************************      PRICELIST */}
@@ -307,7 +343,7 @@ function MenuForm(props) {
 												<ListItem key={i}>
 													<Typography>
 														<Box sx={{ fontWeight: "bold", height: "25%" }}>
-															{price.item}
+															{price.value}
 														</Box>
 													</Typography>
 												</ListItem>
@@ -326,6 +362,8 @@ function MenuForm(props) {
 									<Extra extra='salads' />
 									<Extra extra='soups' />
 									<Extra extra='sides' />
+
+									<Frozen weekday='frozen' />
 								</Grid>
 							</form>
 						</FormProvider>
@@ -333,8 +371,6 @@ function MenuForm(props) {
 					{control && <DevTool control={control} />}
 				</Paper>
 			</Container>
-			{/* </DialogContent>
-			</Dialog> */}
 		</>
 	);
 }

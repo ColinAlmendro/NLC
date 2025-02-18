@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import MenuForm from "./MenuForm.jsx";
+import ViewMenu from "./ViewMenu.jsx";
 
 import {
 	Container,
@@ -23,6 +24,8 @@ import Controls from "../../components/controls/Controls";
 import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup";
+import ViewPopup from "./ViewPopup.js";
+import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import Notification from "../../components/Notification";
@@ -35,7 +38,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useLocation } from "react-router";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
-// import "./MenuTable.css";
+import "./MenuTable.css";
+import "./Menu.css";
+import { toast } from "sonner";
 
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
@@ -74,7 +79,7 @@ const monthName = (monthIndex) => {
 const headCells = [
 	//{ id: "id", label: "Id" },
 	{ id: "date", label: "Date" },
-	{ id: "period", label: "Period" },
+	{ id: "period", label: "Period", disableSorting: true },
 	{ id: "actions", label: "Actions", disableSorting: true },
 ];
 
@@ -101,6 +106,7 @@ export default function Menu() {
 		},
 	});
 	const [openPopup, setOpenPopup] = useState(false);
+	const [openViewPopup, setOpenViewPopup] = useState(false);
 	const [notify, setNotify] = useState({
 		isOpen: false,
 		message: "",
@@ -133,6 +139,12 @@ export default function Menu() {
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -154,16 +166,24 @@ export default function Menu() {
 					}
 				);
 				const data = await response.json();
+				console.log("Recipes list :", data.recipes);
 				if (data.recipes.length > 0) {
 					dispatchMenu({ type: "UPDATE_MAIN_RECIPES", data });
 					dispatchMenu({ type: "UPDATE_SIDE_RECIPES", data });
 					dispatchMenu({ type: "UPDATE_VEGIE_RECIPES", data });
 					dispatchMenu({ type: "UPDATE_SALAD_RECIPES", data });
 					dispatchMenu({ type: "UPDATE_SOUP_RECIPES", data });
+					dispatchMenu({ type: "UPDATE_FROZEN_RECIPES", data });
 				}
 				setIsLoading(false);
 			} catch (err) {
 				console.log("Fetch recipes error:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -189,6 +209,12 @@ export default function Menu() {
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -214,6 +240,12 @@ export default function Menu() {
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -249,6 +281,12 @@ export default function Menu() {
 				});
 		} catch (err) {
 			console.log("Delete error", err);
+			toast.error(err, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -325,11 +363,11 @@ export default function Menu() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }}>
+			<Container sx={{ border: "none" }} id='container'>
 				<Paper
-					//textAlign='center'
+					textAlign='center'
 					className={classes.pageContent}
-					sx={{ width: 750 }}
+					sx={{ width: "100%", p: 1 }}
 				>
 					<Box
 						sx={{
@@ -344,7 +382,7 @@ export default function Menu() {
 						</Typography>
 					</Box>
 					<Divider />
-					<Toolbar style={{ width: 700 }}>
+					<Toolbar style={{ width: "100%" }}>
 						{/* <Controls.Input
 						label='Search Menus'
 						className={classes.searchInput}
@@ -400,7 +438,7 @@ export default function Menu() {
 						<TableBody>
 							{recordsAfterPagingAndSorting().map((item) => {
 								//console.log("itemDate",item.date)
-								menuDate = new Date(item.date).toLocaleDateString();
+								menuDate = new Date(item.date).toLocaleDateString("en-ZA");
 								let week = new Date(item.date);
 								let endDate = new Date(item.date);
 								endDate.setDate(week.getDate() + 5);
@@ -415,6 +453,20 @@ export default function Menu() {
 										<TableCell>{menuDate}</TableCell>
 										<TableCell>{period}</TableCell>
 										<TableCell>
+											<Controls.ActionButton
+												color='primary'
+												onClick={() => {
+													dispatchMenu({
+														type: "SET_SELECTED_MENU",
+														id: item._id,
+													});
+
+													setOpenViewPopup(true);
+													// openInPopup(item);
+												}}
+											>
+												<PageviewOutlinedIcon fontSize='small' />
+											</Controls.ActionButton>
 											<Controls.ActionButton
 												color='primary'
 												onClick={() => {
@@ -461,6 +513,16 @@ export default function Menu() {
 				<MenuForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
 				{/* <MenuForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
 			</Popup>
+			<ViewPopup
+				title='Loading...'
+				openViewPopup={openViewPopup}
+				setOpenViewPopup={setOpenViewPopup}
+			>
+				<ViewMenu
+					openViewPopup={openViewPopup}
+					setOpenViewPopup={setOpenViewPopup}
+				/>
+			</ViewPopup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog
 				confirmDialog={confirmDialog}

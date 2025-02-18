@@ -1,15 +1,39 @@
+import { useEffect, useState } from "react";
+import { IconButton ,Button } from "@mui/material";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import "./CartCount.css";
 
-const CartCount = ({ count, onAddToCart, onRemoveFromCart }) => {
+const CartCount = ({ count, onAddToCart, onRemoveFromCart, showCount }) => {
+	//console.log("showCount", showCount);
+
 	return (
 		<div>
-			<button type='button' className='cartBtnRem' onClick={onRemoveFromCart}>
-				&#8722;
-			</button>
-			<span className='count'>{count}</span>
-			<button type='button' className='cartBtnAdd' onClick={onAddToCart}>
-				&#43;
-			</button>
+			{showCount === "true" && (
+				<>
+					<IconButton onClick={onRemoveFromCart}>
+						<RemoveCircleOutlineIcon />
+					</IconButton>
+					<span className='count'>{count}</span>
+				</>
+			)}
+			{showCount === "true" ? (
+				<IconButton onClick={onAddToCart}>
+					{/* {showCount === "true" ? "+" : "Add Item"} */}
+					<AddCircleOutlineIcon />
+				</IconButton>
+			) : (
+				<Button
+					startIcon={<AddCircleOutlineIcon />}
+					variant='contained'
+					aria-label='Add Item'
+					size='small'
+					color='success'
+					onClick={onAddToCart}
+				>
+					Add Item
+				</Button>
+			)}
 		</div>
 	);
 };

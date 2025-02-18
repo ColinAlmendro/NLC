@@ -26,14 +26,14 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 	// cell: {
-		
+	// 	height:"5px",
 	// 		padding: "none",
 	// 	},
 
 }));
 
 export default function useTable(records, headCells, filterFn) {
-	//	console.log("tablerecords",records)
+		//console.log("tablerecords",records)
 	const classes = useStyles();
 
 	const pages = [5, 10, 25];
@@ -43,28 +43,33 @@ export default function useTable(records, headCells, filterFn) {
 	const [orderBy, setOrderBy] = useState();
 
 	const TblContainer = (props) => (
-		<Table sx={{  mx: "auto" }} className={classes.table}>
+		<Table sx={{ mx: "auto", width: "100%" }} className={classes.table}>
 			{props.children}
 		</Table>
 	);
 
 	const TblHead = (props) => {
 		const handleSortRequest = (cellId) => {
-			console.log("CellId",cellId)
+		//	console.log("CellId",cellId)
 			const isAsc = orderBy === cellId && order === "asc";
+		//	console.log("isAsc",isAsc)
 			setOrder(isAsc ? "desc" : "asc");
 			setOrderBy(cellId);
 		};
 
 		return (
 			<TableHead>
-				<TableRow padding='none'>
+				<TableRow
+					padding='none'
+					
+				>
 					{headCells.map((headCell) => (
 						<TableCell
 							key={headCell.id}
 							sortDirection={orderBy === headCell.id ? order : false}
-							// className={classes.cell}
-							padding="none"
+							className={classes.cell}
+							// padding="none"
+							
 						>
 							{headCell.disableSorting ? (
 								headCell.label
@@ -125,6 +130,7 @@ export default function useTable(records, headCells, filterFn) {
 	}
 
 	function descendingComparator(a, b, orderBy) {
+	//	console.log("descendingComparator", a, b, orderBy)
 		if (b[orderBy] < a[orderBy]) {
 			return -1;
 		}

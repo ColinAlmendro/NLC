@@ -9,6 +9,8 @@ import RecipeProvider from "./shared/context/RecipeProvider";
 import CustomersProvider from "./shared/context/CustomersProvider";
 import OrdersProvider from "./shared/context/OrdersProvider";
 import CartContextProvider from "./shared/context/CartProvider";
+import IngredientsProvider from "./shared/context/IngredientsProvider";
+import UsersProvider from "./shared/context/UsersProvider";
 
 import "./index.css";
 
@@ -20,22 +22,26 @@ root.render(
 	<>
 		<SettingsProvider>
 			<AppProvider>
-				<PromotionsProvider>
-					<RecipeProvider>
-						<CustomersProvider>
-							<MenuProvider>
-								<OrdersProvider>
-									<CartContextProvider>
-										<App />
-									</CartContextProvider>
-									</OrdersProvider>
-								</MenuProvider>
-							</CustomersProvider>
-						</RecipeProvider>
+				<UsersProvider>
+					<PromotionsProvider>
+						<IngredientsProvider>
+							<RecipeProvider>
+								<CustomersProvider>
+									<MenuProvider>
+										<OrdersProvider>
+											<CartContextProvider>
+												<App />
+											</CartContextProvider>
+										</OrdersProvider>
+									</MenuProvider>
+								</CustomersProvider>
+							</RecipeProvider>
+						</IngredientsProvider>
 					</PromotionsProvider>
+				</UsersProvider>
 				</AppProvider>
 			</SettingsProvider>
 		</>
-		//{" "}
+		// //{" "}
 	// </React.StrictMode>
 );

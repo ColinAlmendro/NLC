@@ -6,7 +6,7 @@ const reducerPromotions = (state, action) => {
 		// 	console.log("insertpromotion", action.data);
 		// 	return [
 		// 		...state.promotions,action.data
-				
+
 		// 	];
 		// }
 		// case "UPDATE_PROMOTION": {
@@ -18,7 +18,7 @@ const reducerPromotions = (state, action) => {
 		// 			return t;
 		// 		}
 		// 	});
-			
+
 		// }
 		case "DELETE_PROMOTION": {
 			//	console.log("deletepromotion", action._id)
@@ -56,6 +56,15 @@ const reducerPromotions = (state, action) => {
 			return {
 				...state,
 				selected_promotion: {},
+			};
+		}
+		case "UPDATE_PROMO_RECIPES": {
+			let promoRecipes = action.data.recipes;
+			promoRecipes = promoRecipes.filter((recipe) => recipe.category === "promo");
+			//	console.log("Reducer_promo", promoRecipes);
+			return {
+				...state,
+				promo_recipes: promoRecipes,
 			};
 		}
 

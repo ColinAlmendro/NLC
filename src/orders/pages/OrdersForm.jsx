@@ -20,14 +20,23 @@ import {
 	FormControl,
 	List,
 	ListItem,
+	ListItemText,
+	ListItemButton,
+	ListSubheader,
+	Tabs,
+	Tab,
 	Grid,
 	GridItem,
 	Card,
 	CardMedia,
 	CircularProgress,
+	Collapse,
 } from "@mui/material";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import OrderDay from "./OrderDay.jsx";
+import OrderPromotion from "./OrderPromotion.jsx";
 import * as Yup from "yup";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
@@ -38,6 +47,7 @@ import Cart from "./Cart";
 import CartContext from "../../shared/context/cart-context";
 import CartList from "./CartList";
 import CartPopup from "./CartPopup.js";
+import FieldInputTextarea from "./FieldInputTextarea";
 
 import {
 	FormProvider,
@@ -50,20 +60,52 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 
 import "./Listitem.css";
-// import { File } from "buffer";
+import { makeStyles } from "@mui/styles";
+import { toast } from "sonner";
+
+const useStyles = makeStyles({
+	label: {
+		color: "#212121",
+		"&.Mui-focused": {
+			color: "darkred",
+		},
+	},
+});
 
 const validationSchema = Yup.object()
 	.shape({})
 	.required();
 
 function OrdersForm(props) {
+	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
+	const [disableMenu, setDisableMenu] = useState(true);
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(false);
 	const [openCartPopup, setOpenCartPopup] = useState(false);
+
+	const [openMonday, setOpenMonday] = useState(false);
+	const [openTuesday, setOpenTuesday] = useState(false);
+	const [openWednesday, setOpenWednesday] = useState(false);
+	const [openThursday, setOpenThursday] = useState(false);
+	const [openFriday, setOpenFriday] = useState(false);
+    const [openFrozen, setOpenFrozen] = useState(false);
+	const [openPromo,setOpenPromo] = useState(false);
+    const [memo, setMemo] = useState("");
+	const [promoId,setPromoId] = useState('');
+
+	let { items, totalCount,totalCost,totalAmount, addItem, removeItem, resetCart } = useContext(
+		CartContext
+	);
+
+	useEffect(() => {
+		console.log("resetcart");
+		resetCart();
+	}, []);
+
 	const {
-		menuState: { menus, selected_menu },
+		menuState: { menus, selected_menu, promotions },
 		dispatchMenu,
 	} = useMenuValue();
 	const {
@@ -94,16 +136,16 @@ function OrdersForm(props) {
 
 	let defaultOrder = {};
 	if (record) {
-		console.log("ISrecordY", record);
-		console.log("ISrecordYselectedCustomer", selected_customer[0]);
-		console.log("ISrecordYselectedMenu", selected_menu);
+		//	console.log("ISrecordY", record);
+		//	console.log("ISrecordYselectedCustomer", selected_customer[0]);
+		//	console.log("ISrecordYselectedMenu", selected_menu);
 		defaultOrder = {
 			...record,
 			customer: selected_customer[0]._id,
 			menu: selected_menu[0]._id,
 		};
 	} else {
-		console.log("ISrecordN", record);
+		//	console.log("ISrecordN", record);
 		defaultOrder = {
 			date: new Date(),
 			customer: "",
@@ -113,8 +155,12 @@ function OrdersForm(props) {
 			wednesday: [],
 			thursday: [],
 			friday: [],
+			frozen: [],
+			promotion: [],
 			item_count: 0,
+			total_cost: 0,
 			total_price: 0,
+			note: "",
 		};
 	}
 
@@ -160,84 +206,37 @@ function OrdersForm(props) {
 		price: "",
 	});
 
-	const onSubmit = async (data) => {
-		// e.preventDefault();
-		console.log("clicked", data);
+	const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
-		if (record) {
-			try {
-				setIsLoading(true);
-				console.log("in edit submit");
-				const responseEdit = await fetch(
-					process.env.REACT_APP_BACKEND_URL + `/orders/edit/${record._id}`,
-					{
-						method: "PATCH",
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: "Bearer " + auth.token,
-						},
-
-						body: JSON.stringify({
-							order: data.order,
-							items: data.items,
-						}),
-					}
-				);
-				const dataEdit = await responseEdit.json();
-				if (!responseEdit.ok) {
-					console.log("response error", dataEdit.message);
-					return data;
-				}
-				console.log("UpDate", data);
-
-				setIsLoading(false);
-
-				setOpen(false);
-				setOpenPopup(false);
-				history("/orders");
-				alert("Order updated");
-				return data.orders;
-			} catch (err) {
-				console.log("Update err:", err);
-				setIsLoading(false);
-			}
-		} else {
-			try {
-				setIsLoading(true);
-				console.log("in new submit");
-
-				const responseNew = await fetch(
-					process.env.REACT_APP_BACKEND_URL + "/orders/new",
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: "Bearer " + auth.token,
-						},
-
-						body: JSON.stringify({
-							order: data.order,
-							items: data.items,
-						}),
-					}
-				);
-				const dataNew = await responseNew.json();
-				console.log("ret data", dataNew);
-
-				setIsLoading(false);
-				history("/orders");
-				alert("New order added");
-				setOpen(false);
-				setOpenPopup(false);
-				return dataNew;
-			} catch (err) {
-				console.log("SubmitNew err:", err);
-				setIsLoading(false);
-			}
-		}
-
-		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+	const handleTabChange = (e, tabIndex) => {
+	//	console.log(tabIndex);
+		setCurrentTabIndex(tabIndex);
 	};
+
+	const handleMondayClick = () => {
+		setOpenMonday(!openMonday);
+	};
+	const handleTuesdayClick = () => {
+		setOpenTuesday(!openTuesday);
+	};
+	const handleWednesdayClick = () => {
+		setOpenWednesday(!openWednesday);
+	};
+	const handleThursdayClick = () => {
+		setOpenThursday(!openThursday);
+	};
+	const handleFridayClick = () => {
+		setOpenFriday(!openFriday);
+	};
+	const handleFrozenClick = () => {
+		setOpenFrozen(!openFrozen);
+	};
+
+	const handlePromoClick = () => {
+		setOpenPromo(!openPromo);
+	};
+
+
 	if (isLoading) {
 		return (
 			<Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -248,17 +247,11 @@ function OrdersForm(props) {
 
 	return (
 		<>
-			{/* // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555 */}
-
-			{/* {isCartShowing && items.length > 0 && <CartList />} */}
-
-			<Container sx={{ border: "none" }}>
+			<Container sx={{ border: "none", width: "100%" }}>
 				<Paper>
-					{isLoading && <LoadingSpinner asOverlay />}
-
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
-							<form onSubmit={handleSubmit(onSubmit)}>
+							<form>
 								<Grid
 									container
 									rowSpacing={1}
@@ -277,16 +270,12 @@ function OrdersForm(props) {
 													}}
 												>
 													<Typography fontWeight='700' variant='h5'>
-														Order
+														New Order
 													</Typography>
 												</Box>
 											</Grid>
 											<Grid item xs={12} lg={2}>
 												<Stack direction='row'>
-													<Cart
-														openCartPopup={openCartPopup}
-														setOpenCartPopup={setOpenCartPopup}
-													/>
 													<Button
 														sx={{ gap: "1rem" }}
 														// width='100px'
@@ -305,53 +294,24 @@ function OrdersForm(props) {
 														// width='100px'
 														variant='outlined'
 														color='success'
-														type='submit'
+														onClick={() => {
+															setOpenCartPopup(true);
+														}}
 													>
-														Save
+														Next
 													</Button>
 												</Stack>
 											</Grid>
 										</Stack>
 									</Grid>
 									<Divider sx={{ my: 6 }} />
-									<Grid item xs={12} lg={12}>
-										<Stack direction='row' sx={{ justifyContent: "center" }}>
-											<Grid item xs={6} lg={6}>
-												<Controller
-													name='menu'
-													control={control}
-													render={({
-														field: { onChange, value },
-														fieldState: { error },
-													}) => {
-														return (
-															<TextField
-																select
-																value={value}
-																onChange={(event) => {
-																	onChange(event.target.value);
-																	dispatchMenu({
-																		type: "SET_SELECTED_MENU",
-																		id: event.target.value,
-																	});
-																}}
-																label='Menu'
-																name='menu'
-																size='small'
-																sx={{ width: "100%" }}
-															>
-																{menuOptions.map((item) => (
-																	<MenuItem key={item._id} value={item._id}>
-																		{new Date(item.date).toLocaleDateString()}
-																	</MenuItem>
-																))}
-															</TextField>
-														);
-													}}
-												/>
-											</Grid>
-
-											<Grid item xs={6} lg={6}>
+									<Grid item xs={12} lg={12} padding={2}>
+										<Stack
+											direction='row'
+											sx={{ justifyContent: "center" }}
+											spacing={2}
+										>
+											<Grid item xs={4} lg={4}>
 												<Controller
 													name='customer'
 													control={control}
@@ -360,38 +320,239 @@ function OrdersForm(props) {
 														fieldState: { error },
 													}) => {
 														return (
-															<TextField
-																select
-																value={value}
-																onChange={(event) => {
-																	onChange(event.target.value);
-																}}
-																label='Customer'
-																name='customer'
-																size='small'
-																sx={{ width: "100%" }}
-															>
-																{customerOptions.map((item) => (
-																	<MenuItem key={item._id} value={item._id}>
-																		{`${item.name} ${item.surname}`}
-																	</MenuItem>
-																))}
-															</TextField>
+															<>
+																<InputLabel
+																	sx={{ textAlign: "left" }}
+																	className={classes.label}
+																>
+																	Customer
+																</InputLabel>
+																<Box bgcolor='primary.light' p={0}>
+																	<TextField
+																		select
+																		value={value}
+																		onChange={(event) => {
+																			onChange(event.target.value);
+																			dispatchCustomer({
+																				type: "SET_SELECTED_CUSTOMER",
+																				id: event.target.value,
+																			});
+																			setDisableMenu(false);
+																		}}
+																		// label='Customer'
+																		name='customer'
+																		size='small'
+																		sx={{
+																			"& fieldset": { border: "none" },
+																			"& .MuiInputBase-root": {
+																				"& input": {
+																					textAlign: "left",
+																				},
+																			},
+																			width: "100%",
+																			border: "1px solid",
+																		}}
+																	>
+																		{customerOptions.map((item) => (
+																			<MenuItem key={item._id} value={item._id}>
+																				{`${item.name} ${item.surname}`}
+																			</MenuItem>
+																		))}
+																	</TextField>
+																</Box>
+															</>
 														);
 													}}
 												/>
 											</Grid>
+											<Grid item xs={4} lg={4}>
+												<Controller
+													name='menu'
+													control={control}
+													render={({
+														field: { onChange, value },
+														fieldState: { error },
+													}) => {
+														return (
+															<>
+																<InputLabel
+																	sx={{ textAlign: "left" }}
+																	className={classes.label}
+																>
+																	Menu
+																</InputLabel>
+																<Box bgcolor='primary.light' p={0}>
+																	<TextField
+																	disabled={disableMenu}
+																		select
+																		value={value}
+																		onChange={(event) => {
+																			onChange(event.target.value);
+																			dispatchMenu({
+																				type: "SET_SELECTED_MENU",
+																				id: event.target.value,
+																			});
+																		}}
+																		//label='Menu'
+																		name='menu'
+																		size='small'
+																		sx={{
+																			"& fieldset": { border: "none" },
+																			"& .MuiInputBase-root": {
+																				"& input": {
+																					textAlign: "left",
+																				},
+																			},
+																			width: "100%",
+																			border: "1px solid",
+																		}}
+																	>
+																		{menuOptions.map((item) => (
+																			<MenuItem key={item._id} value={item._id}>
+																				{new Date(item.date).toLocaleDateString(
+																					"en-ZA"
+																				)}
+																			</MenuItem>
+																		))}
+																	</TextField>
+																</Box>
+															</>
+														);
+													}}
+												/>
+											</Grid>
+
+											<Grid item xs={3} lg={3}></Grid>
+											<Grid item xs={1} lg={1}>
+												<Cart
+													openCartPopup={openCartPopup}
+													setOpenCartPopup={setOpenCartPopup}
+												/>
+											</Grid>
 										</Stack>
+										<Grid item xs={12} lg={12} padding={0}>
+											<InputLabel
+												sx={{ textAlign: "left" }}
+												className={classes.label}
+											>
+												Note
+											</InputLabel>
+											<Box bgcolor='primary.light' p={0}>
+												<Controller
+													name='note'
+													control={control}
+													render={({
+														field: { onChange, value },
+														fieldState: { error },
+													}) => {
+														return (
+															<TextField
+																onChange={(event) => {
+																	onChange(event.target.value);
+																	setMemo(event.target.value);
+																}}
+																value={value}
+																size='small'
+																style={{ marginTop: "1px" }}
+																helperText={`${
+																	error?.message ? error?.message : ""
+																}`}
+																error={!!error}
+																fullWidth
+																//sx={{ mb: 1 }}
+																minRows={1}
+																//maxRows={10}
+																multiline='true'
+																sx={{
+																	"& fieldset": { border: "none" },
+																	"& .MuiInputBase-root": {
+																		"& input": {
+																			textAlign: "left",
+																		},
+																	},
+																	border: "1px solid",
+																}}
+															/>
+														);
+													}}
+												/>
+											</Box>
+										</Grid>
 									</Grid>
 									{/* <Divider sx={{ my: 6 }} /> */}
 									{/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&&&&&&&&&&&&&&&&              NEW ITEM INPUT */}
+									{console.log("selPromo", selected_menu[0])}
 									{selected_menu[0] && (
 										<Grid item xs={12} lg={12}>
-											<OrderDay weekday='monday' />
-											<OrderDay weekday='tuesday' />
-											<OrderDay weekday='wednesday' />
-											<OrderDay weekday='thursday' />
-											<OrderDay weekday='friday' />
+											<Tabs
+												value={currentTabIndex}
+												onChange={handleTabChange}
+												centered
+												// variant='fullWidth'
+												TabIndicatorProps={{
+													style: {
+														backgroundColor: "#497777",
+													},
+												}}
+											>
+												<Tab label='Monday' />
+												<Tab label='Tuesday' />
+												<Tab label='Wednesday' />
+												<Tab label='Thursday' />
+												<Tab label='Friday' />
+												<Tab label='Frozen Meals' />
+
+												{selected_menu[0].promotion !== "none" && (
+													<Tab label='Promotion' />
+												)}
+											</Tabs>
+
+											{/* MONDAY Contents */}
+											{currentTabIndex === 0 && (
+												<Box sx={{ p: 3 }}>
+													<OrderDay weekday='monday' />
+												</Box>
+											)}
+											{/* TUESDAY Contents */}
+											{currentTabIndex === 1 && (
+												<Box sx={{ p: 3 }}>
+													<OrderDay weekday='tuesday' />
+												</Box>
+											)}
+											{/* WEDNESDAY Contents */}
+											{currentTabIndex === 2 && (
+												<Box sx={{ p: 3 }}>
+													<OrderDay weekday='wednesday' />
+												</Box>
+											)}
+											{/* THURSDAY Contents */}
+											{currentTabIndex === 3 && (
+												<Box sx={{ p: 3 }}>
+													<OrderDay weekday='thursday' />
+												</Box>
+											)}
+											{/* FRIDAY Contents */}
+											{currentTabIndex === 4 && (
+												<Box sx={{ p: 3 }}>
+													<OrderDay weekday='friday' />
+												</Box>
+											)}
+
+											{/* FROZEN Contents */}
+											{currentTabIndex === 5 && (
+												<Box sx={{ p: 3 }}>
+													<OrderDay weekday='frozen' />
+												</Box>
+											)}
+											{/* PROMO Contents */}
+
+											{selected_menu[0].promotion !== "none" &&
+												currentTabIndex === 6 && (
+													<Box sx={{ p: 3 }}>
+														<OrderPromotion weekday='promotion' />
+													</Box>
+												)}
+											{/* 7777777777777777777777777777777777777777777777777777777 */}
 										</Grid>
 									)}
 
@@ -403,8 +564,7 @@ function OrdersForm(props) {
 					{control && <DevTool control={control} />}
 				</Paper>
 			</Container>
-			{/* </DialogContent>
-			</Dialog> */}
+
 			<CartPopup
 				title='Order Cart'
 				openCartPopup={openCartPopup}
@@ -413,6 +573,9 @@ function OrdersForm(props) {
 				<CartList
 					openCartPopup={openCartPopup}
 					setOpenCartPopup={setOpenCartPopup}
+					menu={selected_menu[0]}
+					customer={selected_customer[0]}
+					note={memo}
 				/>
 			</CartPopup>
 		</>

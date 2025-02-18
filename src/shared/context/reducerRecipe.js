@@ -4,25 +4,7 @@ const reducerRecipe = (state, action) => {
 	switch (action.type) {
 		case "UPDATE_RECIPES":
 			return { ...state, recipes: action.data.recipes };
-		// case "INSERT_MENU": {
-		// 	return [
-		// 		...menus,
-		// 		{
-		// 			// id: action.id,
-		// 			// text: action.text,
-		// 			// done: false,
-		// 		},
-		// 	];
-		// }
-		// case "UPDATE_MENU": {
-		// 	return state.menus.map((t) => {
-		// 		if (t.id === action.menu.id) {
-		// 			return action.menu;
-		// 		} else {
-		// 			return t;
-		// 		}
-		// 	});
-		// }
+		
 		case "DELETE_RECIPE": {
 			//	console.log("deleterecipe", action._id)
 			const indexRecipe = state.recipes.findIndex(
@@ -47,7 +29,7 @@ const reducerRecipe = (state, action) => {
 		}
 
 		case "SET_SELECTED_RECIPE": {
-			console.log("set selected", action.id);
+	//		console.log("set selected", action.id);
 			return {
 				...state,
 				selected_recipe: state.recipes.filter((recipe) => recipe._id === action.id),

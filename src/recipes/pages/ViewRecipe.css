@@ -1,0 +1,30 @@
+li {
+	list-style-type: none;
+}
+
+ .servesBtnRem :hover {
+    cursor: pointer;
+    background: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    width: rem(22px);
+    height: rem(22px);
+    border: 1px solid #333;
+    font-size: rem(16px);
+     margin-right: rem(4px);
+}
+ .servesBtnAdd :hover {
+    cursor: pointer;
+    background: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    width: rem(22px);
+    height: rem(22px);
+    border: 1px solid #333;
+    font-size: rem(16px);
+     margin-left: rem(4px);
+}
+  
+.servesCount {
+    font-size: rem(18px);
+}

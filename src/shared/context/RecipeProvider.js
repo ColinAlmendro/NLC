@@ -5,6 +5,7 @@ const initialState = {
 	recipes: [
 		{
 			category: "main",
+			freezable: "No",
 			name: "Saag Aloo",
 			description: "Potato and Spinach curry",
 			ingredients: [
@@ -88,10 +89,10 @@ export const useRecipeValue = () => {
 };
 
 const ContextProvider = ({ children }) => {
-	const [recipeState, dispatch] = useReducer(reducerRecipe, initialState);
+	const [recipeState, dispatchRecipe] = useReducer(reducerRecipe, initialState);
 
 	return (
-		<Context.Provider value={{ recipeState, dispatch }}>
+		<Context.Provider value={{ recipeState, dispatchRecipe }}>
 			{children}
 		</Context.Provider>
 	);

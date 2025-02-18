@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Typography, Box, Divider } from "@mui/material";
+// import { Typography, Box, Divider } from "@mui/material";
 import * as Yup from "yup";
 import {
 	FormProvider,
@@ -13,9 +13,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 import { useRecipeValue } from "../../shared/context/RecipeProvider.js";
 import { AuthContext } from "../../shared/context/auth-context";
-// import { useHttpClient } from "../../shared/hooks/http-hook";
+import { useValue } from "../../shared/context/SettingsProvider.js";
 
 import {
+	Typography,
+	Box,
+	Divider,
 	Dialog,
 	DialogTitle,
 	DialogContent,
@@ -34,15 +37,30 @@ import {
 	Card,
 	CardMedia,
 	CircularProgress,
+	Radio,
+	Checkbox,
 } from "@mui/material";
 
-import { categoryOptions } from "./utils/constants";
-import { unitOptions } from "./utils/constants";
+// import { categoryOptions, freezableOptions } from "./utils/constants";
+// import { unitOptions } from "./utils/constants";
+// import { typeOptions } from "./utils/constants";
+import RecipeIngredients from "./RecipeIngredients.jsx";
 import FieldInputSelect from "./FieldInputSelect";
 import FieldInputText from "./FieldInputText";
 import FieldInputTextarea from "./FieldInputTextarea";
-import { NumericFormat } from "react-number-format";
+// import { NumericFormat } from "react-number-format";
 import "./Listitem.css";
+import { makeStyles } from "@mui/styles";
+import { toast } from "sonner";
+
+const useStyles = makeStyles({
+	label: {
+		color: "#212121",
+		"&.Mui-focused": {
+			color: "darkred",
+		},
+	},
+});
 
 const validationSchema = Yup.object()
 	.shape({
@@ -50,13 +68,17 @@ const validationSchema = Yup.object()
 			.required()
 			.label("Category")
 			.typeError("Category required"),
-		image: Yup.mixed()
-			.test("fileType", "Unsupported file format", (value) =>
-				["image/jpeg", "image/png"].includes(value?.type)
-			)
-			.required("Images are required")
-			.label("Image")
-			.typeError("Image required"),
+		freezable: Yup.string()
+			.required()
+			.label("Freezable")
+			.typeError("Freezable required"),
+		// image: Yup.mixed()
+		// 	.test("fileType", "Unsupported file format", (value) =>
+		// 		["image/jpeg", "image/jpg", "image/png"].includes(value?.type)
+		// 	)
+		// 	.required("Images are required")
+		// 	.label("Image")
+		// 	.typeError("Image required"),
 		name: Yup.string()
 			.required()
 			.label("Name")
@@ -101,12 +123,12 @@ const validationSchema = Yup.object()
 			.required()
 			.label("Premium")
 			.typeError("Premium required"),
-		cost: Yup.number()
-			.nullable()
-			.positive()
-			.required()
-			.label("Cost")
-			.typeError("Cost required"),
+		// cost: Yup.number()
+		// 	.nullable()
+		// 	.positive()
+		// 	.required()
+		// 	.label("Cost")
+		// 	.typeError("Cost required"),
 		price: Yup.number()
 			.nullable()
 			.positive()
@@ -117,48 +139,51 @@ const validationSchema = Yup.object()
 	.required();
 
 function FormRecipe(props) {
+	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const history = useNavigate();
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(true);
-
+	const { state, dispatch } = useValue();
 	const {
 		recipeState: { recipes, selected_recipe },
-		dispatch,
+		dispatchRecipe,
 	} = useRecipeValue();
 
 	const [record, setRecord] = useState(selected_recipe[0]);
+	const [recipeTypeList, setRecipeTypeList] = useState(state.recipe_type_list);
+const [typeOptions,setTypeOptions] = useState([]);
 
 	// const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const [ingredientsList, setIngredientsList] = useState([]);
+	const [filteredIngredientsList, setFilteredIngredientsList] = useState([]);
 	const [recipeImage, setRecipeImage] = useState(null);
 	const [recipeImagePreview, setRecipeImagePreview] = useState(null);
-
+	const [servingsCount, setServingsCount] = useState(6);
+	const [unitCost, setUnitCost] = useState(0);
+	const [totalCost, setTotalCost] = useState(0);
+	// const [freezable, setFreezable] = useState(null);
+	let recordCost = 0;
 	let defaultRecipe = {};
 	if (record) {
-		console.log("ISrecordY", record);
+		// console.log("ISrecordY", record);
 		defaultRecipe = {
 			...record,
 		};
 	} else {
-		console.log("ISrecordN", record);
+		// console.log("ISrecordN", record);
 		defaultRecipe = {
 			category: "",
+			freezable: "",
 			name: "",
 			description: "",
-			ingredients: [
-				{
-					ingredient: "",
-					unit: "",
-					qty: "",
-				},
-			],
+			ingredients: [],
 			instructions: "",
 			image: "",
 			feeds: "",
 			url: "",
-			premium:"",
+			premium: "",
 			cost: "",
 			price: "",
 		};
@@ -192,64 +217,45 @@ function FormRecipe(props) {
 		isSubmitSuccessful,
 		submitCount,
 	} = formState;
+
+	const freezableOptions = [
+		{ label: "No", value: "No" },
+		{ label: "Yes", value: "Yes" },
+	];
+
+	useEffect(() => {
+	let arrayCopy = [...recipeTypeList];
+	arrayCopy.map((type) => {
+		
+			type.value = type.value;
+			type.label = type.value.charAt(0).toUpperCase() + type.value.slice(1);
+		
+	});
+	setTypeOptions(arrayCopy);
+	}, []);
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	useEffect(() => {
 		if (record) {
 			setRecipeImagePreview(record.image);
+			setUnitCost(record.cost);
+			setTotalCost(record.cost * record.feeds);
 		} else {
 			setRecipeImagePreview(null);
 		}
 	}, []);
 
 	useEffect(() => {
-		async function fetchIngredients() {
-			try {
-				setIsLoading(true);
-				const response = await fetch(
-					process.env.REACT_APP_BACKEND_URL + "/ingredients/list",
-					{
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: "Bearer " + auth.token,
-						},
-					}
-				);
-				const data = await response.json();
-				setIngredientsList(data.ingredients);
-				setIsLoading(false);
-			} catch (err) {
-				console.log(err);
-				setIsLoading(false);
-			}
-		}
-		fetchIngredients();
-	}, []);
-
-	const { fields, append, remove } = useFieldArray({
-		control,
-		name: "ingredients",
-	});
+		//console.log("servingsCount", servingsCount);
+		setUnitCost(totalCost / servingsCount);
+		setValue("feeds", servingsCount);
+	}, [servingsCount]);
 
 	useEffect(() => {
-		const { ingredients } = fields;
+		setUnitCost(totalCost / servingsCount);
 
-		if (ingredients?.length) {
-			ingredients.forEach((item, index) => {
-				append({
-					ingredient: item.id,
-					unit: item.unit,
-					qty: item.qty,
-				});
-				setValue(`ingredients[${index}].ingredient`, item.id);
-				setValue(`ingredients[${index}].unit`, item.unit);
-				setValue(`ingredients[${index}].qty`, item.qty);
-			});
-		}
-	}, [setValue, append]);
-
-	
+		setValue("cost", Number(unitCost).toFixed(2));
+	}, [totalCost]);
 
 	const handelImageChange = (event) => {
 		let file = event.target.files[0];
@@ -258,12 +264,10 @@ function FormRecipe(props) {
 			let reader = new FileReader();
 			reader.onloadend = () => {
 				setRecipeImage(reader.result), setRecipeImagePreview(reader.result);
-
 			};
 			reader.readAsDataURL(file);
 		} else {
 			setRecipeImagePreview(null);
-
 		}
 	};
 
@@ -271,15 +275,11 @@ function FormRecipe(props) {
 		setIsLoading(true);
 		try {
 			let imageUrl;
-	
+
 			const imgFile = new FormData();
 			imgFile.append("file", file);
 			imgFile.append("cloud_name", process.env.REACT_APP_CLOUDINARY_NAME);
 			imgFile.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
-
-			for (var [key, value] of imgFile.entries()) {
-				console.log("imgFile »", key, value);
-			}
 
 			const response = await fetch(
 				`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,
@@ -297,21 +297,38 @@ function FormRecipe(props) {
 			return imageUrl;
 		} catch (error) {
 			console.log("cloudinary upload error:", error);
+			toast.error(error, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
+			toast.error(error, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
 
-	const onSubmit = async (data) => {
+	// const toggleFreezable = () => {
+	// 	// 👇️ Passed function to setState
+	// 	setFreezable((current) => !current);
+	// };
+	const onInvalid = (errors) => console.error(errors);
 
-		// console.log("clicked", data);
+	const onSubmit = async (data) => {
+		console.log("clicked", data);
 
 		const imgUrl = await uploadFile(recipeImagePreview);
-		console.log("imgUrl", imgUrl);
+		//	console.log("imgUrl", imgUrl);
 
 		if (record) {
 			try {
 				setIsLoading(true);
-				console.log("in edit submit");
+				//	console.log("in edit submit");
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/recipes/edit/${record._id}`,
 					{
@@ -322,15 +339,18 @@ function FormRecipe(props) {
 						},
 						body: JSON.stringify({
 							category: data.category,
+							freezable: data.freezable,
 							name: data.name,
 							description: data.description,
 							ingredients: data.ingredients,
 							instructions: data.instructions,
 							image: imgUrl,
-							feeds: data.feeds,
+							//feeds: data.feeds,
+							feeds: servingsCount,
 							url: data.url,
-							premium:data.premium,
-							cost: data.cost,
+							premium: data.premium,
+							cost: unitCost,
+							// cost: data.cost,
 							price: data.price,
 						}),
 					}
@@ -338,6 +358,12 @@ function FormRecipe(props) {
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
 					console.log("response error", dataEdit.message);
+					toast.error(dataEdit.message, {
+						style: {
+							background: "red",
+							color: "white",
+						},
+					});
 					return data;
 				}
 				console.log("UpDate", data);
@@ -347,10 +373,22 @@ function FormRecipe(props) {
 				setOpen(false);
 				setOpenPopup(false);
 				history("/recipes");
-				alert("Recipe updated");
+				//alert("Recipe updated");
+				toast.success("Recipe updated", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
 				return data.recipes;
 			} catch (err) {
 				console.log("Update err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		} else {
@@ -369,15 +407,18 @@ function FormRecipe(props) {
 
 						body: JSON.stringify({
 							category: data.category,
+							freezable: data.freezable,
 							name: data.name,
 							description: data.description,
 							ingredients: data.ingredients,
 							instructions: data.instructions,
 							image: imgUrl,
-							feeds: data.feeds,
+							// feeds: data.feeds,
+							feeds: servingsCount,
 							url: data.url,
-							premium:data.premium,
-							cost: data.cost,
+							premium: data.premium,
+							cost: unitCost,
+							// cost: data.cost,
 							price: data.price,
 						}),
 					}
@@ -387,17 +428,30 @@ function FormRecipe(props) {
 
 				setIsLoading(false);
 				history("/recipes");
-				alert("New recipe added");
+				// alert("New recipe added");
+				toast.success("New recipe added", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
 				setOpen(false);
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
 				console.log("SubmitNew err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+		//console.log("XXXX", totalCost);
 	};
 	if (isLoading) {
 		return (
@@ -409,29 +463,13 @@ function FormRecipe(props) {
 
 	return (
 		<>
-			{/* <Dialog
-				open={openPopup}
-				onClose={() => {
-					setOpenPopup(false);
-					//setOpen(false), 
-				}}
-				aria-labelledby='dialog-title'
-				aria-describedby='dialog-description'
-				fullWidth
-				maxWidth='lg'
-				//show-close="false"
-			>
-				<DialogContent>
-					<DialogActions></DialogActions> */}
-			{/* 77&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7
-			 */}
 			<Container sx={{ border: "none" }}>
 				<Paper>
 					{isLoading && <LoadingSpinner asOverlay />}
 
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
-							<form onSubmit={handleSubmit(onSubmit)}>
+							<form onSubmit={handleSubmit(onSubmit, onInvalid)}>
 								<Grid
 									container
 									rowSpacing={1}
@@ -471,9 +509,6 @@ function FormRecipe(props) {
 													variant='outlined'
 													color='success'
 													type='submit'
-													// onClick={() => {
-													// 	onSubmit();
-													// }}
 												>
 													Save
 												</Button>
@@ -483,12 +518,22 @@ function FormRecipe(props) {
 									<Divider sx={{ my: 2 }} />
 									<Stack gap={2}>
 										<Stack direction='row' gap={2}>
-											<FieldInputSelect
-												name='category'
-												label='Category'
-												control={control}
-												options={categoryOptions}
-											/>
+											<div>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Type
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<FieldInputSelect
+														name='category'
+														//	label='Category'
+														control={control}
+														options={typeOptions}
+													/>
+												</Box>
+											</div>
 											<Controller
 												name='image'
 												control={control}
@@ -498,238 +543,255 @@ function FormRecipe(props) {
 												}) => {
 													return (
 														<div>
-															<TextField
-																sx={{ border: "none", width: "100%" }}
-																// {...field}
-																// value={value?.File}
-																onChange={(event) => {
-																	onChange(event.target.files[0]);
-																	handelImageChange(event);
+															<InputLabel
+																sx={{ textAlign: "left" }}
+																className={classes.label}
+															>
+																Image
+															</InputLabel>
+															<Box bgcolor='primary.light' p={0}>
+																<TextField
+																	//sx={{ border: "none", width: "100%" }}
+																	// {...field}
+																	// value={value?.File}
+																	onChange={(event) => {
+																		onChange(event.target.files[0]);
+																		handelImageChange(event);
 
-																	console.log(
-																		"onChange",
-																		event.target.files[0]
-																	);
-																}}
-																type='file'
-																id='image'
-																error={!!errors.image}
-															/>
-
-															{recipeImagePreview && (
-																<Box
-																	sx={{
-																		my: 2,
-																		display: "flex",
-																		justifyContent: "center",
+																		console.log(
+																			"onChange",
+																			event.target.files[0]
+																		);
 																	}}
-																>
-																	<Card sx={{ maxWidth: 345 }}>
-																		<CardMedia
-																			component='img'
-																			image={recipeImagePreview}
-																			alt='Preview'
-																		/>
-																	</Card>
-																</Box>
-															)}
+																	type='file'
+																	id='image'
+																	error={!!errors.image}
+																	sx={{
+																		"& fieldset": { border: "none" },
+																		"& .MuiInputBase-root": {
+																			"& input": {
+																				textAlign: "left",
+																			},
+																		},
+																		//width: "200px",
+																		border: "1px solid",
+																	}}
+																/>
+
+																{recipeImagePreview && (
+																	<Box
+																		sx={{
+																			my: 2,
+																			display: "flex",
+																			justifyContent: "center",
+																		}}
+																	>
+																		<Card sx={{ maxWidth: 345 }}>
+																			<CardMedia
+																				component='img'
+																				image={recipeImagePreview}
+																				alt='Preview'
+																			/>
+																		</Card>
+																	</Box>
+																)}
+															</Box>
 														</div>
 													);
 												}}
 											/>
+
+											<div>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Freezable
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<FieldInputSelect
+														name='freezable'
+														//	label='Freezable'
+														control={control}
+														options={freezableOptions}
+													/>
+												</Box>
+											</div>
 										</Stack>
 
-										<FieldInputText
-											name='name'
-											control={control}
-											label='Recipe Name'
-										/>
-										<FieldInputText
-											name='description'
-											control={control}
-											label='Recipe Description'
-										/>
-										{/* </Stack> */}
-										<Divider sx={{ mt: 2 }} />
+										{/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */}
 
-										{/* */}
-										<Stack>
-											<Controller
-												name={`ingredients`}
-												control={control}
-												render={({ fieldState: { error } }) => (
-													<List error={!!error}>
-														{fields.map(
-															(
-																{ ingredient, unit, qty, canDelete, options },
-																index
-															) => {
-																return (
-																	<ListItem key={index}>
-																		<Stack
-																			gap={1}
-																			sx={{ border: "none", width: "100%" }}
-																			direction='row'
-																		>
-																			<Controller
-																				name={`ingredients[${index}].ingredient`}
-																				control={control}
-																				defaultValue=''
-																				render={({
-																					field: { field, onChange, value },
-																					fieldState: { error },
-																				}) => (
-																					<TextField
-																						select
-																						//	{...field}
-																						//value={record ? value._id : value}
-																						defaultValue={
-																							record ? value._id : value
-																						}
-																						name={`ingredients[${index}].ingredient`}
-																						label='Ingredient'
-																						onChange={onChange}
-																						size='small'
-																						sx={{ width: "75%" }}
-																						error={!!error}
-																					>
-																						{ingredientsList.map((item) => (
-																							<MenuItem
-																								key={item.id}
-																								value={item.id}
-																							>
-																								{item.name}
-																							</MenuItem>
-																						))}
-																					</TextField>
-																				)}
-																			/>
-
-																			<Controller
-																				name={`ingredients[${index}].unit`}
-																				control={control}
-																				defaultValue=''
-																				render={({
-																					field: { onChange, value },
-																					fieldState: { error },
-																				}) => (
-																					<TextField
-																						select
-																						value={value}
-																						defaultValue={value ? value : ""}
-																						onChange={onChange}
-																						label='Unit'
-																						name={`ingredientsArray[${index}].unit`}
-																						size='small'
-																						sx={{ width: "300px" }}
-																						error={!!error}
-																					>
-																						{unitOptions.map((option) => (
-																							<MenuItem
-																								key={option.value}
-																								value={option.value}
-																							>
-																								{option.label}
-																							</MenuItem>
-																						))}
-																					</TextField>
-																				)}
-																			/>
-
-																			<Controller
-																				name={`ingredients[${index}].qty`}
-																				control={control}
-																				render={({
-																					field: { ref, ...rest },
-																					fieldState: { error },
-																				}) => (
-																					<NumericFormat
-																						customInput={TextField}
-																						name={`ingredientsArray[${index}].qty`}
-																						label='Quantity'
-																						thousandSeparator=','
-																						decimalSeparator='.'
-																						decimalScale={2}
-																						getInputRef={ref}
-																						{...rest}
-																						size='small'
-																						sx={{ width: "200px" }}
-																						error={!!error}
-																					/>
-																				)}
-																			/>
-
-																			<Button
-																				type='button'
-																				onClick={() => {
-																					remove(index);
-																				}}
-																			>
-																				Remove
-																			</Button>
-																		</Stack>
-																	</ListItem>
-																);
-															}
-														)}
-														{error ? (
-															<p style={{ color: "red" }}>{error.message}</p>
-														) : null}
-													</List>
-												)}
-											/>
-
-											<Button
-												type='button'
-												onClick={() => {
-													append({
-														ingredient: "",
-														unit: "",
-														qty: "",
-													});
-												}}
+										<div>
+											<InputLabel
+												sx={{ textAlign: "left" }}
+												className={classes.label}
 											>
-												Add Ingredient
-											</Button>
-										</Stack>
-										<Divider sx={{ mt: 2 }} />
-										<Box display='flex' gap={2}>
-											<FieldInputTextarea
-												name='instructions'
-												label='Instructions'
-												control={control}
+												Recipe Name
+											</InputLabel>
+											<Box bgcolor='primary.light' p={0}>
+												<FieldInputText
+													name='name'
+													control={control}
+													//label='Recipe Name'
+												/>
+											</Box>
+										</div>
+										<div>
+											<InputLabel
+												sx={{ textAlign: "left" }}
+												className={classes.label}
+											>
+												Description
+											</InputLabel>
+											<Box bgcolor='primary.light' p={0}>
+												<FieldInputText
+													name='description'
+													control={control}
+													//	label='Recipe Description'
+												/>
+											</Box>
+										</div>
+										{/* </Stack> */}
+										{/* <Divider sx={{ mt: 2 }} /> */}
+										{/* 77777777777777777777777777777777777777777777777777777777777777777777777777777777777     INGREDIENTS */}
+										<div>
+											<InputLabel
+												sx={{ textAlign: "left" }}
+												className={classes.label}
+											>
+												Ingredients
+											</InputLabel>
+											<RecipeIngredients
+												totalCost={totalCost}
+												setTotalCost={setTotalCost}
 											/>
+										</div>
+										{/*777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */}
+
+										{/* <Divider sx={{ mt: 2 }} /> */}
+										<Box display='flex' gap={2}>
+											<div style={{ width: "100%" }}>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Instructions
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<FieldInputTextarea
+														name='instructions'
+														//	label='Instructions'
+														control={control}
+													/>
+												</Box>
+											</div>
 										</Box>
 
 										<Stack direction='row' gap={2}>
 											{/* */}
-											<FieldInputText
-												name='feeds'
-												control={control}
-												label='Servings'
-											/>
-											<FieldInputText
-												name='cost'
-												control={control}
-												label='Cost'
-											/>
-											<FieldInputText
-												name='premium'
-												control={control}
-												label='Premium'
-											/>
-											<FieldInputText
-												name='price'
-												control={control}
-												label='Price'
-											/>
+											<div>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Servings
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<TextField
+														name='feeds'
+														control={control}
+														value={servingsCount}
+														//label='Servings'
+														onChange={(event) => {
+															//onChange(event.target.value);
+															setServingsCount(event.target.value);
+
+															console.log("onChangeFeeds", event.target.value);
+														}}
+														size='small'
+													/>
+												</Box>
+											</div>
+											<div>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Unit Cost
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<TextField
+														value={Number(unitCost).toFixed(2)}
+														name='cost'
+														//	control={control}
+														//	label='Cost'
+														size='small'
+													/>
+												</Box>
+											</div>
+											<div>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Total Cost
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<TextField
+														value={Number(totalCost).toFixed(2)}
+														name='cost'
+														//	control={control}
+														//	label='Cost'
+														size='small'
+													/>
+												</Box>
+											</div>
+											<div>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Premium
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<FieldInputText
+														name='premium'
+														control={control}
+														//	label='Premium'
+													/>
+												</Box>
+											</div>
+											<div>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Unit Price
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<FieldInputText
+														name='price'
+														control={control}
+														//	label='Price'
+													/>
+												</Box>
+											</div>
 										</Stack>
-										{/* <Divider sx={{ mt: 2 }} /> */}
-										<FieldInputText
-											name='url'
-											control={control}
-											label='Website'
-										/>
+										<div>
+											<InputLabel
+												sx={{ textAlign: "left" }}
+												className={classes.label}
+											>
+												Website (optional)
+											</InputLabel>
+											<Box bgcolor='primary.light' p={0}>
+												<FieldInputText
+													name='url'
+													control={control}
+													//label='Website'
+												/>
+											</Box>
+										</div>
 									</Stack>
 								</Grid>
 							</form>
@@ -738,8 +800,6 @@ function FormRecipe(props) {
 					{control && <DevTool control={control} />}
 				</Paper>
 			</Container>
-			{/* </DialogContent>
-			</Dialog> */}
 		</>
 	);
 }

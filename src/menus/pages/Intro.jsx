@@ -149,35 +149,37 @@ const Intro = (isEdit) => {
 								console.log("datevalue", value);
 								return (
 									<LocalizationProvider dateAdapter={AdapterDateFns}>
-										<DatePicker
-											variant='inline'
-											format='dd MMMM yyyy'
-											minDate={new Date()}
-											value={new Date(value)}
-											onChange={(date) => {
-												onChange(date);
-												setSelectedDate(date);
-											}}
-											sx={{
-												"& fieldset": { border: "none" },
-												"& .MuiInputBase-root": {
-													"& input": {
-														textAlign: "left",
+										<Box bgcolor='primary.light' p={0}>
+											<DatePicker
+												variant='inline'
+												format='dd MMMM yyyy'
+												minDate={new Date()}
+												value={new Date(value)}
+												onChange={(date) => {
+													onChange(date);
+													setSelectedDate(date);
+												}}
+												sx={{
+													"& fieldset": { border: "1px solid" },
+													"& .MuiInputBase-root": {
+														"& input": {
+															textAlign: "left",
+														},
 													},
-												},
-												border: "none",
-												mb: 2,
-											}}
-											InputProps={{
-												inputProps: {
-													style: {
-														backgroundColor: "#E4E4F6",
-													},
-												},
-											}}
-											// helperText={`${error?.message ? error?.message : ""}`}
-											// error={!!error}
-										/>
+													border: "none",
+												//	mb: 2,
+												}}
+												// InputProps={{
+												// 	inputProps: {
+												// 		style: {
+												// 			backgroundColor: "#E4E4F6",
+												// 		},
+												// 	},
+												// }}
+												// helperText={`${error?.message ? error?.message : ""}`}
+												// error={!!error}
+											/>
+										</Box>
 										{/* )}
 							/> */}
 									</LocalizationProvider>
@@ -283,7 +285,17 @@ const Intro = (isEdit) => {
 									fullWidth
 									minRows={9}
 									multiline='true'
-									required
+									//required
+									sx={{
+										"& fieldset": { border: "none" },
+										"& .MuiInputBase-root": {
+											"& input": {
+												textAlign: "left",
+											},
+										},
+										//width: "200px",
+										border: "1px solid",
+									}}
 								/>
 							);
 						}}

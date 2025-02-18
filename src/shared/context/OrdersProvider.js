@@ -12,6 +12,8 @@ const initialState = {
 			wednesday: [],
 			thursday: [],
 			friday: [],
+			frozen: [],
+			promotion: [],
 			item_count: "",
 			total_price: "",
 			note: "",

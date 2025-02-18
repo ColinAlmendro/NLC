@@ -20,6 +20,16 @@ function FieldInputText({ type = "text", name, label, control }) {
 						helperText={`${error?.message ? error?.message : ""}`}
 						error={!!error}
 						fullWidth
+						sx={{
+							"& fieldset": { border: "none" },
+							"& .MuiInputBase-root": {
+								"& input": {
+									textAlign: "left",
+								},
+							},
+							//width: "100px",
+							border: "1px solid",
+						}}
 					/>
 				);
 			}}

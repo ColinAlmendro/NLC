@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import OrdersForm from "./OrdersForm.jsx";
+import ViewOrder from "./ViewOrder.jsx";
 import { useLocation } from "react-router";
 import {
 	Container,
@@ -22,7 +23,9 @@ import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup.js";
+import ViewPopup from "./ViewPopup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
@@ -30,6 +33,7 @@ import { AuthContext } from "../../shared/context/auth-context.js";
 import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
+import { toast } from "sonner";
 
 // import "./OrderTable.css";
 
@@ -49,18 +53,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-	//{ id: "id", label: "Id" },
 	{ id: "date", label: "Order" },
-	{ id: "name", label: "Name" },
-	{ id: "surname", label: "Surname" },
+	{ id: "name", label: "Name", disableSorting: true },
+	{ id: "surname", label: "Surname", disableSorting: true },
 	{ id: "menu", label: "Menu" },
-	{ id: "item_count", label: "Items" },
-	{ id: "total_price", label: "Total" },
-	{ id: "actions", label: "Actions", disableSorting: true },
+	{ id: "item_count", label: "Items", numeric: true },
+	{ id: "total_cost", label: "Cost", numeric: true },
+	{ id: "total_price", label: "Amount", numeric: true },
+	{ id: "actions", label: "View", disableSorting: true },
 ];
 
 export default function Order() {
-	console.log("loading order");
+	//console.log("loading order");
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -86,11 +90,12 @@ export default function Order() {
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			console.log("filteritems", items);
+		//	console.log("filteritems", items);
 			return items;
 		},
 	});
 	const [openPopup, setOpenPopup] = useState(false);
+	const [openViewPopup, setOpenViewPopup] = useState(false);
 	const [notify, setNotify] = useState({
 		isOpen: false,
 		message: "",
@@ -118,11 +123,20 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-				console.log("Orders list :", data.orders);
-				dispatchOrder({ type: "UPDATE_ORDERS", data });
+				//	console.log("Orders list :", data.orders);
+				dispatchOrder({
+					type: "UPDATE_ORDERS",
+					data,
+				});
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -145,11 +159,20 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-				console.log("Menus list :", data.menus);
-				dispatchMenu({ type: "UPDATE_MENUS", data });
+					console.log("Menus list :", data.menus);
+				dispatchMenu({
+					type: "UPDATE_MENUS",
+					data,
+				});
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -172,29 +195,79 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-				console.log("customers list :", data.customers);
-				dispatchCustomer({ type: "UPDATE_CUSTOMERS", data });
+				//		console.log("customers list :", data.customers);
+				dispatchCustomer({
+					type: "UPDATE_CUSTOMERS",
+					data,
+				});
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
 		fetchCustomers();
 	}, []);
 
+	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Promotions
+	useEffect(() => {
+		async function fetchPromotions() {
+			try {
+				setIsLoading(true);
+				const response = await fetch(
+					process.env.REACT_APP_BACKEND_URL + "/promotions/list",
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + auth.token,
+						},
+					}
+				);
+				const data = await response.json();
+				dispatchMenu({
+					type: "UPDATE_PROMOTIONS",
+					data,
+				});
+				setIsLoading(false);
+			} catch (err) {
+				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
+				setIsLoading(false);
+			}
+		}
+		fetchPromotions();
+	}, []);
+
 	const insertOrder = (order) => {
-		console.log("insertdata:", order),
-			dispatchOrder({ type: "INSERT_ORDER", order });
+		//		console.log("insertdata:", order),
+		dispatchOrder({
+			type: "INSERT_ORDER",
+			order,
+		});
 	};
 
 	const updateOrder = (order) => {
-		console.log("updatedata:", order),
-			dispatchOrder({ type: "UPDATE_ORDER", order });
+		//		console.log("updatedata:", order),
+		dispatchOrder({
+			type: "UPDATE_ORDER",
+			order,
+		});
 	};
 
 	const deleteOrderItem = async (_id) => {
-		console.log("deleteitem:", _id);
+		//		console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/orders/delete/${_id}`, {
@@ -206,12 +279,28 @@ export default function Order() {
 			})
 				.then((response) => response.json())
 				.then(() => {
-					dispatchOrder({ type: "DELETE_ORDER", _id });
+					dispatchOrder({
+						type: "DELETE_ORDER",
+						_id,
+					});
 					setIsLoading(false);
-					alert("Order deleted !");
+					// alert("Order deleted !");
+					toast.success("Order deleted", {
+						style: {
+							background: "green",
+							color: "white",
+						},
+					});
+
 				});
 		} catch (err) {
 			console.log("Delete error", err);
+			toast.error(err, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -232,8 +321,8 @@ export default function Order() {
 					return items.filter(
 						(x) =>
 							//console.log(x)
-							 x.customer.name.toLowerCase().includes(target.value) ||
-							 x.customer.surname.toLowerCase().includes(target.value)
+							x.customer.name.toLowerCase().includes(target.value) ||
+							x.customer.surname.toLowerCase().includes(target.value)
 					);
 			},
 		});
@@ -255,9 +344,18 @@ export default function Order() {
 
 	const openInPopup = (item) => {
 		// setRecordForEdit(item);
-		dispatchOrder({ type: "SET_SELECTED_ORDER", _id: item._id });
-		dispatchMenu({ type: "SET_SELECTED_MENU", id: item.menu.id });
-		dispatchCustomer({ type: "SET_SELECTED_CUSTOMER", id: item.customer.id });
+		dispatchOrder({
+			type: "SET_SELECTED_ORDER",
+			_id: item._id,
+		});
+		dispatchMenu({
+			type: "SET_SELECTED_MENU",
+			id: item.menu.id,
+		});
+		dispatchCustomer({
+			type: "SET_SELECTED_CUSTOMER",
+			id: item.customer.id,
+		});
 		setOpenPopup(true);
 	};
 
@@ -278,7 +376,12 @@ export default function Order() {
 
 	if (isLoading) {
 		return (
-			<Box sx={{ display: "flex", justifyContent: "center" }}>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "center",
+				}}
+			>
 				<CircularProgress />
 			</Box>
 		);
@@ -287,9 +390,9 @@ export default function Order() {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper
-					//textAlign='center'
+					textAlign='center'
 					className={classes.pageContent}
-					sx={{ width: 700 }}
+					sx={{ width: "100%", p: 1 }}
 				>
 					<Box
 						sx={{
@@ -304,7 +407,7 @@ export default function Order() {
 						</Typography>
 					</Box>
 					{/* <Divider /> */}
-					<Toolbar style={{ width: 650 }}>
+					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Orders'
 							className={classes.searchInput}
@@ -344,16 +447,21 @@ export default function Order() {
 						<TblHead />
 						<TableBody>
 							{recordsAfterPagingAndSorting().map((item) => {
-								orderDate = new Date(item.date).toLocaleDateString();
-								menuDate = new Date(item.menu.date).toLocaleDateString();
+								orderDate = new Date(item.date).toLocaleDateString("en-ZA");
+								menuDate = new Date(item.menu.date).toLocaleDateString("en-ZA");
 								return (
 									<TableRow key={item._id}>
 										<TableCell width='15%'>{orderDate}</TableCell>
 										<TableCell width='20%'>{item.customer.name}</TableCell>
 										<TableCell width='20%'>{item.customer.surname}</TableCell>
 										<TableCell width='15%'>{menuDate}</TableCell>
-										<TableCell width='15%'>{item.item_count}</TableCell>
-										<TableCell width='15%'>{item.total_price}</TableCell>
+										<TableCell width='10%'>{item.item_count}</TableCell>
+										<TableCell width='10%'>
+											{Number(item.total_cost).toFixed(2)}
+										</TableCell>
+										<TableCell width='10%'>
+											{Number(item.total_price).toFixed(2)}
+										</TableCell>
 										<TableCell>
 											<Controls.ActionButton
 												color='primary'
@@ -370,13 +478,13 @@ export default function Order() {
 															type: "SET_SELECTED_CUSTOMER",
 															id: item.customer.id,
 														});
-													setOpenPopup(true);
+													setOpenViewPopup(true);
 													// openInPopup(item);
 												}}
 											>
-												<EditOutlinedIcon fontSize='small' />
+												<PageviewOutlinedIcon fontSize='small' />
 											</Controls.ActionButton>
-											<Controls.ActionButton
+											{/* <Controls.ActionButton
 												color='secondary'
 												onClick={() => {
 													setConfirmDialog({
@@ -390,7 +498,7 @@ export default function Order() {
 												}}
 											>
 												<CloseIcon fontSize='small' />
-											</Controls.ActionButton>
+											</Controls.ActionButton> */}
 										</TableCell>
 									</TableRow>
 								);
@@ -407,6 +515,16 @@ export default function Order() {
 			>
 				<OrdersForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
 			</Popup>
+			<ViewPopup
+				title='Loading...'
+				openViewPopup={openViewPopup}
+				setOpenViewPopup={setOpenViewPopup}
+			>
+				<ViewOrder
+					openViewPopup={openViewPopup}
+					setOpenViewPopup={setOpenViewPopup}
+				/>
+			</ViewPopup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog
 				confirmDialog={confirmDialog}

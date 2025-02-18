@@ -30,6 +30,7 @@ import { AuthContext } from "../../shared/context/auth-context.js";
 
 import { usePromotionsValue } from "../../shared/context/PromotionsProvider.js";
 // import "./PromotionTable.css";
+import { toast } from "sonner";
 
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 		padding: theme.spacing(3),
 	},
 	searchInput: {
-		width: "75%",
+		width: "50%",
 	},
 	newButton: {
 		position: "absolute",
@@ -59,7 +60,7 @@ export default function Promotion() {
 	const location = useLocation();
 
 	const {
-		promotionsState: { promotions },
+		promotionsState: { promotions},
 		dispatch,
 	} = usePromotionsValue();
 
@@ -108,11 +109,50 @@ export default function Promotion() {
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
 		fetchPromotions();
 	}, [location.key]);
+
+	useEffect(() => {
+		async function fetchRecipes() {
+			try {
+				setIsLoading(true);
+				const response = await fetch(
+					process.env.REACT_APP_BACKEND_URL + "/recipes/list",
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + auth.token,
+						},
+					}
+				);
+				const data = await response.json();
+				if (data.recipes.length > 0) {
+					dispatch({ type: "UPDATE_PROMO_RECIPES", data });
+				}
+				setIsLoading(false);
+			} catch (err) {
+				console.log("Fetch recipes error:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
+				setIsLoading(false);
+			}
+		}
+		fetchRecipes();
+	}, []);
 
 	const insertPromotion = (promotion) => {
 		console.log("insertdata:", promotion),
@@ -139,10 +179,22 @@ export default function Promotion() {
 				.then(() => {
 					dispatch({ type: "DELETE_PROMOTION", _id });
 					setIsLoading(false);
-					alert("Promotion deleted !");
+					// alert("Promotion deleted !");
+					toast.success("Promotion deleted", {
+						style: {
+							background: "green",
+							color: "white",
+						},
+					});
 				});
 		} catch (err) {
 			console.log("Delete error", err);
+			toast.error(err, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -212,9 +264,9 @@ export default function Promotion() {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper
-					//textAlign='center'
-					 className={classes.pageContent}
-					sx={{ width: 700 }}
+					textAlign='center'
+					className={classes.pageContent}
+					sx={{ width: "100%", p: 1 }}
 				>
 					<Box
 						sx={{
@@ -229,7 +281,7 @@ export default function Promotion() {
 						</Typography>
 					</Box>
 					{/* <Divider /> */}
-					<Toolbar style={{ width: 650 }}>
+					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Promotions'
 							className={classes.searchInput}
@@ -262,10 +314,9 @@ export default function Promotion() {
 					<TblContainer>
 						<TblHead />
 						<TableBody>
-
 							{recordsAfterPagingAndSorting().map((item) => (
 								<TableRow key={item._id}>
-									<TableCell width="80%">{item.promotion}</TableCell>
+									<TableCell width='80%'>{item.promotion}</TableCell>
 									<TableCell>
 										<Controls.ActionButton
 											color='primary'

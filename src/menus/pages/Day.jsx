@@ -43,6 +43,7 @@ const Day = ({ weekday }) => {
 			vegie_recipes,
 			salad_recipes,
 			soup_recipes,
+			frozen_recipes,
 			monday,
 			tuesday,
 			wednesday,
@@ -53,7 +54,7 @@ const Day = ({ weekday }) => {
 	} = useMenuValue();
 
 
-const [record, setRecord] = useState(selected_menu[0]);
+// const [record, setRecord] = useState(selected_menu[0]);
 
 const { fields, append, remove } = useFieldArray({
 	control,
@@ -69,6 +70,9 @@ const [meal, setMeal] = useState({
 	side: "",
 	sidename: "",
 	sidedescription: "",
+	count:1,
+	cost:0,
+	price:0,
 });
 
 	const dayMainChange = (e) => {
@@ -79,6 +83,9 @@ const [meal, setMeal] = useState({
 			main: e.target.value,
 			mainname: obj.name,
 			maindescription: obj.description,
+			count: 1,
+			cost: obj.cost,
+			price: obj.price,
 		};
 		setMeal((meal) => ({
 			...meal,
@@ -120,91 +127,134 @@ const [meal, setMeal] = useState({
 						}}
 					>
 						<Typography fontWeight='700' variant='h6'>
-							~ {weekday.charAt(0).toUpperCase() + weekday.slice(1)} ~
+							{weekday.charAt(0).toUpperCase() + weekday.slice(1)}
 						</Typography>
 					</Box>
 				</Grid>
 				<Grid item xs={12} lg={12}>
 					<Stack>
-						<Stack direction='row'>
+						<Stack direction='row' spacing={2}>
 							<Grid item xs={5} lg={5}>
 								<Stack>
-									<TextField
-										select
-										value={meal.main}
-										name='daymain'
-										label='Main meal'
-										size='small'
-										sx={{ width: "100%" }}
-										// error={!!error}
-										onChange={(event) => {
-											dayMainChange(event);
-										}}
-									>
-										{main_recipes.map((item) => (
-											<MenuItem key={item._id} value={item._id}>
-												{item.name}
-												{item.premium > 0 && (
-													
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											select
+											value={meal.main}
+											name='daymain'
+											label='Main meal'
+											size='small'
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+											// error={!!error}
+											onChange={(event) => {
+												dayMainChange(event);
+											}}
+										>
+											{main_recipes.map((item) => (
+												<MenuItem key={item._id} value={item._id}>
+													{item.name}
+													{item.premium > 0 && (
 														<StarOutlineIcon
 															style={{ color: "green" }}
 															sx={{ pb: 1, ml: 1 }}
 														/>
-													
-												)}
-											</MenuItem>
-										))}
-									</TextField>
-									<TextField
-										id='dayMainDescInput'
-										defaultValue={meal.maindescription}
-										onChange={(e) => {
-											setMeal({
-												...meal,
-												maindescription: e.target.value,
-											});
-										}}
-										size='small'
-										fullWidth
-										minRows={3}
-										multiline
-									/>
+													)}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											id='dayMainDescInput'
+											defaultValue={meal.maindescription}
+											onChange={(e) => {
+												setMeal({
+													...meal,
+													maindescription: e.target.value,
+												});
+											}}
+											size='small'
+											fullWidth
+											minRows={3}
+											multiline
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+										/>
+									</Box>
 								</Stack>
 							</Grid>
 							<Grid item xs={5} lg={5}>
 								<Stack>
-									<TextField
-										select
-										value={meal.side}
-										onChange={(event) => {
-											daySideChange(event);
-										}}
-										label='Side meal'
-										name='dayside'
-										size='small'
-										sx={{ width: "100%" }}
-									>
-										{side_recipes.map((item) => (
-											<MenuItem key={item._id} value={item._id}>
-												{item.name}
-											</MenuItem>
-										))}
-									</TextField>
-
-									<TextField
-										id='daySideDescInput'
-										defaultValue={meal.sidedescription}
-										onChange={(e) => {
-											setMeal({
-												...meal,
-												sidedescription: e.target.value,
-											});
-										}}
-										size='small'
-										fullWidth
-										minRows={3}
-										multiline
-									/>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											select
+											value={meal.side}
+											onChange={(event) => {
+												daySideChange(event);
+											}}
+											label='Side meal'
+											name='dayside'
+											size='small'
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+										>
+											{side_recipes.map((item) => (
+												<MenuItem key={item._id} value={item._id}>
+													{item.name}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											id='daySideDescInput'
+											defaultValue={meal.sidedescription}
+											onChange={(e) => {
+												setMeal({
+													...meal,
+													sidedescription: e.target.value,
+												});
+											}}
+											size='small'
+											fullWidth
+											minRows={3}
+											multiline
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+										/>
+									</Box>
 								</Stack>
 							</Grid>
 							<Grid item xs={2} lg={2}>

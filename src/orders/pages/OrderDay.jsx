@@ -5,18 +5,20 @@ import {
 	Stack,
 	TextField,
 	Button,
-	// MenuItem,
 	List,
 	ListItem,
+	ListItemText,
+	ListItemButton,
+	ListSubheader,
 	Grid,
 	GridItem,
 	Card,
 	CardMedia,
-	IconButton,
+	CircularProgress,
+	Collapse,
 } from "@mui/material";
-// import IconButton from "@mui/material/IconButton";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
-import DeleteIcon from "@mui/icons-material/Delete";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import {
 	FormProvider,
@@ -42,201 +44,169 @@ const OrderDay = ({ weekday }) => {
 			vegie_recipes,
 			salad_recipes,
 			soup_recipes,
+			frozen_recipes,
 			monday,
 			tuesday,
 			wednesday,
 			thursday,
 			friday,
+			frozen,
 		},
 		dispatch,
 	} = useMenuValue();
 
 	const [record, setRecord] = useState(selected_menu[0]);
+	const [openVegies, setOpenVegies] = React.useState(false);
+	const [openSalads, setOpenSalads] = React.useState(false);
+	const [openSoups, setOpenSoups] = React.useState(false);
+	const [openSides, setOpenSides] = React.useState(false);
+	// const [openFrozen, setOpenFrozen] = React.useState(false);
+	// const [openPromo, setOpenPromo] = React.useState(false);
+
 	// const [dayMenu, setDayMenu] = useState([null]);
+	console.log("selectedmenu", record);
 
+	let menuOptions = [];
+	switch (weekday) {
+		case "monday":
+			//fields = [...record.vegies];
+			//	console.log("selected_menu[0].monday", selected_menu[0].monday);
+			menuOptions = [...selected_menu[0].monday];
+			break;
+		case "tuesday":
+			//fields = [...record.salads];
+			menuOptions = [...selected_menu[0].tuesday];
+			break;
+		case "wednesday":
+			//fields = [...record.soups];
+			menuOptions = [...selected_menu[0].wednesday];
+			break;
+		case "thursday":
+			//fields = [...record.sides];
+			menuOptions = [...selected_menu[0].thursday];
+			break;
+		case "friday":
+			//fields = [...record.sides];
+			menuOptions = [...selected_menu[0].friday];
+			break;
+		case "frozen":
+			//fields = [...record.sides];
+			menuOptions = [...selected_menu[0].frozen];
+			break;
+		default:
+			menuOptions = [];
+	}
+
+	const vegiesOptions = [...selected_menu[0].vegies];
+	const saladsOptions = [...selected_menu[0].salads];
+	const soupsOptions = [...selected_menu[0].soups];
+	const sidesOptions = [...selected_menu[0].sides];
+	// const frozenOptions = [...selected_menu[0].frozen];
 	
-let menuOptions = [];
-switch (weekday) {
-	case "monday":
-		//fields = [...record.vegies];
-		console.log("selected_menu[0].monday", selected_menu[0].monday);
-		menuOptions = [...selected_menu[0].monday];
-		break;
-	case "tuesday":
-		//fields = [...record.salads];
-		menuOptions = [...selected_menu[0].tuesday];
-		break;
-	case "wednesday":
-		//fields = [...record.soups];
-		menuOptions = [...selected_menu[0].wednesday];
-		break;
-	case "thursday":
-		//fields = [...record.sides];
-		menuOptions = [...selected_menu[0].thursday];
-		break;
-	case "friday":
-		//fields = [...record.sides];
-		menuOptions = [...selected_menu[0].friday];
-		break;
-	default:
-		menuOptions = [];
-}
 
-console.log("CCCCC",weekday, menuOptions);
-
-	const { fields, append, remove } = useFieldArray({
-		control,
-		name: `${weekday}`,
-	});
-
-	const [order, setOrder] = useState({
-		// id: 0,
-		item: "",
-		category: "",
-		description: "",
-		premium: "",
-		count: "",
-		price: "",
-	});
-
-	// const dayMainChange = (e) => {
-	// 	let obj = main_recipes.find((o) => o._id === e.target.value);
-	// 	let mainItems = {};
-	// 	mainItems = {
-	// 		image: obj.image,
-	// 		main: e.target.value,
-	// 		mainname: obj.name,
-	// 		maindescription: obj.description,
-	// 	};
-	// 	setMeal((meal) => ({
-	// 		...meal,
-	// 		...mainItems,
-	// 	}));
-
-	// 	document.getElementById("dayMainDescInput").value = obj.description;
-	// 	//		console.log("GETMealmain", meal);
-	// };
-	// const daySideChange = (e) => {
-	// 	let obj = side_recipes.find((o) => o._id === e.target.value);
-	// 	let sideItems = {};
-	// 	sideItems = {
-	// 		side: e.target.value,
-	// 		sidename: obj.name,
-	// 		sidedescription: obj.description,
-	// 	};
-	// 	setMeal((meal) => ({
-	// 		...meal,
-	// 		...sideItems,
-	// 	}));
-
-	// 	document.getElementById("daySideDescInput").value = obj.description;
-	// 	//		console.log("GETMealside", meal);
-	// };
-
-	// const onSubmit = (data) => console.log(data);
+	const handleVegiesClick = () => {
+		setOpenVegies(!openVegies);
+	};
+	const handleSaladsClick = () => {
+		setOpenSalads(!openSalads);
+	};
+	const handleSoupsClick = () => {
+		setOpenSoups(!openSoups);
+	};
+	const handleSidesClick = () => {
+		setOpenSides(!openSides);
+	};
+		// const handleFrozenClick = () => {
+		// 	setOpenFrozen(!openFrozen);
+		// };
 
 	return (
 		<Grid item xs={12} lg={12}>
 			<Stack>
 				<Grid item xs={12} lg={12}>
-					<Box
-						sx={{
-							mx: "auto",
-							textAlign: "center",
-							p: 2,
-							m: 0,
-						}}
-					>
-						<Typography fontWeight='700' variant='h6'>
-							~ {weekday.charAt(0).toUpperCase() + weekday.slice(1)} ~
-						</Typography>
-					</Box>
-				</Grid>
-				<Grid item xs={12} lg={12}>
-					{/* // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */}
 					<Controller
 						name={weekday}
 						control={control}
 						render={({ fieldState: { error } }) => (
-							<List>
-								{menuOptions.map((item, i) => {
-                                    return <MenuItem data={item} id={i} key={i} />;
+							<>
+								<List label='Main Meals'>
+									{menuOptions.map((item, i) => {
+										return (
+											<MenuItem data={item} id={i} key={i} day={weekday} />
+										);
+									})}
+								</List>
 
-									{/* console.log("recordlists", menuOptions); */}
-									{/* return (
-										<ListItem key={index}> */}
-											{/* <Grid width='95%'>
-												<Stack direction='row' width='100%'>
-													<Grid item xs={1} lg={1}>
-														<Card sx={{ width: 50, p: 0.5 }}>
-															<CardMedia
-																component='img'
-																image={image}
-																alt='Meal image'
-																height='50px'
-															/>
-														</Card>
-													</Grid>
-													<Grid item xs={6} lg={6}>
-														<Stack direction='row'>
-															<Typography fontWeight='700'>
-																{main.name}
-															</Typography>
-															{menuOptions.indexOf("side" > -1) && (
-																<Typography fontWeight='700'>
-																	&nbsp; {`& ${sidedescription}`}
-																</Typography>
-															)}
-															{main.premium > 0 && (
-																<Typography fontWeight='700'>
-																	<StarOutlineIcon style={{color:"green"}} sx={{pb:1,ml:1}}/>
-																</Typography>
-															)}
-														</Stack>
-													</Grid>
-													<Grid item xs={3} lg={3}>
-														<Stack direction='row'>
-															<IconButton
-																sx={{
-																	height: 10,
-																	m: 2,
-																	p: 2,
-																}}
-																size='small'
-																variant='outlined'
-																color='error'
-																type='button'
-																// onClick={() => {
-																// 	console.log("index", id),
-																// 	remove(main),
-																// 		setMeal({
-																// 			image: "",
-																// 			main: "",
-																// 			mainname: "",
-																// 			maindescription: "",
-																// 			side: "",
-																// 			sidename: "",
-																// 			sidedescription: "",
-																// 		}),
-																// 		//	console.log("appendedmeal", meal),
-																// 		(document.getElementById(
-																// 			"dayMainDescInput"
-																// 		).value = ""),
-																// 		(document.getElementById(
-																// 			"daySideDescInput"
-																// 		).value = "");
-																// }}
-															>
-																<DeleteIcon />
-															</IconButton>
-														</Stack>
-													</Grid>
-												</Stack>
-											</Grid> */}
-										{/* </ListItem> */}
-									{/* ); */}
-								})}
-							</List>
+								<ListItemButton onClick={handleVegiesClick} sx={{ width: 200 }}>
+									<ListItemText primary='Add Vegies' />
+									{openVegies ? <ExpandLess /> : <ExpandMore />}
+								</ListItemButton>
+								<Collapse in={openVegies} timeout='auto' unmountOnExit>
+									<List component='div' disablePadding>
+										{vegiesOptions.map((item, i) => {
+											return (
+												<MenuItem data={item} id={i} key={i} day={weekday} />
+											);
+										})}
+									</List>
+								</Collapse>
+
+								<ListItemButton onClick={handleSaladsClick} sx={{ width: 200 }}>
+									<ListItemText primary='Fresh Salads' />
+									{openSalads ? <ExpandLess /> : <ExpandMore />}
+								</ListItemButton>
+								<Collapse in={openSalads} timeout='auto' unmountOnExit>
+									<List component='div' disablePadding>
+										{saladsOptions.map((item, i) => {
+											return (
+												<MenuItem data={item} id={i} key={i} day={weekday} />
+											);
+										})}
+									</List>
+								</Collapse>
+
+								<ListItemButton onClick={handleSoupsClick} sx={{ width: 200 }}>
+									<ListItemText primary='Yummy Soups' />
+									{openSoups ? <ExpandLess /> : <ExpandMore />}
+								</ListItemButton>
+								<Collapse in={openSoups} timeout='auto' unmountOnExit>
+									<List component='div' disablePadding>
+										{soupsOptions.map((item, i) => {
+											return (
+												<MenuItem data={item} id={i} key={i} day={weekday} />
+											);
+										})}
+									</List>
+								</Collapse>
+
+								<ListItemButton onClick={handleSidesClick} sx={{ width: 200 }}>
+									<ListItemText primary='Extra Sides' />
+									{openSides ? <ExpandLess /> : <ExpandMore />}
+								</ListItemButton>
+								<Collapse in={openSides} timeout='auto' unmountOnExit>
+									<List component='div' disablePadding>
+										{sidesOptions.map((item, i) => {
+											return (
+												<MenuItem data={item} id={i} key={i} day={weekday} />
+											);
+										})}
+									</List>
+								</Collapse>
+
+								{/* <ListItemButton onClick={handleFrozenClick} sx={{ width: 200 }}>
+									<ListItemText primary='Frozen Meals' />
+									{openFrozen ? <ExpandLess /> : <ExpandMore />}
+								</ListItemButton>
+								<Collapse in={openFrozen} timeout='auto' unmountOnExit>
+									<List component='div' disablePadding>
+										{frozenOptions.map((item, i) => {
+											return (
+												<MenuItem data={item} id={i} key={i} day={weekday} />
+											);
+										})}
+									</List>
+								</Collapse> */}
+							</>
 						)}
 					/>
 				</Grid>

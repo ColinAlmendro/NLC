@@ -26,9 +26,9 @@ import {
 	CardMedia,
 	CircularProgress,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-// import { NumericFormat } from "react-number-format";
+
 import * as Yup from "yup";
+import { useValue } from "../../shared/context/SettingsProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,18 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 import "./Listitem.css";
+import { makeStyles } from "@mui/styles";
+
+import { toast } from "sonner";
+
+const useStyles = makeStyles({
+	label: {
+		color: "#212121",
+		"&.Mui-focused": {
+			color: "black",
+		},
+	},
+});
 
 const validationSchema = Yup.object()
 	.shape({
@@ -61,9 +73,12 @@ const validationSchema = Yup.object()
 		cell: Yup.string()
 			.required()
 			.label("Cell")
+			.matches(/^[0-9]+$/, "Invalid cell no.")
+			.min(10, "Invalid cell no.")
 			.typeError("Cell no. required"),
 		email: Yup.string()
-			.notRequired()
+			.email("Invalid email format")
+			.required()
 			.label("Email"),
 		dob: Yup.string()
 			.notRequired()
@@ -72,29 +87,28 @@ const validationSchema = Yup.object()
 			.required()
 			.label("Address")
 			.typeError("Address required"),
-		address2: Yup.string()
+		area: Yup.string()
 			.required()
 			.label("Area")
 			.typeError("Area required"),
-		// location: Yup.string()
-		// 	.notRequired()
-		// 	.label("Name"),
 		note: Yup.string()
 			.notRequired()
-			.label("Name")
+			.label("Name"),
 	})
 	.required();
 
 function CustomersForm(props) {
+	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(false);
+	const { state, dispatch } = useValue();
 	const {
 		customersState: { customers, selected_customer },
 		dispatchCustomer,
 	} = useCustomersValue();
-
+	const [areaList, setAreaList] = useState(state.area_list);
 	const [record, setRecord] = useState(selected_customer[0]);
 
 	const history = useNavigate();
@@ -114,12 +128,11 @@ function CustomersForm(props) {
 			cell: "",
 			email: "",
 			address1: "",
-			address2: "",
-			// location: "",
+			area: "",
 			note: "",
 		};
 	}
-	
+
 	const formProps = useForm({
 		defaultValues: defaultCustomer,
 		resolver: yupResolver(validationSchema),
@@ -148,21 +161,6 @@ function CustomersForm(props) {
 		submitCount,
 	} = formState;
 
-	// const { fields, append, remove } = useFieldArray({
-	// 	control,
-	// 	name: `items`,
-	// });
-	//console.log("xtra record",record)
-
-	// const [customerItem, setCustomerItem] = useState({
-	// 	name: "",
-	// 	cell: "",
-	// 	email: "",
-	// 	address1: "",
-	// 	address2: "",
-	// 	location: "",
-	// 	note: "",
-	// });
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	const onSubmit = async (data) => {
@@ -189,8 +187,7 @@ function CustomersForm(props) {
 							cell: data.cell,
 							email: data.email,
 							address1: data.address1,
-							address2: data.address2,
-							// location: data.location,
+							area: data.area,
 							note: data.note,
 						}),
 					}
@@ -198,6 +195,12 @@ function CustomersForm(props) {
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
 					console.log("response error", dataEdit.message);
+					toast.error(dataEdit.message, {
+						style: {
+							background: "red",
+							color: "white",
+						},
+					});
 					return data;
 				}
 				console.log("UpDate", data);
@@ -207,7 +210,13 @@ function CustomersForm(props) {
 				setOpen(false);
 				setOpenPopup(false);
 				history("/customers");
-				alert("Customer updated");
+				//alert("Customer updated");
+				toast.success("Customer updated", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
 				return data.customers;
 			} catch (err) {
 				console.log("Update err:", err);
@@ -234,8 +243,7 @@ function CustomersForm(props) {
 							cell: data.cell,
 							email: data.email,
 							address1: data.address1,
-							address2: data.address2,
-							// location: data.location,
+							area: data.area,
 							note: data.note,
 						}),
 					}
@@ -245,12 +253,24 @@ function CustomersForm(props) {
 
 				setIsLoading(false);
 				history("/customers");
-				alert("New customer added");
+				//alert("New customer added");
+				toast.success("New customer added", {
+					style: {
+						background: "green",
+						color: "white",
+					},
+				});
 				setOpen(false);
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
 				console.log("SubmitNew err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -269,7 +289,7 @@ function CustomersForm(props) {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper>
-					{isLoading && <LoadingSpinner asOverlay />}
+					{/* {isLoading && <LoadingSpinner asOverlay />} */}
 
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
@@ -300,7 +320,7 @@ function CustomersForm(props) {
 												<Stack direction='row'>
 													<Button
 														sx={{ gap: "1rem" }}
-														// width='100px'
+														
 														variant='outlined'
 														color='error'
 														autoFocus
@@ -313,7 +333,7 @@ function CustomersForm(props) {
 													</Button>
 													<Button
 														sx={{ display: "flex", gap: "1rem" }}
-														// width='100px'
+														
 														variant='outlined'
 														color='success'
 														type='submit'
@@ -329,73 +349,147 @@ function CustomersForm(props) {
 									<Grid item xs={12} lg={12}>
 										<Stack spacing={2}>
 											<Stack direction='row' spacing={2}>
-												<Stack spacing={2}>
-													<InputLabel sx={{ textAlign: "left" }}>
+												<Stack>
+													<InputLabel
+														sx={{ textAlign: "left" }}
+														className={classes.label}
+													>
 														Name
 													</InputLabel>
-													
+													<Box bgcolor='primary.light' p={0}>
 														<FieldInputText
 															name='name'
 															control={control}
-															// label='Name'
+														
 														/>
-												
+													</Box>
 												</Stack>
-												<Stack spacing={2} style={{ width: "100%" }}>
-													<InputLabel sx={{ textAlign: "left" }}>
+												<Stack style={{ width: "100%" }}>
+													<InputLabel
+														sx={{ textAlign: "left" }}
+														className={classes.label}
+													>
 														Surname
 													</InputLabel>
-													<FieldInputText
-														name='surname'
-														control={control}
-														// label='Surname'
-													/>
+													<Box bgcolor='primary.light' p={0}>
+														<FieldInputText
+															name='surname'
+															control={control}
+														
+														/>
+													</Box>
 												</Stack>
 											</Stack>
 											<Stack direction='row' spacing={2}>
-												<Stack spacing={2}>
-													<InputLabel sx={{ textAlign: "left" }}>
+												<Stack>
+													<InputLabel
+														sx={{ textAlign: "left" }}
+														className={classes.label}
+													>
 														Cell
 													</InputLabel>
-													<FieldInputText
-														name='cell'
-														control={control}
-														// label='Cell'
-													/>
+													<Box bgcolor='primary.light' p={0}>
+														<FieldInputText
+															name='cell'
+															control={control}
+														
+														/>
+													</Box>
 												</Stack>
-												<Stack spacing={2} style={{ width: "100%" }}>
-													<InputLabel sx={{ textAlign: "left" }}>
+												<Stack style={{ width: "100%" }}>
+													<InputLabel
+														sx={{ textAlign: "left" }}
+														className={classes.label}
+													>
 														Email
 													</InputLabel>
-													<FieldInputText
-														name='email'
-														control={control}
-														// label='Email'
-													/>
+													<Box bgcolor='primary.light' p={0}>
+														<FieldInputText
+															name='email'
+															control={control}
+															
+														/>
+													</Box>
 												</Stack>
 											</Stack>
-
-											<InputLabel sx={{ textAlign: "left" }}>
-												Address
-											</InputLabel>
-											<FieldInputText
-												name='address1'
-												control={control}
-												// label='Address'
-											/>
-											<Stack direction='row' spacing={2}>
-												<Stack spacing={2}>
-													<InputLabel sx={{ textAlign: "left" }}>
-														Area
-													</InputLabel>
+											<Stack style={{ width: "100%" }}>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Address
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
 													<FieldInputText
-														name='address2'
+														name='address1'
 														control={control}
-														// label='Area'
+														// label='Address'
+													/>
+												</Box>
+											</Stack>
+											<Stack direction='row' spacing={2}>
+												<Stack>
+													<Controller
+														name='area'
+														control={control}
+														render={({
+															field: { onChange, value },
+															fieldState: { error },
+														}) => {
+															return (
+																<>
+																	<InputLabel
+																		sx={{ textAlign: "left" }}
+																		className={classes.label}
+																	>
+																		Area
+																	</InputLabel>
+																	<Box bgcolor='primary.light' p={0}>
+																		<TextField
+																			select
+																			value={value}
+																			onChange={(event) => {
+																				onChange(event.target.value);
+																			}}
+																			sx={{
+																				"& fieldset": { border: "none" },
+																				"& .MuiInputBase-root": {
+																					"& input": {
+																						textAlign: "left",
+																					},
+																				},
+
+																				border: "1px solid",
+																			}}
+																			size='small'
+																			// fullWidth
+																			style={{ width: 200 }}
+																			helperText={`${
+																				error?.message ? error?.message : ""
+																			}`}
+																			error={!!error}
+																		>
+																			{areaList.map((option) => (
+																				<MenuItem
+																					key={option.id}
+																					value={option.area}
+																				>
+																					{option.area}
+																				</MenuItem>
+																			))}
+																		</TextField>
+																	</Box>
+																</>
+															);
+														}}
 													/>
 												</Stack>
-												<Stack spacing={2}>
-													<InputLabel sx={{ textAlign: "left" }}>
+
+												<Stack >
+													<InputLabel
+														sx={{ textAlign: "left" }}
+														className={classes.label}
+													>
 														Birthday
 													</InputLabel>
 													<Box
@@ -408,6 +502,7 @@ function CustomersForm(props) {
 															},
 															mx: "auto",
 															mt: 0,
+															//	bgcolor: "primary.light",
 														}}
 													>
 														<Controller
@@ -434,16 +529,16 @@ function CustomersForm(props) {
 																				onChange(date);
 																			}}
 																			sx={{
-																				"& fieldset": { border: "none" },
+																				"& fieldset": { border: "1px solid" },
 																				"& .MuiInputBase-root": {
 																					"& input": {
 																						textAlign: "left",
 																					},
 																				},
-																				border: "none",
+																				border: "1px solid",
 																				mb: 2,
 																			}}
-
+																			size='small'
 																			// helperText={`${
 																			// 	error?.message ? error?.message : ""
 																			// }`}
@@ -454,22 +549,23 @@ function CustomersForm(props) {
 															}}
 														/>
 													</Box>
-													{/* <InputLabel sx={{ textAlign: "left" }}>
-														Location
-													</InputLabel>
-													<FieldInputText
-														name='location'
-														control={control}
-														// label='Location'
-													/> */}
 												</Stack>
 											</Stack>
-											<InputLabel sx={{ textAlign: "left" }}>Note</InputLabel>
-											<FieldInputTextarea
-												name='note'
-												// label='Note'
-												control={control}
-											/>
+											<Stack>
+												<InputLabel
+													sx={{ textAlign: "left" }}
+													className={classes.label}
+												>
+													Note
+												</InputLabel>
+												<Box bgcolor='primary.light' p={0}>
+													<FieldInputTextarea
+														name='note'
+														// label='Note'
+														control={control}
+													/>
+												</Box>
+											</Stack>
 										</Stack>
 									</Grid>
 								</Grid>

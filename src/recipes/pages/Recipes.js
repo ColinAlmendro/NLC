@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import RecipeForm from "./RecipeForm.jsx";
+import ViewRecipe from "./ViewRecipe.jsx";
 
 import {
 	Container,
@@ -23,7 +24,9 @@ import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup.js";
+import ViewPopup from "./ViewPopup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
@@ -32,13 +35,34 @@ import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useLocation } from "react-router";
 import { useRecipeValue } from "../../shared/context/RecipeProvider.js";
-// import "./RecipeTable.css";
+ import "./Recipe.css";
+ import "./RecipeTable.css";
+import { toast } from "sonner";
 
+// const useStyles = makeStyles((theme) => ({
+// 	pageContent: {
+// 		align: "center",
+// 		margin: theme.spacing(5),
+// 		padding: theme.spacing(3),
+// 	},
+// 	searchInput: {
+// 		width: "50%",
+// 	},
+// 	newButton: {
+// 		position: "absolute",
+// 		right: "10px",
+// 	},
+// 	img: {
+// 		height: "50px",
+// 		width: "50px",
+// 		borderRadius: "50%",
+// 	},
+// }));
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
 		align: "center",
 		margin: theme.spacing(5),
-		padding: theme.spacing(3),
+		padding: theme.spacing(1),
 	},
 	searchInput: {
 		width: "75%",
@@ -47,14 +71,24 @@ const useStyles = makeStyles((theme) => ({
 		position: "absolute",
 		right: "10px",
 	},
+	img: {
+		height: "50px",
+		width: "50px",
+		borderRadius: "50%",
+	},
 }));
 
 const headCells = [
 	// { id: "_id", label: "Id" },
-	{ id: "image", label: "Image" },
-	{ id: "category", label: "Category" },
+	{ id: "image", label: "Image", disableSorting: true },
+	{ id: "category", label: "Type" },
+	{ id: "freezable", label: "Freeze" },
 	{ id: "name", label: "Name" },
 	{ id: "description", label: "Description" },
+	{ id: "cost", label: "Unit Cost" },
+	{ id: "totalcost", label: "Total Cost" },
+	{ id: "price", label: "Unit Price" },
+	{ id: "orders", label: "Orders" },
 	{ id: "actions", label: "Actions", disableSorting: true },
 ];
 
@@ -65,7 +99,7 @@ export default function Recipes() {
 	const location = useLocation();
 	const {
 		recipeState: { recipes },
-		dispatch,
+		dispatchRecipe,
 	} = useRecipeValue();
 
 	const classes = useStyles();
@@ -81,6 +115,7 @@ export default function Recipes() {
 		},
 	});
 	const [openPopup, setOpenPopup] = useState(false);
+	const [openViewPopup, setOpenViewPopup] = useState(false);
 	const [notify, setNotify] = useState({
 		isOpen: false,
 		message: "",
@@ -109,10 +144,16 @@ export default function Recipes() {
 				);
 				const data = await response.json();
 				console.log("Recipes list :", data.recipes);
-				dispatch({ type: "UPDATE_RECIPES", data });
+				dispatchRecipe({ type: "UPDATE_RECIPES", data });
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -122,12 +163,12 @@ export default function Recipes() {
 
 	const insertRecipe = (recipe) => {
 		console.log("insertdata:", recipe),
-			dispatch({ type: "INSERT_RECIPE", recipe });
+			dispatchRecipe({ type: "INSERT_RECIPE", recipe });
 	};
 
 	const updateRecipe = (recipe) => {
 		console.log("updatedata:", recipe),
-			dispatch({ type: "UPDATE_RECIPE", recipe });
+			dispatchRecipe({ type: "UPDATE_RECIPE", recipe });
 	};
 
 	const deleteRecipeItem = async (_id) => {
@@ -143,12 +184,25 @@ export default function Recipes() {
 			})
 				.then((response) => response.json())
 				.then(() => {
-					dispatch({ type: "DELETE_RECIPE", _id });
+					dispatchRecipe({ type: "DELETE_RECIPE", _id });
 					setIsLoading(false);
-					alert("Recipe deleted !");
+					//alert("Recipe deleted !");
+					toast.success("Recipe deleted", {
+						style: {
+							background: "green",
+							color: "white",
+						},
+					});
+
 				});
 		} catch (err) {
 			console.log("Delete error", err);
+			toast.error(err, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -189,7 +243,7 @@ export default function Recipes() {
 
 	const openInPopup = (item) => {
 		// setRecordForEdit(item);
-		dispatch({ type: "SET_SELECTED_RECIPE", _id: item._id });
+		dispatchRecipe({ type: "SET_SELECTED_RECIPE", _id: item._id });
 		setOpenPopup(true);
 	};
 
@@ -205,7 +259,7 @@ export default function Recipes() {
 			type: "error",
 		});
 	};
-	//let period = "";
+	let orderCount = 0;
 
 	if (isLoading) {
 		return (
@@ -216,12 +270,12 @@ export default function Recipes() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }} fullWidth>
+			<Container sx={{ border: "none" }} fullwidth>
 				<Paper
-					//textAlign='center'
-					// className={classes.pageContent}
-					// sx={{ width: 900 }}
-					sx={{ p: 1 }}
+					textAlign='center'
+					className={classes.pageContent}
+					sx={{ width:"100%", p: 1 }}
+				
 				>
 					<Box
 						sx={{
@@ -231,12 +285,12 @@ export default function Recipes() {
 							m: 0,
 						}}
 					>
-						<Typography fontWeight='700' variant='h5'>
+						<Typography fontWeight='900' variant='h5'>
 							Recipe Manager
 						</Typography>
 					</Box>
 					{/* <Divider /> */}
-					<Toolbar>
+					<Toolbar style={{ width:"100%" }}>
 						<Controls.Input
 							label='Search Recipes'
 							className={classes.searchInput}
@@ -254,7 +308,7 @@ export default function Recipes() {
 							// startIcon={<AddIcon />}
 							className={classes.newButton}
 							onClick={() => {
-								dispatch({
+								dispatchRecipe({
 									type: "RESET_SELECTED_RECIPE",
 								}),
 									setOpenPopup(true);
@@ -268,53 +322,87 @@ export default function Recipes() {
 					<TblContainer>
 						<TblHead />
 						<TableBody>
-							{recordsAfterPagingAndSorting().map((item) => (
-								<TableRow key={item._id}>
-									{/* <TableCell width="0px">{item._id}</TableCell> */}
-									<TableCell>
-										<img
-											src={`${item.image}?w=164&fit=crop&auto=format`}
-											alt={item.name}
-											loading='lazy'
-											height='50px'
-										/>
-									</TableCell>
-									<TableCell>{item.category}</TableCell>
-									<TableCell>{item.name}</TableCell>
-									<TableCell>{item.description}</TableCell>
+							{recordsAfterPagingAndSorting().map((item) => {
+								{
+									/* console.log("recipe item", item); */
+								}
+								item.orders ? (orderCount = item.orders) : (orderCount = 0);
+								return (
+									<TableRow key={item._id}>
+										<TableCell width='5%'>
+											<img
+												src={`${item.image}?w=164&fit=crop&auto=format`}
+												alt={item.name}
+												loading='lazy'
+												className={classes.img}
+											/>
+										</TableCell>
+										<TableCell width='5%'>{item.category}</TableCell>
+										<TableCell  width= "5%">
+											{item.freezable}
+										</TableCell>
+										<TableCell  width= "5%">{item.name}</TableCell>
+										<TableCell  width= "5%">
+											{item.description}
+										</TableCell>
+										<TableCell  width= "5%">
+											{Number(item.cost).toFixed(2)}
+										</TableCell>
+										<TableCell  width= "5%">
+											{Number(item.cost * item.feeds).toFixed(2)}
+										</TableCell>
+										<TableCell  width= "5%">
+											{Number(item.price).toFixed(2)}
+										</TableCell>
+										<TableCell  width= "5%">{item.orders}</TableCell>
 
-									<TableCell>
-										<Controls.ActionButton
-											color='primary'
-											onClick={() => {
-												dispatch({
-													type: "SET_SELECTED_RECIPE",
-													id: item._id,
-												}),
-													setOpenPopup(true);
-												// openInPopup(item);
-											}}
-										>
-											<EditOutlinedIcon fontSize='small' />
-										</Controls.ActionButton>
-										<Controls.ActionButton
-											color='secondary'
-											onClick={() => {
-												setConfirmDialog({
-													isOpen: true,
-													title: "Are you sure to delete this record?",
-													subTitle: "You can't undo this operation",
-													onConfirm: () => {
-														onDelete(item._id);
-													},
-												});
-											}}
-										>
-											<CloseIcon fontSize='small' />
-										</Controls.ActionButton>
-									</TableCell>
-								</TableRow>
-							))}
+										<TableCell>
+											<Controls.ActionButton
+												color='primary'
+												onClick={() => {
+													dispatchRecipe({
+														type: "SET_SELECTED_RECIPE",
+														id: item._id,
+													});
+
+													setOpenViewPopup(true);
+													// openInPopup(item);
+												}}
+											>
+												<PageviewOutlinedIcon fontSize='small' />
+											</Controls.ActionButton>
+											<Controls.ActionButton
+												color='primary'
+												onClick={() => {
+													dispatchRecipe({
+														type: "SET_SELECTED_RECIPE",
+														id: item._id,
+													}),
+														setOpenPopup(true);
+													// openInPopup(item);
+												}}
+											>
+												<EditOutlinedIcon fontSize='small' />
+											</Controls.ActionButton>
+											<Controls.ActionButton
+												color='secondary'
+												onClick={() => {
+													setConfirmDialog({
+														isOpen: true,
+														title: "Are you sure to delete this record?",
+														subTitle: "You can't undo this operation",
+														onConfirm: () => {
+															onDelete(item._id);
+														},
+													});
+												}}
+											>
+												<CloseIcon fontSize='small' />
+											</Controls.ActionButton>
+										</TableCell>
+									</TableRow>
+								);
+							})}
 						</TableBody>
 					</TblContainer>
 					<TblPagination />
@@ -325,6 +413,16 @@ export default function Recipes() {
 				<RecipeForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
 				{/* <RecipeForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
 			</Popup>
+			<ViewPopup
+				title='Loading...'
+				openViewPopup={openViewPopup}
+				setOpenViewPopup={setOpenViewPopup}
+			>
+				<ViewRecipe
+					openViewPopup={openViewPopup}
+					setOpenViewPopup={setOpenViewPopup}
+				/>
+			</ViewPopup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog
 				confirmDialog={confirmDialog}

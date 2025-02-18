@@ -20,9 +20,19 @@ function FieldInputTextarea({ type = "text", name, label, control }) {
 						error={!!error}
 						fullWidth
 						//sx={{ mb: 1 }}
-						minRows={3}
+						minRows={5}
 						//maxRows={10}
 						multiline='true'
+						sx={{
+							"& fieldset": { border: "none" },
+							"& .MuiInputBase-root": {
+								"& input": {
+									textAlign: "left",
+								},
+							},
+							//width: "200px",
+							border: "1px solid",
+						}}
 					/>
 				);
 			}}

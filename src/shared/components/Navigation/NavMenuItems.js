@@ -1,91 +1,52 @@
-const RecipeMenuItems = [
+const AdminMenuItems = [
 	{
-		title: "Test",
-		path: "/recipes/recipe",
+		title: "DaysOrders",
+		path: "/daysorders",
 		cName: "dropdown-link",
 	},
 	{
-		title: "List",
-		path: "/recipes/list",
-		cName: "dropdown-link",
-	},
-	{
-		title: "Add",
-		path: "/recipes/new",
-		cName: "dropdown-link",
-	},
-	{
-		title: "Edit",
-		path: "/recipes/edit",
-		cName: "dropdown-link",
-	},
-	{
-		title: "Delete",
-		path: "/recipes/delete",
-		cName: "dropdown-link",
-	},
-];
-const IngredientMenuItems = [
-	{
-		title: "List",
-		path: "/ingredients/list",
-		cName: "dropdown-link",
-	},
-	{
-		title: "Add",
-		path: "/ingredients/new",
-		cName: "dropdown-link",
-	},
-	{
-		title: "Edit",
-		path: "/ingredients/edit",
-		cName: "dropdown-link",
-	},
-	{
-		title: "Delete",
-		path: "/ingredients/delete",
-		cName: "dropdown-link",
-	},
-];
-const MenuMenuItems = [
-	{
-		title: "Manager",
-		path: "/menus/manager",
-		cName: "dropdown-link",
-	},
-	// {
-	// 	title: "Add",
-	// 	path: "/menus/new",
-	// 	cName: "dropdown-link",
-	// },
-	// {
-	// 	title: "Edit",
-	// 	path: "/menus/edit",
-	// 	cName: "dropdown-link",
-	// },
-	// {
-	// 	title: "Delete",
-	// 	path: "/menus/delete",
-	// 	cName: "dropdown-link",
-	// },
-];
-
-
-const MuiMenuItems = [
-	{
-		title: "Employees",
-		path: "/mui/employees",
+		title: "Ingredients",
+		path: "/ingredients",
 		cName: "dropdown-link",
 	},
 	{
 		title: "Recipes",
-		path: "/mui/recipes",
+		path: "/recipes",
 		cName: "dropdown-link",
 	},
 	{
-		title: "Tools",
-		path: "/mui/tools",
+		title: "Menus",
+		path: "/menus",
+		cName: "dropdown-link",
+	},
+	{
+		title: "Orders",
+		path: "/orders",
+		cName: "dropdown-link",
+	},
+	{
+		title: "Customers",
+		path: "/customers",
+		cName: "dropdown-link",
+	},
+	{
+		title: "Promotions",
+		path: "/promotions",
+		cName: "dropdown-link",
+	},
+	{
+		title: "Users",
+		path: "/users",
+		cName: "dropdown-link",
+	},
+	{
+		title: "Settings",
+		path: "/appsettings",
 		cName: "dropdown-link",
 	},
 ];
-export { MenuMenuItems, RecipeMenuItems, IngredientMenuItems, MuiMenuItems };
+
+
+export {
+	AdminMenuItems,
+};

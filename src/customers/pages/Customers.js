@@ -14,7 +14,6 @@ import {
 	Divider,
 	CircularProgress,
 	InputAdornment,
-	Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
@@ -27,8 +26,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
-
+import { useValue } from "../../shared/context/SettingsProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
+
+import { toast } from "sonner";
 // import "./CustomerTable.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 		padding: theme.spacing(3),
 	},
 	searchInput: {
-		width: "75%",
+		width: "50%",
 	},
 	newButton: {
 		position: "absolute",
@@ -47,21 +48,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-	//{ id: "id", label: "Id" },
 	{ id: "name", label: "Name" },
 	{ id: "surname", label: "Surname" },
 	{ id: "cell", label: "Cell" },
 	{ id: "email", label: "Email" },
 	{ id: "address1", label: "Address" },
-	{ id: "address2", label: "Area" },
+	{ id: "area", label: "Area" },
 	{ id: "dob", label: "Birthday" },
-	// { id: "location", label: "Location" },
 	{ id: "note", label: "Note" },
 	{ id: "actions", label: "Actions", disableSorting: true },
 ];
 
 export default function Customer() {
-	console.log("loading customer");
+	//console.log("loading customer");
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -111,11 +110,17 @@ export default function Customer() {
 					}
 				);
 				const data = await response.json();
-				console.log("Customers list :", data.customers);
+				//console.log("Customers list :", data.customers);
 				dispatchCustomer({ type: "UPDATE_CUSTOMERS", data });
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//	console.log(err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
@@ -151,6 +156,12 @@ export default function Customer() {
 				});
 		} catch (err) {
 			console.log("Delete error", err);
+			toast.error(err, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -220,9 +231,9 @@ export default function Customer() {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper
-				//	textAlign='center'
-				//	className={classes.pageContent}
-					 sx={{ p:1}}
+					textAlign='center'
+					className={classes.pageContent}
+					sx={{ width: "100%", p: 1 }}
 				>
 					<Box
 						sx={{
@@ -237,7 +248,7 @@ export default function Customer() {
 						</Typography>
 					</Box>
 					{/* <Divider /> */}
-					<Toolbar>
+					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Customers'
 							className={classes.searchInput}
@@ -251,10 +262,11 @@ export default function Customer() {
 							onChange={handleSearch}
 						/>
 						<Button
-						//	text='Add New'
+							//	text='Add New'
 							variant='contained'
 							// startIcon={<AddIcon />}
 							className={classes.newButton}
+							sx={{ marginLeft: "auto" }}
 							onClick={() => {
 								dispatchCustomer({
 									type: "RESET_SELECTED_CUSTOMER",
@@ -278,9 +290,8 @@ export default function Customer() {
 										<TableCell>{item.cell}</TableCell>
 										<TableCell>{item.email}</TableCell>
 										<TableCell>{item.address1}</TableCell>
-										<TableCell>{item.address2}</TableCell>
+										<TableCell>{item.area}</TableCell>
 										<TableCell>{dob}</TableCell>
-										{/* <TableCell>{item.location}</TableCell> */}
 										<TableCell>{item.note}</TableCell>
 										<TableCell>
 											<Controls.ActionButton

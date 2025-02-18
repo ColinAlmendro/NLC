@@ -1,25 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
- import LoadingSpinner from "../../src/shared/components/UIElements/LoadingSpinner.js";
-// import { Typography, Box, Divider } from "@mui/material";
-// import * as Yup from "yup";
-// import {
-// 	FormProvider,
-// 	useFormContext,
-// 	useForm,
-// 	useFieldArray,
-// 	Controller,
-// } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { DevTool } from "@hookform/devtools";
+import LoadingSpinner from "../../src/shared/components/UIElements/LoadingSpinner.js";
 
+// import FieldInputSelect from "./FieldInputSelect";
 import { AuthContext } from "../shared/context/auth-context";
 import { useValue } from "../shared/context/SettingsProvider.js";
+import Controls from "../components/controls/Controls.js";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+// import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import Notification from "../components/Notification.js";
+import ConfirmDialog from "../components/ConfirmDialog.js";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
 
 import {
-	Typography, 
-	Box, 
-	Divider, 
+	Typography,
+	Box,
+	Divider,
 	Dialog,
 	DialogTitle,
 	DialogContent,
@@ -41,6 +39,7 @@ import {
 	Card,
 	CardMedia,
 } from "@mui/material";
+import { toast } from "sonner";
 
 function AppSettings() {
 	const [open, setOpen] = useState(true);
@@ -76,6 +75,30 @@ function AppSettings() {
 	const [menuImagePreview, setMenuImagePreview] = useState(state.menu_image);
 	const [aboutImagePreview, setAboutImagePreview] = useState(state.about_image);
 
+	const [areaList, setAreaList] = useState(state.area_list);
+	const [areaName, setAreaName] = useState(null);
+	const [areaKM, setAreaKM] = useState(null);
+	const [selectedArea, setSelectedArea] = useState("");
+	const [areaRate, setAreaRate] = useState(null);
+
+	const [recipeTypeList, setRecipeTypeList] = useState(state.recipe_type_list);
+	const [recipeType, setRecipeType] = useState(null);
+
+	const [selectedRecipeType, setSelectedRecipeType] = useState("");
+
+	const [ingredientCategoryList, setIngredientCategoryList] = useState(
+		state.ingredient_category_list
+	);
+	const [ingredientCategory, setIngredientCategory] = useState(null);
+	const [selectedIngredientCategory, setSelectedIngredientCategory] = useState(
+		""
+	);
+	const [aaRate, setAARate] = useState(state.aa_rate);
+
+	const [priceList, setPriceList] = useState(state.price_list);
+	const [price, setPrice] = useState(null);
+	const [selectedPrice, setSelectedPrice] = useState("");
+
 	const [disableAppTitle, setDisableAppTitle] = useState(true);
 	const [disableAppLogo, setDisableAppLogo] = useState(true);
 	const [disableHomeBgImage, setDisableHomeBgImage] = useState(true);
@@ -92,6 +115,14 @@ function AppSettings() {
 	const [disableMenuLogo, setDisableMenuLogo] = useState(true);
 	const [disableFacebook, setDisableFacebook] = useState(true);
 	const [disableInstagram, setDisableInstagram] = useState(true);
+	const [disableAreaList, setDisableAreaList] = useState(true);
+	const [disableRecipeTypeList, setDisableRecipeTypeList] = useState(true);
+	const [
+		disableIngredientCategoryList,
+		setDisableIngredientCategoryList,
+	] = useState(true);
+	const [disablePriceList, setDisablePriceList] = useState(true);
+	const [disableAARate, setDisableAARate] = useState(true);
 
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -130,15 +161,32 @@ function AppSettings() {
 						about_intro: state.about_intro,
 						about_text: state.about_text,
 						about_image: state.about_image,
+						area_list: state.area_list,
+						recipe_type_list: state.recipe_type_list,
+						ingredient_category_list: state.ingredient_category_list,
+						price_list: state.price_list,
+						aa_rate: state.aa_rate,
 					}),
 				}
 			);
 			const data = await response.json();
 			setIsLoading(false);
-			alert("Settings updated successfully");
+			// alert("Settings updated successfully");
+			toast.success("Settings updated", {
+				style: {
+					background: "green",
+					color: "white",
+				},
+			});
 			return data.appSettings;
 		} catch (err) {
 			console.log("updateErr:", err);
+			toast.error(err, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -153,9 +201,9 @@ function AppSettings() {
 			imgFile.append("cloud_name", process.env.REACT_APP_CLOUDINARY_NAME);
 			imgFile.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
 
-			for (var [key, value] of imgFile.entries()) {
-				console.log("imgFile »", key, value);
-			}
+			// for (var [key, value] of imgFile.entries()) {
+			// 	console.log("imgFile »", key, value);
+			// }
 
 			const response = await fetch(
 				`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,
@@ -231,13 +279,19 @@ function AppSettings() {
 			return imageUrl;
 		} catch (error) {
 			console.log("cloudinary upload error:", error);
+			toast.error(error, {
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
 
 	const handelImageChange = (event) => {
 		let file = event.target.files[0];
-		console.log("handlechangefile:", file);
+		//	console.log("handlechangefile:", file);
 		if (file) {
 			let reader = new FileReader();
 			reader.onloadend = () => {
@@ -333,41 +387,250 @@ function AppSettings() {
 		}
 	};
 
+	const handleAreaEdit = (e) => {
+		//console.log("area ta", e.target);
+		setSelectedArea(e.target.value);
+		if (e.target.value === "") {
+			setAreaName("");
+			setAreaKM(0);
+		} else {
+			console.log("arealist", areaList);
+			console.log("area t", e.target);
+
+			let filteredArea = areaList;
+			filteredArea = filteredArea.filter((a) => a.id === e.target.value);
+			console.log("filteredArea", filteredArea);
+			setAreaName(filteredArea[0].area);
+			setAreaKM(filteredArea[0].delivery_km);
+		}
+	};
+
+	const updateAreaList = () => {
+		let arrayCopy = [];
+
+		if (selectedArea === "") {
+			const newArea = {
+				area: areaName,
+				delivery_km: areaKM,
+				id: Math.round(Math.random() * 10),
+			};
+			arrayCopy = [...areaList, newArea];
+		} else {
+			arrayCopy = [...areaList];
+			arrayCopy.map((area) => {
+				if (area.id === selectedArea) {
+					area.area = areaName;
+					area.delivery_km = areaKM;
+				}
+			});
+		}
+		setAreaList(arrayCopy);
+
+		dispatch({
+			type: "UPDATE_AREA_LIST",
+			payload: { area_list: arrayCopy },
+		});
+	};
+
+	const removeArea = () => {
+		const newArray = areaList.filter((item) => item.id !== selectedArea);
+		setAreaList(newArray);
+
+		dispatch({
+			type: "DELETE_AREA",
+			payload: { id: selectedArea },
+		});
+
+		dispatch({
+			type: "UPDATE_AREA_LIST",
+			payload: { area_list: newArray },
+		});
+	};
+	// //////////////////////////////////////////////////////////////////////////
+
+	const handleRecipeTypeEdit = (e) => {
+		console.log("recipeTypelist", recipeTypeList);
+		console.log("area ta", e.target);
+		setSelectedRecipeType(e.target.value);
+		if (e.target.value === "") {
+			setRecipeType("");
+		} else {
+			console.log("recipeType t", e.target);
+
+			let filteredRecipeType = recipeTypeList;
+			filteredRecipeType = filteredRecipeType.filter(
+				(a) => a.value === e.target.value
+			);
+			console.log("filteredRecipeType", filteredRecipeType);
+			setRecipeType(filteredRecipeType[0].value);
+		}
+	};
+
+	const updateRecipeTypeList = () => {
+		//console.log("recipeType sel", recipeType, selectedRecipeType);
+		let arrayCopy = [];
+		if (selectedRecipeType === "") {
+			const newRecipeType = {
+				value: recipeType,
+				id: Math.round(Math.random() * 10),
+			};
+			arrayCopy = [...recipeTypeList, newRecipeType];
+		} else {
+			arrayCopy = [...recipeTypeList];
+			arrayCopy.map((type) => {
+				if (type.value === selectedRecipeType) {
+					type.value = recipeType;
+				}
+			});
+		}
+		setRecipeTypeList(arrayCopy);
+
+		dispatch({
+			type: "UPDATE_RECIPE_TYPE_LIST",
+			payload: { recipe_type_list: arrayCopy },
+		});
+	};
+
+	const removeRecipeType = () => {
+		//	console.log("selectedRecipeType", selectedRecipeType);
+		const newArray = recipeTypeList.filter(
+			(item) => item.value !== selectedRecipeType
+		);
+		setRecipeTypeList(newArray);
+
+		dispatch({
+			type: "DELETE_RECIPE_TYPE",
+			payload: { id: selectedRecipeType },
+		});
+
+		dispatch({
+			type: "UPDATE_RECIPE_TYPE_LIST",
+			payload: { recipe_type_list: newArray },
+		});
+	};
+
+	// //////////////////////////////////////////////////////////////////////////
+
+	const handleIngredientCategoryEdit = (e) => {
+		console.log("ingredientCategorylist", ingredientCategoryList);
+		console.log("selectedcategory", e.target);
+		setSelectedIngredientCategory(e.target.value);
+		if (e.target.value === "") {
+			setIngredientCategory("");
+		} else {
+			console.log("ingredientCategory t", e.target);
+
+			let filteredIngredientCategory = ingredientCategoryList;
+			filteredIngredientCategory = filteredIngredientCategory.filter(
+				(a) => a.value === e.target.value
+			);
+			console.log("filteredIngredientCategory", filteredIngredientCategory);
+			setIngredientCategory(filteredIngredientCategory[0].value);
+		}
+	};
+
+	const updateIngredientCategoryList = () => {
+		let arrayCopy = [];
+		if (selectedIngredientCategory === "") {
+			const newIngredientCategory = {
+				value: ingredientCategory,
+				id: Math.round(Math.random() * 10),
+			};
+			arrayCopy = [...ingredientCategoryList, newIngredientCategory];
+		} else {
+			arrayCopy = [...ingredientCategoryList];
+			arrayCopy.map((category) => {
+				if (category.value === selectedIngredientCategory) {
+					category.value = ingredientCategory;
+				}
+			});
+		}
+		setIngredientCategoryList(arrayCopy);
+
+		dispatch({
+			type: "UPDATE_INGREDIENT_CATEGORY_LIST",
+			payload: { ingredient_category_list: arrayCopy },
+		});
+	};
+
+	const removeIngredientCategory = () => {
+		//	console.log("selectedIngredientCategory", selectedIngredientCategory);
+		const newArray = ingredientCategoryList.filter(
+			(item) => item.value !== selectedIngredientCategory
+		);
+		setIngredientCategoryList(newArray);
+
+		dispatch({
+			type: "DELETE_INGREDIENT_CATEGORY",
+			payload: { id: selectedIngredientCategory },
+		});
+
+		dispatch({
+			type: "UPDATE_INGREDIENT_CATEGORY_LIST",
+			payload: { ingredient_category_list: newArray },
+		});
+	};
+	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+	const handlePriceEdit = (e) => {
+		console.log("price val", e.target.value);
+		setSelectedPrice(e.target.value);
+		if (e.target.value === "") {
+			setPrice("");
+		} else {
+			console.log("pricelist", priceList);
+			console.log("price t", e.target);
+
+			let filteredPrice = priceList;
+			filteredPrice = filteredPrice.filter((a) => a.value === e.target.value);
+			console.log("filteredPrice", filteredPrice);
+			setPrice(filteredPrice[0].value);
+		}
+	};
+
+	const updatePriceList = () => {
+		let arrayCopy = [];
+		console.log("UselectedPrice", selectedPrice);
+		if (selectedPrice === "") {
+			const newPrice = {
+				value: price,
+				id: Math.round(Math.random() * 10),
+			};
+			arrayCopy = [...priceList, newPrice];
+		} else {
+			arrayCopy = [...priceList];
+			arrayCopy.map((price) => {
+				if (price.value === selectedPrice) {
+					price.value = price;
+				}
+			});
+		}
+		setPriceList(arrayCopy);
+
+		dispatch({
+			type: "UPDATE_PRICE_LIST",
+			payload: { price_list: arrayCopy },
+		});
+	};
+
+	const removePrice = () => {
+		const newArray = priceList.filter((item) => item.value !== selectedPrice);
+		setPriceList(newArray);
+
+		dispatch({
+			type: "DELETE_PRICE",
+			payload: { id: selectedPrice },
+		});
+
+		dispatch({
+			type: "UPDATE_PRICE_LIST",
+			payload: { price_list: newArray },
+		});
+	};
+	// //////////////////////////////////////////////////////////////////////////
+
 	return (
 		<>
-			{/* <Button onClick={() => setOpen(true)}>Edit App Settings</Button> */}
-			{/* <Dialog
-				open={open}
-				onClose={() => setOpen(false)}
-				aria-labelledby='dialog-title'
-				aria-describedby='dialog-description'
-				fullWidth
-				maxWidth='lg'
-			> */}
-			{/* <DialogTitle id='dialog-title'>Submit the test?</DialogTitle> */}
-			{/* <DialogContent>
-					<DialogActions>
-						<Button
-							sx={{ display: "flex", gap: "1rem" }}
-							variant='contained'
-							color='error'
-							autoFocus
-							onClick={() => setOpen(false)}
-						>
-							Cancel
-						</Button>
-						<Button
-							sx={{ display: "flex", gap: "1rem" }}
-							variant='contained'
-							color='success'
-							onClick={() => {
-								handleSubmit(), setOpen(false);
-							}}
-						>
-							Save
-						</Button>
-					</DialogActions> */}
-			{/* ########################################################### DIALOG */}
 			<Container sx={{ border: "none" }}>
 				<Paper>
 					{isLoading && <LoadingSpinner asOverlay />}
@@ -426,7 +689,6 @@ function AppSettings() {
 									</Grid>
 								</Stack>
 							</Grid>
-							{/* <Divider sx={{ my: 6 }} /> */}
 
 							{/* 55555555555555555555555555555555555555555555555555555 */}
 							<FormLabel>
@@ -435,10 +697,8 @@ function AppSettings() {
 								</Typography>
 							</FormLabel>
 
-							{/* <InputLabel sx={{ textAlign: "left" }}>Title</InputLabel> */}
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1821,14 +2081,726 @@ function AppSettings() {
 									</Stack>
 								</Grid>
 							</Grid>
+
+							<Divider sx={{ mt: 2 }} />
+
+							{/* 888888888888888888888888888888888888888888888888888888888888888888888888888888 AA Rate */}
+							<FormLabel>
+								<Typography fontWeight='700' variant='h6'>
+									AA Rate
+								</Typography>
+							</FormLabel>
+							<Grid
+								container
+								// my={4}
+								rowSpacing={1}
+								columnSpacing={0}
+								sx={{ border: "none" }}
+							>
+								<Grid item xs={12} lg={9}>
+									<InputLabel sx={{ textAlign: "left" }}>AA Rate</InputLabel>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											disabled={disableAARate}
+											type='number'
+											inputProps={{ step: "0.1", lang: "en-US" }}
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												border: "1px solid",
+											}}
+											name='aa_rate'
+											value={aaRate}
+											onChange={(e) => setAARate(e.target.value)}
+											fullWidth
+										/>
+									</Box>
+								</Grid>
+
+								<Grid item xs={12} lg={3}>
+									<Stack direction='row' p={2} spacing={2}>
+										<Controls.ActionButton
+											disabled={disableAARate ? false : true}
+											color='primary'
+											onClick={() => {
+												setDisableAARate(false);
+											}}
+										>
+											<EditOutlinedIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableAARate}
+											color='primary'
+											onClick={() => {
+												    setDisableAARate(true),
+													setAARate(state.aa_rate);
+											}}
+										>
+											<CloseIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableAARate}
+											color='primary'
+											onClick={() => {
+												dispatch({
+													type: "UPDATE_AA_RATE",
+													payload: { aa_rate: aaRate },
+												}),
+													setDisableAARate(true),
+													setIsLoading(false);
+											}}
+											
+										>
+											<SaveIcon fontSize='small' />
+										</Controls.ActionButton>
+										
+									</Stack>
+								</Grid>
+							</Grid>
+
+							<Divider sx={{ mt: 2 }} />
+
+							{/* ##################################################################################   LISTS   ################# */}
+							<FormLabel>
+								<Typography fontWeight='700' variant='h6'>
+									Lists
+								</Typography>
+							</FormLabel>
+							{/************************************************************** AREA LIST  */}
+
+							<Grid
+								container
+								// my={4}
+								rowSpacing={1}
+								columnSpacing={0}
+								sx={{ border: "none" }}
+							>
+								<Grid item xs={3} lg={3}>
+									<InputLabel sx={{ textAlign: "left" }}>
+										Delivery Areas
+									</InputLabel>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											select
+											value={selectedArea}
+											//disabled={disableAreaList}
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+											size='small'
+											onChange={(e) => {
+												handleAreaEdit(e);
+											}}
+											width='200px'
+										>
+											<MenuItem value=''>
+												<em>Add New</em>
+											</MenuItem>
+											{areaList.map((option, id) => (
+												<MenuItem key={id} value={option.id}>
+													{option.area} - {option.delivery_km}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
+								</Grid>
+								<Grid item xs={6} lg={6}>
+									<Stack direction='row' spacing={2} ml={5}>
+										<Grid
+											item
+											xs={9}
+											lg={9}
+											sx={
+												disableAreaList
+													? { display: "none" }
+													: { display: "inline" }
+											}
+										>
+											<InputLabel sx={{ textAlign: "left" }}>
+												Area Name
+											</InputLabel>
+											<Box
+												bgcolor='primary.light'
+												p={0}
+												sx={
+													disableAreaList
+														? { display: "none" }
+														: { display: "inline" }
+												}
+											>
+												<TextField
+													disabled={disableAreaList}
+													sx={{
+														"& fieldset": { border: "none" },
+														"& .MuiInputBase-root": {
+															"& input": {
+																textAlign: "left",
+															},
+														},
+														border: "1px solid",
+													}}
+													name='areaName'
+													value={areaName}
+													onChange={(e) => setAreaName(e.target.value)}
+													size='small'
+													fullWidth
+												/>
+											</Box>
+										</Grid>
+										<Grid
+											item
+											xs={3}
+											lg={3}
+											sx={
+												disableAreaList
+													? { display: "none" }
+													: { display: "inline" }
+											}
+										>
+											<InputLabel sx={{ textAlign: "left" }}>
+												Delivery KM
+											</InputLabel>
+											<Box
+												bgcolor='primary.light'
+												p={0}
+												sx={
+													disableAreaList
+														? { display: "none" }
+														: { display: "inline" }
+												}
+											>
+												<TextField
+													disabled={disableAreaList}
+													type='number'
+													inputProps={{ step: "0.1", lang: "en-US" }}
+													sx={{
+														"& fieldset": { border: "none" },
+														"& .MuiInputBase-root": {
+															"& input": {
+																textAlign: "left",
+															},
+														},
+														border: "1px solid",
+													}}
+													name='areaKM'
+													value={areaKM}
+													onChange={(e) => setAreaKM(e.target.value)}
+													size='small'
+													fullWidth
+												/>
+											</Box>
+										</Grid>
+									</Stack>
+								</Grid>
+								{/* bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb */}
+								<Grid item xs={3} lg={3}>
+									<Stack direction='row' p={2} spacing={2}>
+										<Controls.ActionButton
+											disabled={disableAreaList ? false : true}
+											color='primary'
+											onClick={() => {
+												setDisableAreaList(false);
+											}}
+										>
+											<EditOutlinedIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableAreaList}
+											color='primary'
+											onClick={() => {
+												removeArea(),
+													// updateAreaList(),
+													setDisableAreaList(true),
+													setSelectedArea(""),
+													setAreaName(""),
+													setAreaKM(""),
+													setIsLoading(false);
+											}}
+										>
+											<DeleteIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableAreaList}
+											color='primary'
+											onClick={() => {
+												setDisableAreaList(true),
+													setAreaList(state.area_list),
+													setSelectedArea(""),
+													setAreaName(""),
+													setAreaKM("");
+											}}
+										>
+											<CloseIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableAreaList}
+											color='primary'
+											onClick={() => {
+												updateAreaList(),
+													setDisableAreaList(true),
+													setSelectedArea(""),
+													setAreaName(""),
+													setAreaKM(""),
+													setIsLoading(false);
+											}}
+										>
+											<SaveIcon fontSize='small' />
+										</Controls.ActionButton>
+									</Stack>
+								</Grid>
+							</Grid>
+							{/* 88888888888888888888888888888888888888888888888888888888888    Recipe Types                888888 */}
+
+							<Grid
+								container
+								// my={4}
+								rowSpacing={1}
+								columnSpacing={0}
+								sx={{ border: "none" }}
+							>
+								<Grid item xs={3} lg={3}>
+									<InputLabel sx={{ textAlign: "left" }}>
+										Recipe Types
+									</InputLabel>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											select
+											value={selectedRecipeType}
+											//disabled={disableRecipeType}
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+											size='small'
+											onChange={(e) => {
+												handleRecipeTypeEdit(e);
+											}}
+											width='200px'
+										>
+											<MenuItem value=''>
+												<em>Add New</em>
+											</MenuItem>
+											{recipeTypeList.map((option, id) => (
+												<MenuItem key={id} value={option.value}>
+													{option.value}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
+								</Grid>
+								<Grid item xs={6} lg={6}>
+									<Stack direction='row' spacing={2} ml={5}>
+										<Grid
+											item
+											xs={9}
+											lg={9}
+											sx={
+												disableRecipeTypeList
+													? { display: "none" }
+													: { display: "inline" }
+											}
+										>
+											<InputLabel sx={{ textAlign: "left" }}>
+												Recipe Type
+											</InputLabel>
+											<Box
+												bgcolor='primary.light'
+												p={0}
+												sx={
+													disableRecipeTypeList
+														? { display: "none" }
+														: { display: "inline" }
+												}
+											>
+												<TextField
+													disabled={disableRecipeTypeList}
+													sx={{
+														"& fieldset": { border: "none" },
+														"& .MuiInputBase-root": {
+															"& input": {
+																textAlign: "left",
+															},
+														},
+														border: "1px solid",
+													}}
+													name='recipeType'
+													value={recipeType}
+													onChange={(e) => setRecipeType(e.target.value)}
+													size='small'
+													fullWidth
+												/>
+											</Box>
+										</Grid>
+										<Grid item xs={3} lg={3}></Grid>
+									</Stack>
+								</Grid>
+								{/* bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb */}
+								<Grid item xs={3} lg={3}>
+									<Stack direction='row' p={2} spacing={2}>
+										<Controls.ActionButton
+											disabled={disableRecipeTypeList ? false : true}
+											color='primary'
+											onClick={() => {
+												setDisableRecipeTypeList(false);
+											}}
+										>
+											<EditOutlinedIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableRecipeTypeList}
+											color='primary'
+											onClick={() => {
+												removeRecipeType(),
+													// updateRecipeTypeList(),
+													setDisableRecipeTypeList(true),
+													setSelectedRecipeType(""),
+													setRecipeType("");
+
+												//setIsLoading(false);
+											}}
+										>
+											<DeleteIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableRecipeTypeList}
+											color='primary'
+											onClick={() => {
+												setDisableRecipeTypeList(true),
+													setRecipeTypeList(state.recipe_type_list),
+													setSelectedRecipeType(""),
+													setRecipeType("");
+											}}
+										>
+											<CloseIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableRecipeTypeList}
+											color='primary'
+											onClick={() => {
+												updateRecipeTypeList(),
+													setDisableRecipeTypeList(true),
+													setSelectedRecipeType(""),
+													setRecipeType("");
+												//setIsLoading(false);
+											}}
+										>
+											<SaveIcon fontSize='small' />
+										</Controls.ActionButton>
+									</Stack>
+								</Grid>
+							</Grid>
+
+							{/* #########################################################     IngredientCategories   ######### */}
+							<Grid
+								container
+								// my={4}
+								rowSpacing={1}
+								columnSpacing={0}
+								sx={{ border: "none" }}
+							>
+								<Grid item xs={3} lg={3}>
+									<InputLabel sx={{ textAlign: "left" }}>
+										Ingredient Categories
+									</InputLabel>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											select
+											value={selectedIngredientCategory}
+											//disabled={disableIngredientCategoryList}
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+											size='small'
+											onChange={(e) => {
+												handleIngredientCategoryEdit(e);
+											}}
+											width='200px'
+										>
+											<MenuItem value=''>
+												<em>Add New</em>
+											</MenuItem>
+											{ingredientCategoryList.map((option, id) => (
+												<MenuItem key={id} value={option.value}>
+													{option.value}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
+								</Grid>
+								<Grid item xs={6} lg={6}>
+									<Stack direction='row' spacing={2} ml={5}>
+										<Grid
+											item
+											xs={9}
+											lg={9}
+											sx={
+												disableIngredientCategoryList
+													? { display: "none" }
+													: { display: "inline" }
+											}
+										>
+											<InputLabel sx={{ textAlign: "left" }}>
+												Ingredient Category
+											</InputLabel>
+											<Box
+												bgcolor='primary.light'
+												p={0}
+												sx={
+													disableIngredientCategoryList
+														? { display: "none" }
+														: { display: "inline" }
+												}
+											>
+												<TextField
+													disabled={disableIngredientCategoryList}
+													sx={{
+														"& fieldset": { border: "none" },
+														"& .MuiInputBase-root": {
+															"& input": {
+																textAlign: "left",
+															},
+														},
+														border: "1px solid",
+													}}
+													name='ingredientCategory'
+													value={ingredientCategory}
+													onChange={(e) =>
+														setIngredientCategory(e.target.value)
+													}
+													size='small'
+													fullWidth
+												/>
+											</Box>
+										</Grid>
+										<Grid item xs={3} lg={3}></Grid>
+									</Stack>
+								</Grid>
+								{/* bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb */}
+								<Grid item xs={3} lg={3}>
+									<Stack direction='row' p={2} spacing={2}>
+										<Controls.ActionButton
+											disabled={disableIngredientCategoryList ? false : true}
+											color='primary'
+											onClick={() => {
+												setDisableIngredientCategoryList(false);
+											}}
+										>
+											<EditOutlinedIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableIngredientCategoryList}
+											color='primary'
+											onClick={() => {
+												removeIngredientCategory(),
+													// updateIngredientCategoryList(),
+													setDisableIngredientCategoryList(true),
+													setSelectedIngredientCategory(""),
+													setIngredientCategory("");
+
+												//setIsLoading(false);
+											}}
+										>
+											<DeleteIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableIngredientCategoryList}
+											color='primary'
+											onClick={() => {
+												setDisableIngredientCategoryList(true),
+													setIngredientCategoryList(
+														state.ingredient_category_list
+													),
+													setSelectedIngredientCategory(""),
+													setIngredientCategory("");
+											}}
+										>
+											<CloseIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableIngredientCategoryList}
+											color='primary'
+											onClick={() => {
+												updateIngredientCategoryList(),
+													setDisableIngredientCategoryList(true),
+													setSelectedIngredientCategory(""),
+													setIngredientCategory("");
+												//setIsLoading(false);
+											}}
+										>
+											<SaveIcon fontSize='small' />
+										</Controls.ActionButton>
+									</Stack>
+								</Grid>
+							</Grid>
+
+							{/* #########################################################     Price List   ######### */}
+							<Grid
+								container
+								// my={4}
+								rowSpacing={1}
+								columnSpacing={0}
+								sx={{ border: "none" }}
+							>
+								<Grid item xs={3} lg={3}>
+									<InputLabel sx={{ textAlign: "left" }}>Prices</InputLabel>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											select
+											value={selectedPrice}
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												width: "100%",
+												border: "1px solid",
+											}}
+											size='small'
+											onChange={(e) => {
+												handlePriceEdit(e);
+											}}
+											width='200px'
+										>
+											<MenuItem value=''>
+												<em>Add New</em>
+											</MenuItem>
+											{priceList.map((option, id) => (
+												<MenuItem key={id} value={option.value}>
+													{option.value}
+												</MenuItem>
+											))}
+										</TextField>
+									</Box>
+								</Grid>
+								<Grid item xs={6} lg={6}>
+									<Stack direction='row' spacing={2} ml={5}>
+										<Grid
+											item
+											xs={9}
+											lg={9}
+											sx={
+												disablePriceList
+													? { display: "none" }
+													: { display: "inline" }
+											}
+										>
+											<InputLabel sx={{ textAlign: "left" }}>Price</InputLabel>
+											<Box
+												bgcolor='primary.light'
+												p={0}
+												sx={
+													disablePriceList
+														? { display: "none" }
+														: { display: "inline" }
+												}
+											>
+												<TextField
+													disabled={disablePriceList}
+													sx={{
+														"& fieldset": { border: "none" },
+														"& .MuiInputBase-root": {
+															"& input": {
+																textAlign: "left",
+															},
+														},
+														border: "1px solid",
+													}}
+													name='price'
+													value={price}
+													onChange={(e) => setPrice(e.target.value)}
+													size='small'
+													fullWidth
+												/>
+											</Box>
+										</Grid>
+										<Grid item xs={3} lg={3}></Grid>
+									</Stack>
+								</Grid>
+								{/* bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb */}
+								<Grid item xs={3} lg={3}>
+									<Stack direction='row' p={2} spacing={2}>
+										<Controls.ActionButton
+											disabled={disablePriceList ? false : true}
+											color='primary'
+											onClick={() => {
+												setDisablePriceList(false);
+											}}
+										>
+											<EditOutlinedIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disablePriceList}
+											color='primary'
+											onClick={() => {
+												removePrice(),
+													// updatePriceList(),
+													setDisablePriceList(true),
+													setSelectedPrice(""),
+													setPrice("");
+
+												//setIsLoading(false);
+											}}
+										>
+											<DeleteIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disablePriceList}
+											color='primary'
+											onClick={() => {
+												setDisablePriceList(true),
+													setPriceList(state.price_list),
+													setSelectedPrice(""),
+													setPrice("");
+											}}
+										>
+											<CloseIcon fontSize='small' />
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disablePriceList}
+											color='primary'
+											onClick={() => {
+												updatePriceList(),
+													setDisablePriceList(true),
+													setSelectedPrice(""),
+													setPrice("");
+												//setIsLoading(false);
+											}}
+										>
+											<SaveIcon fontSize='small' />
+										</Controls.ActionButton>
+									</Stack>
+								</Grid>
+							</Grid>
 						</Grid>
 					</Box>
 				</Paper>
 			</Container>
-
-			{/* ##################################################################### */}
-			{/* </DialogContent>
-			</Dialog> */}
 		</>
 	);
 }

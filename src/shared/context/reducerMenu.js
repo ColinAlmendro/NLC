@@ -47,7 +47,7 @@ const reducerMenu = (state, action) => {
 		}
 
 		case "SET_SELECTED_MENU": {
-			console.log("set selected menu", action.id);
+			//	console.log("set selected menu", action.id);
 			return {
 				...state,
 				selected_menu: state.menus.filter((menu) => menu._id === action.id),
@@ -107,13 +107,22 @@ const reducerMenu = (state, action) => {
 				soup_recipes: soupRecipes,
 			};
 		}
+		case "UPDATE_FROZEN_RECIPES": {
+			let frozenRecipes = action.data.recipes;
+			frozenRecipes = frozenRecipes.filter((recipe) => recipe.freezable === "Yes");
+			// console.log("Reducer_main",frozenRecipes);
+			return {
+				...state,
+				frozen_recipes:frozenRecipes,
+			};
+		}
 		case "UPDATE_PROMOTIONS":
 			return { ...state, promotions: action.data.promotions };
 		case "UPDATE_PRICES":
 			return { ...state, prices: action.data.pricelists };
 
 		case "UPDATE_MONDAY":
-			console.log("reducermon", action.payload);
+			//	console.log("reducermon", action.payload);
 			//	return { ...state, monday: [...state.monday, action.payload] };
 			return { ...state.selected_menu, monday: action.payload };
 		case "DELETE_MONDAY":
@@ -139,8 +148,8 @@ const reducerMenu = (state, action) => {
 			}
 
 		case "UPDATE_TUESDAY":
-			console.log("reducertue", action.payload);
-			return { ...state.selected_menu, monday: action.payload };
+			//	console.log("reducertue", action.payload);
+			return { ...state.selected_menu, tuesday: action.payload };
 		case "DELETE_TUESDAY":
 			const indexTuesday = state.tuesday.findIndex(
 				(item) => action.main === item.main
@@ -162,8 +171,8 @@ const reducerMenu = (state, action) => {
 				};
 			}
 		case "UPDATE_WEDNESDAY":
-			console.log("reducerwed", action.payload);
-			return { ...state.selected_menu, monday: action.payload };
+			//		console.log("reducerwed", action.payload);
+			return { ...state.selected_menu, wednesday: action.payload };
 		case "DELETE_WEDNESDAY":
 			const indexWednesday = state.wednesday.findIndex(
 				(item) => action.main === item.main
@@ -185,8 +194,8 @@ const reducerMenu = (state, action) => {
 				};
 			}
 		case "UPDATE_THURSDAY":
-			console.log("reducerthu", action.payload);
-			return { ...state.selected_menu, monday: action.payload };
+			//		console.log("reducerthu", action.payload);
+			return { ...state.selected_menu, thursday: action.payload };
 		// return { ...state, thursday: [...state.thursday, action.payload] };
 		case "DELETE_THURSDAY":
 			const indexThursday = state.thursday.findIndex(
@@ -209,8 +218,8 @@ const reducerMenu = (state, action) => {
 				};
 			}
 		case "UPDATE_FRIDAY":
-			console.log("reducerfri", action.payload);
-			return { ...state.selected_menu, monday: action.payload };
+			//		console.log("reducerfri", action.payload);
+			return { ...state.selected_menu, friday: action.payload };
 		case "DELETE_FRIDAY":
 			const indexFriday = state.friday.findIndex(
 				(item) => action.main === item.main
@@ -231,9 +240,34 @@ const reducerMenu = (state, action) => {
 					friday: newFriday,
 				};
 			}
+
+		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  FROZEN
+		case "UPDATE_FROZEN":
+			//		console.log("reducerfri", action.payload);
+			return { ...state.selected_menu, frozen: action.payload };
+		case "DELETE_FROZEN":
+			const indexFrozen = state.frozen.findIndex(
+				(item) => action.main === item.main
+			);
+			let newFrozen = [...state.frozen];
+			if (indexFrozen >= 0) {
+				newFrozen.splice(indexFrozen, 1);
+			}
+
+			if (newFrozen.length === 0) {
+				return {
+					...state,
+					frozen: newFrozen,
+				};
+			} else {
+				return {
+					...state,
+					frozen: newFrozen,
+				};
+			}
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& EXTRAS
 		case "UPDATE_VEGIES":
-			console.log("reducerveg", action.payload);
+			//		console.log("reducerveg", action.payload);
 			return { ...state, vegies: [...state.vegies, action.payload] };
 		case "DELETE_VEGIES":
 			const indexVegies = state.vegies.findIndex(
@@ -257,7 +291,7 @@ const reducerMenu = (state, action) => {
 			}
 
 		case "UPDATE_SALADS":
-			console.log("reducersalad", action.payload);
+			//		console.log("reducersalad", action.payload);
 			return { ...state, salads: [...state.salads, action.payload] };
 		case "DELETE_SALADS":
 			const indexSalads = state.salads.findIndex(
@@ -281,7 +315,7 @@ const reducerMenu = (state, action) => {
 			}
 
 		case "UPDATE_SOUPS":
-			console.log("reducersoup", action.payload);
+			//		console.log("reducersoup", action.payload);
 			return { ...state, soups: [...state.soups, action.payload] };
 		case "DELETE_SOUPS":
 			const indexSoups = state.soups.findIndex(
@@ -305,15 +339,15 @@ const reducerMenu = (state, action) => {
 			}
 
 		case "UPDATE_WEEK":
-			console.log("reducerweek", action.week);
+			//		console.log("reducerweek", action.week);
 			return { ...state, week: action.week };
 
 		case "UPDATE_INTRODUCTION":
-			console.log("reducerintro", action.payload);
+			//		console.log("reducerintro", action.payload);
 			return { ...state, introduction: action.payload };
 
 		case "UPDATE_PERIOD":
-			console.log("reducerperiod", action.period);
+			//		console.log("reducerperiod", action.period);
 			return { ...state, period: action.period };
 
 		// case "UPDATE_INSTRUCTION":

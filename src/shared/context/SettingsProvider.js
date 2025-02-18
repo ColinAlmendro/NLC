@@ -30,6 +30,11 @@ const initialState = {
 	about_text:
 		"Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita nemo debitis voluptatum aliquid voluptas deserunt quidem rem delectus vel, nostrum voluptatibus qui a? Odit sed ducimus quos, expedita fugit ea porro, tempora tenetur asperiores numquam alias, iste corrupti dolorum assumenda cumque quidem! Distinctio voluptatum velit quisquam temporibus dolorem est facilis. Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima rem earum iusto, sapiente explicabo nulla id nemo praesentium sequi, quasi, fugiat odit facere inventore eius ipsam? Harum perspiciatis ut modi quo nam consectetur tempora dicta! Saepe laudantium aliquam quisquam voluptatibus sint! Tempora exercitationem reprehenderit error nulla vel, perferendis eligendi saepe eveniet ducimus, blanditiis, rerum nemo dicta obcaecati earum sed aliquam nisi provident vero! Dolore molestiae suscipit atque laudantium, maiores ea esse tenetur, dolorem corrupti magni reiciendis sed quae eaque non?",
 	about_image: "",
+	area_list: [],
+	recipe_type_list: [],
+	ingredient_category_list: [],
+	price_list: [],
+	//selected_area: {},
 };
 
 const Context = createContext(initialState);
