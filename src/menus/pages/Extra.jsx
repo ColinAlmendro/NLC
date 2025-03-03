@@ -68,24 +68,23 @@ const Extra = ({ extra }) => {
 		price:0,
 	});
 
-	//console.log("extra", extra);
-	// let extraFields = [];
+	
 	let extraOptions = [];
 	switch (extra) {
 		case "vegies":
-			//fields = [...record.vegies];
+		
 			extraOptions = [...vegie_recipes];
 			break;
 		case "salads":
-			//fields = [...record.salads];
+			
 			extraOptions = [...salad_recipes];
 			break;
 		case "soups":
-			//fields = [...record.soups];
+		
 			extraOptions = [...soup_recipes];
 			break;
 		case "sides":
-			//fields = [...record.sides];
+			
 			extraOptions = [...side_recipes];
 			break;
 		default:
@@ -251,9 +250,7 @@ const Extra = ({ extra }) => {
 				render={({ fieldState: { error } }) => (
 					<List>
 						{fields.map(({ image, main, mainname, maindescription }, index) => {
-							{
-								/* console.log("List", extraFields); */
-							}
+							
 							return (
 								<ListItem>
 									<Grid width='95%'>

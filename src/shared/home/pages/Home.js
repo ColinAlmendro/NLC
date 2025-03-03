@@ -2,36 +2,35 @@ import React, { useContext, useState, useEffect } from "react";
 import { useValue } from "../../context/SettingsProvider";
 import { AuthContext } from "../../../shared/context/auth-context.js";
 import Footer from "../../components/Navigation/footer/Footer";
-//import SwiperCore, { EffectCoverflow, Pagination } from "swiper";
+
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-// import "swiper/swiper-bundle.min.css";
-// import "swiper/swiper.min.css";
+
 import {
 	Typography,
 	Box,
-	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
-	Container,
-	Paper,
-	Stack,
-	TextField,
-	Grid,
-	InputLabel,
-	Button,
-	MenuItem,
-	List,
-	ListItem,
-	Card,
-	CardMedia,
+	// Divider,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
+	// Container,
+	// Paper,
+	// Stack,
+	// TextField,
+	// Grid,
+	// InputLabel,
+	// Button,
+	// MenuItem,
+	// List,
+	// ListItem,
+	// Card,
+	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
 import "./Home.css";
@@ -143,14 +142,14 @@ const Home = () => {
 											src={recipe.image}
 											alt={recipe.name}
 										/>
-										<p>
+										<div>
 											<Typography variant='h6'>{recipe.name}</Typography>
-										</p>
-										<p>
+										</div>
+										<div>
 											<Typography variant='caption'>
 												{recipe.description}
 											</Typography>
-										</p>
+										</div>
 									</div>
 								</SwiperSlide>
 							);

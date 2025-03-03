@@ -22,7 +22,7 @@ import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
@@ -148,7 +148,13 @@ export default function User() {
 				.then(() => {
 					dispatchUser({ type: "DELETE_USER", _id });
 					setIsLoading(false);
-					alert("User deleted !");
+					// alert("User deleted !");
+					toast.success("User deleted", {
+											style: {
+												background: "green",
+												color: "white",
+											},
+										});
 				});
 		} catch (err) {
 			console.log("Delete error", err);
@@ -227,7 +233,7 @@ export default function User() {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper
-					textAlign='center'
+					textalign='center'
 					className={classes.pageContent}
 					sx={{ width: "100%", p: 1 }}
 				>
@@ -300,10 +306,15 @@ export default function User() {
 													// openInPopup(item);
 												}}
 											>
-												<EditOutlinedIcon fontSize='small' />
+												<EditOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "blue",
+													}}
+												/>
 											</Controls.ActionButton>
 											<Controls.ActionButton
-												color='secondary'
+												color='primary'
 												onClick={() => {
 													setConfirmDialog({
 														isOpen: true,
@@ -315,7 +326,12 @@ export default function User() {
 													});
 												}}
 											>
-												<CloseIcon fontSize='small' />
+												<DeleteIcon
+													fontSize='small'
+													sx={{
+														color: "red",
+													}}
+												/>
 											</Controls.ActionButton>
 										</TableCell>
 									</TableRow>

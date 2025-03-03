@@ -41,14 +41,11 @@ import {
 	Checkbox,
 } from "@mui/material";
 
-// import { categoryOptions, freezableOptions } from "./utils/constants";
-// import { unitOptions } from "./utils/constants";
-// import { typeOptions } from "./utils/constants";
 import RecipeIngredients from "./RecipeIngredients.jsx";
-import FieldInputSelect from "./FieldInputSelect";
-import FieldInputText from "./FieldInputText";
-import FieldInputTextarea from "./FieldInputTextarea";
-// import { NumericFormat } from "react-number-format";
+import FieldInputSelect from "../../components/controls/FieldInputSelect";
+import FieldInputText from "../../components/controls/FieldInputText";
+import FieldInputTextarea from "../../components/controls/FieldInputTextarea.jsx";
+
 import "./Listitem.css";
 import { makeStyles } from "@mui/styles";
 import { toast } from "sonner";
@@ -155,7 +152,7 @@ function FormRecipe(props) {
 	const [recipeTypeList, setRecipeTypeList] = useState(state.recipe_type_list);
 const [typeOptions,setTypeOptions] = useState([]);
 
-	// const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
 	const [ingredientsList, setIngredientsList] = useState([]);
 	const [filteredIngredientsList, setFilteredIngredientsList] = useState([]);
 	const [recipeImage, setRecipeImage] = useState(null);
@@ -493,25 +490,27 @@ const [typeOptions,setTypeOptions] = useState([]);
 												</Box>
 											</Grid>
 											<Grid item xs={12} lg={2}>
-												<Button
-													sx={{ gap: "1rem" }}
-													variant='outlined'
-													color='error'
-													autoFocus
-													onClick={() => {
-														setOpen(false), setOpenPopup(false);
-													}}
-												>
-													Cancel
-												</Button>
-												<Button
-													sx={{ gap: "1rem" }}
-													variant='outlined'
-													color='success'
-													type='submit'
-												>
-													Save
-												</Button>
+												<Stack direction='row' spacing={1}>
+													<Button
+														sx={{ gap: "1rem" }}
+														variant='contained'
+														color='error'
+														autoFocus
+														onClick={() => {
+															setOpen(false), setOpenPopup(false);
+														}}
+													>
+														Cancel
+													</Button>
+													<Button
+														sx={{ gap: "1rem" }}
+														variant='contained'
+														color='success'
+														type='submit'
+													>
+														Save
+													</Button>
+												</Stack>
 											</Grid>
 										</Stack>
 									</Grid>

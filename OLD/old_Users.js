@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import UsersList from "../components/UsersList";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import { useHttpClient } from "../../shared/hooks/http-hook";
+import UsersList from "../src/user/components/UsersList";
+import ErrorModal from "../src/shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../src/shared/components/UIElements/LoadingSpinner";
+import { useHttpClient } from "../src/shared/hooks/http-hook";
 import { toast } from "sonner";
 
 const Users = () => {

@@ -54,7 +54,7 @@ const Frozen = ({ weekday }) => {
 	} = useMenuValue();
 
 console.log("frozen_recipes", frozen_recipes);
-// const [record, setRecord] = useState(selected_menu[0]);
+
 
 const { fields, append, remove } = useFieldArray({
 	control,
@@ -62,7 +62,7 @@ const { fields, append, remove } = useFieldArray({
 });
 
 const [meal, setMeal] = useState({
-	// id: 0,
+	
 	image: "",
 	main: "",
 	mainname: "",
@@ -127,7 +127,7 @@ const [meal, setMeal] = useState({
 						}}
 					>
 						<Typography fontWeight='700' variant='h6'>
-							{/* {weekday.charAt(0).toUpperCase() + weekday.slice(1)} */}
+							
 							Frozen Meals
 						</Typography>
 					</Box>

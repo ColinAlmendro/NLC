@@ -1,7 +1,7 @@
 import { Fragment, useContext } from 'react';
 import { createPortal } from 'react-dom';
 
-import CartContext from "../../shared/context/cart-context";
+import CartContext from "../src/shared/context/cart-context";
 
 import './Modal.css';
 

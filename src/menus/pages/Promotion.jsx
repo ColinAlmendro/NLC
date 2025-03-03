@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 
 import {
-	Typography,
+	//Typography,
 	Box,
-	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
-	Container,
-	Paper,
-	Stack,
+	// Divider,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
+	// Container,
+	// Paper,
+	// Stack,
 	TextField,
-	InputLabel,
-	Button,
+	// InputLabel,
+	// Button,
 	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
+	// GridItem,
+	// Card,
+	// CardMedia,
 	ImageList,
 	ImageListItem,
 	ImageListItemBar,
@@ -63,10 +63,9 @@ const Promotion = () => {
 			salad_recipes,
 			soup_recipes,
 			week,
-			//period,
+
 			introduction,
 			promotions,
-			//instruction,
 		},
 		dispatch,
 	} = useMenuValue();
@@ -91,8 +90,6 @@ const Promotion = () => {
 			: []
 	);
 
-
-
 	const handelPromotionChange = (value) => {
 		//	console.log("promovalue:", value.target.value);
 		if (value.target.value !== "none") {
@@ -109,10 +106,8 @@ const Promotion = () => {
 		<div>
 			<Grid>
 				<Grid item xs={12} lg={12}>
-
 					<>
 						<Grid item xs={12} lg={12} mt={2}>
-
 							<Controller
 								name={`promotion`}
 								control={control}
@@ -124,21 +119,16 @@ const Promotion = () => {
 									<Box bgcolor='primary.light' p={0} sx={{ width: "25%" }}>
 										<TextField
 											select
-											// {...field}
 											name={`promotion`}
 											id='promotionInput'
 											value={value}
-											//defaultValue="none"
 											label='Promotion'
-											//onChange={onChange}
 											onChange={(value) => {
-												console.log('promo',value)
+												console.log("promo", value);
 												onChange(value), handelPromotionChange(value);
 											}}
 											size='small'
-											//sx={{ width: "100%" }}
 											error={!!error}
-										//	required
 											sx={{
 												"& fieldset": { border: "none" },
 												"& .MuiInputBase-root": {
@@ -166,11 +156,7 @@ const Promotion = () => {
 						{selectedPromotion.length > 0 ? (
 							<Grid item xs={12} lg={12} mt={2}>
 								{/* Promotion Items */}
-								<Box
-									// alignItems='center'
-									// justifyContent='center'
-									className={classes.root}
-								>
+								<Box className={classes.root}>
 									<ImageList
 										className={classes.imageList}
 										// sx={{ height: 300 }}
@@ -219,8 +205,6 @@ const Promotion = () => {
 							</Grid>
 						) : null}
 					</>
-
-					{/* )} */}
 				</Grid>
 			</Grid>
 		</div>

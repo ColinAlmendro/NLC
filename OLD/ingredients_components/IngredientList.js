@@ -1,8 +1,8 @@
 import React from "react";
 
-import Card from "../../shared/components/UIElements/Card";
+import Card from "../../src/shared/components/UIElements/Card";
 import IngredientItem from "./IngredientItem";
-import Button from "../../shared/components/FormElements/Button";
+import Button from "../../src/shared/components/FormElements/Button";
 import "./IngredientList.css";
 
 const IngredientList = (props) => {

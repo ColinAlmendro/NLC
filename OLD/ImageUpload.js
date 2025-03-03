@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 
-import Button from "./Button";
+import Button from "../src/shared/components/FormElements/Button";
 import "./ImageUpload.css";
 
 const ImageUpload = (props) => {

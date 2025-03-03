@@ -33,11 +33,8 @@ import { useValue } from "../../shared/context/SettingsProvider.js";
 import { useUsersValue } from "../../shared/context/UsersProvider.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useNavigate } from "react-router-dom";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import FieldInputText from "./FieldInputText.jsx";
-import FieldInputTextarea from "./FieldInputTextarea.jsx";
+import FieldInputText from "../../components/controls/FieldInputText.jsx";
+
 import {
 	FormProvider,
 	useFormContext,
@@ -301,8 +298,8 @@ function UsersForm(props) {
 											<Grid item xs={12} lg={2}>
 												<Stack direction='row'>
 													<Button
-														sx={{ gap: "1rem" }}
-														variant='outlined'
+														sx={{ gap: "1rem"}}
+														variant='contained'
 														color='error'
 														autoFocus
 														onClick={() => {
@@ -314,7 +311,7 @@ function UsersForm(props) {
 													</Button>
 													<Button
 														sx={{ display: "flex", gap: "1rem" }}
-														variant='outlined'
+														variant='contained'
 														color='success'
 														type='submit'
 													>

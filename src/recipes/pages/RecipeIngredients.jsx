@@ -171,7 +171,7 @@ const RecipeIngredients = (params) => {
 							name='categorySelect'
 							//label='Category'
 							size='small'
-							fullWidth
+							//fullwidth='true'
 							//	sx={{ width: "100%" }}
 							// error={!!error}
 							onChange={(event) => {
@@ -184,7 +184,7 @@ const RecipeIngredients = (params) => {
 										textAlign: "left",
 									},
 								},
-								//width: "200px",
+								width: "100%",
 								border: "1px solid",
 							}}
 						>
@@ -208,7 +208,7 @@ const RecipeIngredients = (params) => {
 							name='ingredientSelect'
 							//label='Ingredient'
 							size='small'
-							fullWidth
+							//fullwidth='true'
 							//	sx={{ width: "100%" }}
 							// error={!!error}
 							onChange={(event) => {
@@ -227,7 +227,7 @@ const RecipeIngredients = (params) => {
 										textAlign: "left",
 									},
 								},
-								//width: "200px",
+								width: "100%",
 								border: "1px solid",
 							}}
 						>
@@ -255,7 +255,7 @@ const RecipeIngredients = (params) => {
 							//label='Amount'
 							name='ingredientAmount'
 							size='small'
-							fullWidth
+							fullwidth='true'
 							//	sx={{ width: "100%" }}
 							sx={{
 								"& fieldset": { border: "none" },
@@ -348,7 +348,7 @@ const RecipeIngredients = (params) => {
 							append({
 								...ingredientItem,
 							}),
-							//	console.log("addcost", params.totalCost, ingredientItem.cost),
+								//	console.log("addcost", params.totalCost, ingredientItem.cost),
 								params.setTotalCost(
 									params.totalCost + Number(ingredientItem.cost)
 								),
@@ -370,140 +370,168 @@ const RecipeIngredients = (params) => {
 			{/* </Grid>
 			</Stack> */}
 			{/* // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */}
+			{fields.length > 0 && (
+				<Box sx={{ border: 1, mt: 2 }}>
+					<Grid width='100%'>
+						<Stack direction='row' width='100%'>
+							<Grid item xs={1} lg={1}>
+								<InputLabel
+									sx={{ textAlign: "left", pl: 2 }}
+									className={classes.label}
+								>
+									Amount
+								</InputLabel>
+							</Grid>
+							<Grid item xs={7} lg={7}>
+								<InputLabel
+									sx={{ textAlign: "left", pl: 2 }}
+									className={classes.label}
+								>
+									Ingredient
+								</InputLabel>
+							</Grid>
 
-			<Grid width='100%'>
-				<Stack direction='row' width='100%'>
-					<Grid item xs={1} lg={1}>
-						<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-							Amount
-						</InputLabel>
-					</Grid>
-					<Grid item xs={6} lg={6}>
-						<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-							Ingredient
-						</InputLabel>
+							<Grid item xs={1} lg={1}>
+								<InputLabel
+									sx={{ textAlign: "left" }}
+									className={classes.label}
+								>
+									Quantity
+								</InputLabel>
+							</Grid>
+							<Grid item xs={1} lg={1}>
+								<InputLabel
+									sx={{ textAlign: "left" }}
+									className={classes.label}
+								>
+									Cost
+								</InputLabel>
+							</Grid>
+							<Grid item xs={2} lg={2}></Grid>
+						</Stack>
 					</Grid>
 
-					<Grid item xs={1} lg={1}>
-						<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-							Quantity
-						</InputLabel>
-					</Grid>
-					<Grid item xs={1} lg={1}>
-						<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-							Cost
-						</InputLabel>
-					</Grid>
-					<Grid item xs={2} lg={2}></Grid>
-				</Stack>
-			</Grid>
-
-			<Controller
-				name={"ingredients"}
-				control={control}
-				render={({ fieldState: { error } }) => (
-					<List dense='true'>
-						{/* {console.log("fields", fields)} */}
-						{fields.map(
-							({ category, ingredient, amount, qty, cost }, index) => {
-								{
-									{/* console.log("curr", qty,cost);
+					<Controller
+						name={"ingredients"}
+						control={control}
+						render={({ fieldState: { error } }) => (
+							<List dense='true'>
+								{/* {console.log("fields", fields)} */}
+								{fields.map(
+									({ category, ingredient, amount, qty, cost }, index) => {
+										{
+											{
+												/* console.log("curr", qty,cost);
 									console.log("currname", ingredient.name);
-									console.log("currilist", ingredientsList); */}
+									console.log("currilist", ingredientsList); */
+											}
 
-									if (ingredient.name === undefined) {
-										let currIngredient = ingredientsList.find(
-											(item) => item._id === ingredient
-										);
-										{/* console.log("currIng", currIngredient); */}
+											if (ingredient.name === undefined) {
+												let currIngredient = ingredientsList.find(
+													(item) => item._id === ingredient
+												);
+												{
+													/* console.log("currIng", currIngredient); */
+												}
 
-										if (currIngredient !== undefined) {
-											ingredientName = currIngredient.name;
-											ingredientDescription = currIngredient.description;
-											itemCost =
-												qty * Number(currIngredient.price).toFixed(2);
-										} else {
-											ingredientName = "???";
-											ingredientDescription = "";
-											itemCost = qty * Number(ingredient.price);
+												if (currIngredient !== undefined) {
+													ingredientName = currIngredient.name;
+													ingredientDescription = currIngredient.description;
+													itemCost =
+														qty * Number(currIngredient.price).toFixed(2);
+												} else {
+													ingredientName = "???";
+													ingredientDescription = "";
+													itemCost = qty * Number(ingredient.price);
+												}
+											} else {
+												ingredientName = ingredient.name;
+												ingredientDescription = ingredient.description;
+												itemCost = qty * Number(ingredient.price);
+											}
 										}
-									} else {
-										ingredientName = ingredient.name;
-										ingredientDescription = ingredient.description;
-										itemCost = qty * Number(ingredient.price);
-									}
+										return (
+											<ListItem key={`${index}_${fields.length}`}>
+												<Grid width='100%'>
+													<Stack direction='row' width='100%'>
+														<Grid item xs={1} lg={1}>
+															<Typography fontWeight='500'>{amount}</Typography>
+														</Grid>
+														<Grid item xs={7} lg={7}>
+															<Stack direction='row'>
+																<Typography fontWeight='500'>
+																	{ingredientName}
+																</Typography>
+																&nbsp;-&nbsp;
+																<Typography fontWeight='300'>
+																	{ingredientDescription}
+																</Typography>
+															</Stack>
+														</Grid>
 
-									
-								}
-								return (
-									<ListItem key={`${index}_${fields.length}`}>
-										<Grid width='100%'>
-											<Stack direction='row' width='100%'>
-												<Grid item xs={1} lg={1}>
-													<Typography fontWeight='500'>{amount}</Typography>
-												</Grid>
-												<Grid item xs={6} lg={6}>
-													<Stack direction='row'>
-														<Typography fontWeight='500'>
-															{ingredientName}
-														</Typography>
-														&nbsp;-&nbsp;
-														<Typography fontWeight='300'>
-															{ingredientDescription}
-														</Typography>
+														<Grid
+															item
+															xs={1}
+															lg={1}
+															sx={{ textAlign: "left", pl: 1 }}
+														>
+															<Typography fontWeight='500'>{qty}</Typography>
+														</Grid>
+														<Grid
+															item
+															xs={1}
+															lg={1}
+															sx={{ textAlign: "left", pl: 1 }}
+														>
+															<Typography fontWeight='500'>
+																{itemCost.toFixed(2)}
+															</Typography>
+														</Grid>
+														<Grid item xs={2} lg={2}>
+															<IconButton
+																sx={{
+																	height: 15,
+																	m: 0,
+																	p: 0,
+																}}
+																size='small'
+																variant='outlined'
+																color='error'
+																type='button'
+																onClick={() => {
+																	console.log(
+																		"removecost",
+																		params.totalCost,
+																		ingredientItem.cost
+																	),
+																		params.setTotalCost(
+																			params.totalCost -
+																				Number(ingredientItem.cost)
+																		),
+																		remove(index),
+																		setIngredientItem({
+																			category: "",
+																			ingredient: "",
+																			amount: "",
+																			qty: "",
+																			cost: "",
+																		});
+																}}
+															>
+																<DeleteIcon />
+															</IconButton>
+														</Grid>
 													</Stack>
 												</Grid>
-
-												<Grid item xs={1} lg={1}>
-													<Typography fontWeight='500'>{qty}</Typography>
-												</Grid>
-												<Grid item xs={1} lg={1}>
-													<Typography fontWeight='500'>
-														{itemCost.toFixed(2)}
-													</Typography>
-												</Grid>
-												<Grid item xs={2} lg={2}>
-													<IconButton
-														sx={{
-															height: 15,
-															m: 0,
-															p: 0,
-														}}
-														size='small'
-														variant='outlined'
-														color='error'
-														type='button'
-														onClick={() => {
-															console.log(
-																"removecost",
-																params.totalCost,
-																ingredientItem.cost
-															),
-																params.setTotalCost(
-																	params.totalCost - Number(ingredientItem.cost)
-																),
-																remove(index),
-																setIngredientItem({
-																	category: "",
-																	ingredient: "",
-																	amount: "",
-																	qty: "",
-																	cost: "",
-																});
-														}}
-													>
-														<DeleteIcon />
-													</IconButton>
-												</Grid>
-											</Stack>
-										</Grid>
-									</ListItem>
-								);
-							}
+											</ListItem>
+										);
+									}
+								)}
+							</List>
 						)}
-					</List>
-				)}
-			/>
+					/>
+				</Box>
+			)}
 		</Grid>
 	);
 };

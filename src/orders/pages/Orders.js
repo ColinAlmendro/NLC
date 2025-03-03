@@ -12,21 +12,21 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	Divider,
+	//Divider,
 	CircularProgress,
 	InputAdornment,
-	Snackbar,
+	//Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
+//import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup.js";
 import ViewPopup from "./ViewPopup.js";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+//import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+//import CloseIcon from "@mui/icons-material/Close";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
@@ -328,49 +328,49 @@ export default function Order() {
 		});
 	};
 
-	const addOrEdit = (order, resetForm) => {
-		if (order._id == 0) insertOrder(order);
-		else updateOrder(order);
-		resetForm();
-		setRecordForEdit(null);
-		setOpenPopup(false);
-		// setRecords(getAllOrders());
-		setNotify({
-			isOpen: true,
-			message: "Submitted Successfully",
-			type: "success",
-		});
-	};
+	// const addOrEdit = (order, resetForm) => {
+	// 	if (order._id == 0) insertOrder(order);
+	// 	else updateOrder(order);
+	// 	resetForm();
+	// 	setRecordForEdit(null);
+	// 	setOpenPopup(false);
+	// 	// setRecords(getAllOrders());
+	// 	setNotify({
+	// 		isOpen: true,
+	// 		message: "Submitted Successfully",
+	// 		type: "success",
+	// 	});
+	// };
 
-	const openInPopup = (item) => {
-		// setRecordForEdit(item);
-		dispatchOrder({
-			type: "SET_SELECTED_ORDER",
-			_id: item._id,
-		});
-		dispatchMenu({
-			type: "SET_SELECTED_MENU",
-			id: item.menu.id,
-		});
-		dispatchCustomer({
-			type: "SET_SELECTED_CUSTOMER",
-			id: item.customer.id,
-		});
-		setOpenPopup(true);
-	};
+	// const openInPopup = (item) => {
+	// 	// setRecordForEdit(item);
+	// 	dispatchOrder({
+	// 		type: "SET_SELECTED_ORDER",
+	// 		_id: item._id,
+	// 	});
+	// 	dispatchMenu({
+	// 		type: "SET_SELECTED_MENU",
+	// 		id: item.menu.id,
+	// 	});
+	// 	dispatchCustomer({
+	// 		type: "SET_SELECTED_CUSTOMER",
+	// 		id: item.customer.id,
+	// 	});
+	// 	setOpenPopup(true);
+	// };
 
-	const onDelete = (_id) => {
-		setConfirmDialog({
-			...confirmDialog,
-			isOpen: false,
-		});
-		deleteOrderItem(_id);
-		setNotify({
-			isOpen: true,
-			message: "Deleted Successfully",
-			type: "error",
-		});
-	};
+	// const onDelete = (_id) => {
+	// 	setConfirmDialog({
+	// 		...confirmDialog,
+	// 		isOpen: false,
+	// 	});
+	// 	deleteOrderItem(_id);
+	// 	setNotify({
+	// 		isOpen: true,
+	// 		message: "Deleted Successfully",
+	// 		type: "error",
+	// 	});
+	// };
 	let orderDate = Date();
 	let menuDate = Date();
 
@@ -390,7 +390,7 @@ export default function Order() {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper
-					textAlign='center'
+					textalign='center'
 					className={classes.pageContent}
 					sx={{ width: "100%", p: 1 }}
 				>
@@ -482,7 +482,12 @@ export default function Order() {
 													// openInPopup(item);
 												}}
 											>
-												<PageviewOutlinedIcon fontSize='small' />
+												<PageviewOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "#e65100",
+													}}
+												/>
 											</Controls.ActionButton>
 											{/* <Controls.ActionButton
 												color='secondary'

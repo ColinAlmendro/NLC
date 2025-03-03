@@ -1,14 +1,14 @@
 import React, { useReducer, useEffect } from "react";
 import Select from "react-select";
-import { validate } from "../../util/validators";
+import { validate } from "../src/shared/util/validators";
 import "./Input.css";
 
 const inputReducer = (state, action) => {
-//	console.log("state", state);
-//	console.log("action", action.type);
+	//	console.log("state", state);
+	//	console.log("action", action.type);
 	switch (action.type) {
 		case "CHANGE":
-   			return {
+			return {
 				...state,
 				value: action.val,
 				isValid: validate(action.val, action.validators),
@@ -22,11 +22,10 @@ const inputReducer = (state, action) => {
 		default:
 			return state;
 	}
-  
 };
 
 const InputSelect = (props) => {
-  const catOptions = [...props.options]
+	const catOptions = [...props.options];
 	const [inputState, dispatch] = useReducer(inputReducer, {
 		value: props.initialValue || "",
 		isTouched: false,
@@ -46,7 +45,7 @@ const InputSelect = (props) => {
 			val: event.value,
 			validators: props.validators,
 		});
-    dispatch({
+		dispatch({
 			type: "TOUCH",
 		});
 	};
@@ -67,7 +66,7 @@ const InputSelect = (props) => {
 	//       value={inputState.value}
 	//       options={props.options}
 	//     />
-console.log("inputstate", inputState.value);
+	console.log("inputstate", inputState.value);
 	return (
 		<div
 			className={`form-control ${!inputState.isValid &&
@@ -93,16 +92,15 @@ console.log("inputstate", inputState.value);
 				onBlur={touchHandler}
 				value={inputState.value}
 				options={props.options}
-        
 			>
-				{catOptions.map(o => (
-				<option key={o.value} value={o.value}>
-					{o.label}
-				</option>
+				{catOptions.map((o) => (
+					<option key={o.value} value={o.value}>
+						{o.label}
+					</option>
 				))}
 			</Select>
-      
-     {/* /> */}
+
+			{/* /> */}
 			{!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
 		</div>
 	);

@@ -2,15 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../src/shared/components/UIElements/LoadingSpinner.js";
 
-// import FieldInputSelect from "./FieldInputSelect";
 import { AuthContext } from "../shared/context/auth-context";
 import { useValue } from "../shared/context/SettingsProvider.js";
 import Controls from "../components/controls/Controls.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-// import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
+
 import CloseIcon from "@mui/icons-material/Close";
-import Notification from "../components/Notification.js";
-import ConfirmDialog from "../components/ConfirmDialog.js";
+//import Notification from "../components/Notification.js";
+//import ConfirmDialog from "../components/ConfirmDialog.js";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 
@@ -18,11 +17,6 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
 	Container,
 	Paper,
 	Stack,
@@ -31,20 +25,19 @@ import {
 	Button,
 	MenuItem,
 	FormLabel,
-	FormControl,
-	List,
-	ListItem,
 	Grid,
-	GridItem,
 	Card,
 	CardMedia,
+	IconButton,
 } from "@mui/material";
+
 import { toast } from "sonner";
 
 function AppSettings() {
 	const [open, setOpen] = useState(true);
 	const auth = useContext(AuthContext);
 	const { state, dispatch } = useValue();
+	const [setting_id, setSetting_id] = useState(state.id);
 	const [appTitle, setAppTitle] = useState(state.app_title);
 	const [appLogo, setAppLogo] = useState(state.app_logo);
 	const [homeBgImage, setHomeBgImage] = useState(state.home_bg_image);
@@ -129,10 +122,8 @@ function AppSettings() {
 	const history = useNavigate();
 
 	const handleSubmit = async () => {
-		// e.preventDefault();
 		console.log("clicked", state);
 		setIsLoading(true);
-		const setting_id = "66b751c915895762e0718369";
 
 		try {
 			const response = await fetch(
@@ -171,7 +162,6 @@ function AppSettings() {
 			);
 			const data = await response.json();
 			setIsLoading(false);
-			// alert("Settings updated successfully");
 			toast.success("Settings updated", {
 				style: {
 					background: "green",
@@ -200,10 +190,6 @@ function AppSettings() {
 			imgFile.append("file", file);
 			imgFile.append("cloud_name", process.env.REACT_APP_CLOUDINARY_NAME);
 			imgFile.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
-
-			// for (var [key, value] of imgFile.entries()) {
-			// 	console.log("imgFile »", key, value);
-			// }
 
 			const response = await fetch(
 				`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,
@@ -388,7 +374,6 @@ function AppSettings() {
 	};
 
 	const handleAreaEdit = (e) => {
-		//console.log("area ta", e.target);
 		setSelectedArea(e.target.value);
 		if (e.target.value === "") {
 			setAreaName("");
@@ -449,14 +434,10 @@ function AppSettings() {
 	// //////////////////////////////////////////////////////////////////////////
 
 	const handleRecipeTypeEdit = (e) => {
-		console.log("recipeTypelist", recipeTypeList);
-		console.log("area ta", e.target);
 		setSelectedRecipeType(e.target.value);
 		if (e.target.value === "") {
 			setRecipeType("");
 		} else {
-			console.log("recipeType t", e.target);
-
 			let filteredRecipeType = recipeTypeList;
 			filteredRecipeType = filteredRecipeType.filter(
 				(a) => a.value === e.target.value
@@ -467,7 +448,6 @@ function AppSettings() {
 	};
 
 	const updateRecipeTypeList = () => {
-		//console.log("recipeType sel", recipeType, selectedRecipeType);
 		let arrayCopy = [];
 		if (selectedRecipeType === "") {
 			const newRecipeType = {
@@ -492,7 +472,6 @@ function AppSettings() {
 	};
 
 	const removeRecipeType = () => {
-		//	console.log("selectedRecipeType", selectedRecipeType);
 		const newArray = recipeTypeList.filter(
 			(item) => item.value !== selectedRecipeType
 		);
@@ -554,7 +533,6 @@ function AppSettings() {
 	};
 
 	const removeIngredientCategory = () => {
-		//	console.log("selectedIngredientCategory", selectedIngredientCategory);
 		const newArray = ingredientCategoryList.filter(
 			(item) => item.value !== selectedIngredientCategory
 		);
@@ -639,11 +617,10 @@ function AppSettings() {
 							container
 							rowSpacing={1}
 							columnSpacing={0}
-							sx={{ border: "none" }} //1px solid
+							sx={{ border: "none" }}
 						>
 							{/************************************************************** APPLICATION */}
 
-							{/* 55555555555555555555555555555555555555555555555555555 */}
 							<Grid item xs={12} lg={12}>
 								<Stack direction='row'>
 									<Grid item xs={12} lg={10}>
@@ -661,10 +638,10 @@ function AppSettings() {
 										</Box>
 									</Grid>
 									<Grid item xs={12} lg={2}>
-										<Stack direction='row'>
+										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
-												variant='outlined'
+												variant='contained'
 												color='error'
 												autoFocus
 												onClick={() => {
@@ -675,10 +652,8 @@ function AppSettings() {
 											</Button>
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
-												// width='100px'
-												variant='outlined'
+												variant='contained'
 												color='success'
-												// type='submit'
 												onClick={() => {
 													handleSubmit();
 												}}
@@ -720,55 +695,62 @@ function AppSettings() {
 											name='app_title'
 											value={appTitle}
 											onChange={(e) => setAppTitle(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableAppTitle ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableAppTitle(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAppTitle ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAppTitle}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableAppTitle(true),
-													setAppTitle(state.app_title),
-													setIsLoading(false);
+												setDisableAppTitle(true), setAppTitle(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAppTitle ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAppTitle}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
-												// setIsLoading(true),
 												dispatch({
 													type: "UPDATE_APP_TITLE",
 													payload: { app_title: appTitle },
 												}),
-													setDisableAppTitle(true);
+													setDisableAppTitle(true),
+													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAppTitle ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -826,43 +808,52 @@ function AppSettings() {
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableAppLogo ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableAppLogo(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAppLogo ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAppLogo}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableAppLogo(true), setAppLogo(state.app_logo);
+												setDisableAppLogo(true), setAppLogo(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAppLogo ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAppLogo}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												uploadFile("inputAppLogo", appLogoPreview),
 													setDisableAppLogo(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAppLogo ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -876,7 +867,6 @@ function AppSettings() {
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -898,42 +888,51 @@ function AppSettings() {
 											name='contact_location'
 											value={contactLocation}
 											onChange={(e) => setContactLocation(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableContactLocation ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableContactLocation(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableContactLocation
+														? "primary.light"
+														: "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactLocation}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableContactLocation(true),
-													setContactLocation(state.contact_location);
+													setContactLocation(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableContactLocation
+														? "primary.light"
+														: "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactLocation}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												setIsLoading(true),
 													dispatch({
@@ -943,17 +942,22 @@ function AppSettings() {
 													setDisableContactLocation(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableContactLocation
+														? "primary.light"
+														: "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -975,41 +979,46 @@ function AppSettings() {
 											name='contact_name'
 											value={contactName}
 											onChange={(e) => setContactName(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableContactName ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableContactName(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableContactName ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactName}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableContactName(true),
-													setContactName(state.contact_name);
+													setContactName(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableContactName ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactName}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												setIsLoading(true),
 													dispatch({
@@ -1019,17 +1028,20 @@ function AppSettings() {
 													setDisableContactName(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableContactName ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1051,41 +1063,48 @@ function AppSettings() {
 											name='contact_email'
 											value={contactEmail}
 											onChange={(e) => setContactEmail(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableContactEmail ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableContactEmail(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableContactEmail
+														? "primary.light"
+														: "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactEmail}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableContactEmail(true),
-													setContactEmail(state.contact_email);
+													setContactEmail(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableContactEmail ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactEmail}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												setIsLoading(true),
 													dispatch({
@@ -1095,17 +1114,22 @@ function AppSettings() {
 													setDisableContactEmail(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableContactEmail
+														? "primary.light"
+														: "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1127,41 +1151,50 @@ function AppSettings() {
 											name='contact_cellphone'
 											value={contactCellphone}
 											onChange={(e) => setContactCellphone(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableContactCellphone ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableContactCellphone(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableContactCellphone
+														? "primary.light"
+														: "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactCellphone}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableContactCellphone(true),
-													setContactCellphone(state.contact_cellphone);
+													setContactCellphone(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableContactCellphone
+														? "primary.light"
+														: "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableContactCellphone}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												setIsLoading(true),
 													dispatch({
@@ -1171,10 +1204,16 @@ function AppSettings() {
 													setDisableContactCellphone(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableContactCellphone
+														? "primary.light"
+														: "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -1188,7 +1227,6 @@ function AppSettings() {
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1241,51 +1279,59 @@ function AppSettings() {
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableHomeBgImage ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableHomeBgImage(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableHomeBgImage ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableHomeBgImage}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableHomeBgImage(true),
-													setHomeBgImage(state.home_bg_image);
+													setHomeBgImage(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableHomeBgImage ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableHomeBgImage}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												uploadFile("inputHomeBgImage", homeBgImagePreview),
 													setDisableHomeBgImage(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableHomeBgImage ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1336,43 +1382,52 @@ function AppSettings() {
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableHomeLogo ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableHomeLogo(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableHomeLogo ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableHomeLogo}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableHomeLogo(true), setHomeLogo(state.home_logo);
+												setDisableHomeLogo(true), setHomeLogo(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableHomeLogo ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableHomeLogo}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												uploadFile("inputHomeLogo", homeLogoPreview),
 													setDisableHomeLogo(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableHomeLogo ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -1387,7 +1442,6 @@ function AppSettings() {
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1438,51 +1492,59 @@ function AppSettings() {
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableAboutImage ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableAboutImage(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAboutImage ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAboutImage}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableAboutImage(true),
 													setAboutImage(state.about_image);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAboutImage ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAboutImage}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												uploadFile("inputAboutImage", aboutImagePreview),
 													setDisableAboutImage(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAboutImage ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1509,44 +1571,48 @@ function AppSettings() {
 											name='about_intro'
 											value={aboutIntro}
 											onChange={(e) => setAboutIntro(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableAboutIntro ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableAboutIntro(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAboutIntro ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAboutIntro}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableAboutIntro(true),
-													setAboutIntro(state.about_intro);
+													setAboutIntro(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAboutIntro ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAboutIntro}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
-												// setIsLoading(true),
 												dispatch({
 													type: "UPDATE_ABOUT_INTRO",
 													payload: { about_intro: aboutIntro },
@@ -1554,17 +1620,20 @@ function AppSettings() {
 													setDisableAboutIntro(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAboutIntro ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1589,43 +1658,46 @@ function AppSettings() {
 											name='about_text'
 											value={aboutText}
 											onChange={(e) => setAboutText(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableAboutText ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableAboutText(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAboutText ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAboutText}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableAboutText(true),
-													setAboutText(state.about_text);
+												setDisableAboutText(true), setAboutText(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAboutText ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableAboutText}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
-												// setIsLoading(true),
 												dispatch({
 													type: "UPDATE_ABOUT_TEXT",
 													payload: { about_text: aboutText },
@@ -1633,10 +1705,14 @@ function AppSettings() {
 													setDisableAboutText(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAboutText ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -1650,7 +1726,6 @@ function AppSettings() {
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1701,51 +1776,58 @@ function AppSettings() {
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableMenuImage ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableMenuImage(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableMenuImage ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableMenuImage}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableMenuImage(true),
-													setMenuImage(state.menu_image);
+												setDisableMenuImage(true), setMenuImage(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableMenuImage ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableMenuImage}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												uploadFile("inputMenuImage", menuImagePreview),
 													setDisableMenuImage(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableMenuImage ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1796,43 +1878,52 @@ function AppSettings() {
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableMenuLogo ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableMenuLogo(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableMenuLogo ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableMenuLogo}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableMenuLogo(true), setMenuLogo(state.menu_logo);
+												setDisableMenuLogo(true), setMenuLogo(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableMenuLogo ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableMenuLogo}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												uploadFile("inputMenuLogo", menuLogoPreview),
 													setDisableMenuLogo(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableMenuLogo ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -1869,42 +1960,47 @@ function AppSettings() {
 											name='footer_about'
 											value={footerAbout}
 											onChange={(e) => setFooterAbout(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableFooterAbout ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableFooterAbout(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableFooterAbout ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableFooterAbout}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
 												setDisableFooterAbout(true),
-													setFooterAbout(state.footer_about);
+													setFooterAbout(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableFooterAbout ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableFooterAbout}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
 												setIsLoading(true),
 													dispatch({
@@ -1914,10 +2010,14 @@ function AppSettings() {
 													setDisableFooterAbout(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableFooterAbout ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -1932,7 +2032,6 @@ function AppSettings() {
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -1954,42 +2053,46 @@ function AppSettings() {
 											name='facebook'
 											value={facebook}
 											onChange={(e) => setFacebook(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableFacebook ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableFacebook(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableFacebook ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableFacebook}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableFacebook(true), setFacebook(state.facebook);
+												setDisableFacebook(true), setFacebook(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableFacebook ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableFacebook}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
-												// setIsLoading(true),
 												dispatch({
 													type: "UPDATE_FACEBOOK",
 													payload: { facebook: facebook },
@@ -1997,17 +2100,20 @@ function AppSettings() {
 													setDisableFacebook(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableFacebook ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -2029,44 +2135,47 @@ function AppSettings() {
 											name='instagram'
 											value={instagram}
 											onChange={(e) => setInstagram(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
 
 								<Grid item xs={12} lg={3}>
 									<Stack direction='row' p={2} spacing={2}>
-										<Button
+										<Controls.ActionButton
 											disabled={disableInstagram ? false : true}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
+											color='primary'
 											onClick={() => {
 												setDisableInstagram(false);
 											}}
-											size='small'
 										>
-											Edit
-										</Button>
-										<Button
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableInstagram ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableInstagram}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='error'
+											color='primary'
 											onClick={() => {
-												setDisableInstagram(true),
-													setInstagram(state.instagram);
+												setDisableInstagram(true), setInstagram(state.aa_rate);
 											}}
-											size='small'
 										>
-											Cancel
-										</Button>
-										<Button
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableInstagram ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
 											disabled={disableInstagram}
-											sx={{ display: "flex", gap: "1rem" }}
-											variant='contained'
-											color='success'
+											color='primary'
 											onClick={() => {
-												// setIsLoading(true),
 												dispatch({
 													type: "UPDATE_INSTAGRAM",
 													payload: { instagram: instagram },
@@ -2074,10 +2183,14 @@ function AppSettings() {
 													setDisableInstagram(true),
 													setIsLoading(false);
 											}}
-											size='small'
 										>
-											Save
-										</Button>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableInstagram ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
 									</Stack>
 								</Grid>
 							</Grid>
@@ -2092,7 +2205,6 @@ function AppSettings() {
 							</FormLabel>
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -2116,7 +2228,7 @@ function AppSettings() {
 											name='aa_rate'
 											value={aaRate}
 											onChange={(e) => setAARate(e.target.value)}
-											fullWidth
+											fullWidth={true}
 										/>
 									</Box>
 								</Grid>
@@ -2130,17 +2242,26 @@ function AppSettings() {
 												setDisableAARate(false);
 											}}
 										>
-											<EditOutlinedIcon fontSize='small' />
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAARate ? "primary.light" : "blue",
+												}}
+											/>
 										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disableAARate}
 											color='primary'
 											onClick={() => {
-												    setDisableAARate(true),
-													setAARate(state.aa_rate);
+												setDisableAARate(true), setAARate(state.aa_rate);
 											}}
 										>
-											<CloseIcon fontSize='small' />
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAARate ? "primary.light" : "blue",
+												}}
+											/>
 										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disableAARate}
@@ -2153,11 +2274,14 @@ function AppSettings() {
 													setDisableAARate(true),
 													setIsLoading(false);
 											}}
-											
 										>
-											<SaveIcon fontSize='small' />
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAARate ? "primary.light" : "green",
+												}}
+											/>
 										</Controls.ActionButton>
-										
 									</Stack>
 								</Grid>
 							</Grid>
@@ -2174,7 +2298,6 @@ function AppSettings() {
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -2187,7 +2310,6 @@ function AppSettings() {
 										<TextField
 											select
 											value={selectedArea}
-											//disabled={disableAreaList}
 											sx={{
 												"& fieldset": { border: "none" },
 												"& .MuiInputBase-root": {
@@ -2254,7 +2376,7 @@ function AppSettings() {
 													value={areaName}
 													onChange={(e) => setAreaName(e.target.value)}
 													size='small'
-													fullWidth
+													fullWidth={true}
 												/>
 											</Box>
 										</Grid>
@@ -2297,7 +2419,7 @@ function AppSettings() {
 													value={areaKM}
 													onChange={(e) => setAreaKM(e.target.value)}
 													size='small'
-													fullWidth
+													fullWidth={true}
 												/>
 											</Box>
 										</Grid>
@@ -2313,23 +2435,14 @@ function AppSettings() {
 												setDisableAreaList(false);
 											}}
 										>
-											<EditOutlinedIcon fontSize='small' />
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAreaList ? "primary.light" : "blue",
+												}}
+											/>
 										</Controls.ActionButton>
-										<Controls.ActionButton
-											disabled={disableAreaList}
-											color='primary'
-											onClick={() => {
-												removeArea(),
-													// updateAreaList(),
-													setDisableAreaList(true),
-													setSelectedArea(""),
-													setAreaName(""),
-													setAreaKM(""),
-													setIsLoading(false);
-											}}
-										>
-											<DeleteIcon fontSize='small' />
-										</Controls.ActionButton>
+
 										<Controls.ActionButton
 											disabled={disableAreaList}
 											color='primary'
@@ -2341,7 +2454,31 @@ function AppSettings() {
 													setAreaKM("");
 											}}
 										>
-											<CloseIcon fontSize='small' />
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAreaList ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableAreaList}
+											color='primary'
+											onClick={() => {
+												removeArea(),
+													setDisableAreaList(true),
+													setSelectedArea(""),
+													setAreaName(""),
+													setAreaKM(""),
+													setIsLoading(false);
+											}}
+										>
+											<DeleteIcon
+												fontSize='small'
+												sx={{
+													color: disableAreaList ? "primary.light" : "red",
+												}}
+											/>
 										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disableAreaList}
@@ -2355,7 +2492,12 @@ function AppSettings() {
 													setIsLoading(false);
 											}}
 										>
-											<SaveIcon fontSize='small' />
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAreaList ? "primary.light" : "green",
+												}}
+											/>
 										</Controls.ActionButton>
 									</Stack>
 								</Grid>
@@ -2364,7 +2506,6 @@ function AppSettings() {
 
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -2377,7 +2518,6 @@ function AppSettings() {
 										<TextField
 											select
 											value={selectedRecipeType}
-											//disabled={disableRecipeType}
 											sx={{
 												"& fieldset": { border: "none" },
 												"& .MuiInputBase-root": {
@@ -2444,7 +2584,7 @@ function AppSettings() {
 													value={recipeType}
 													onChange={(e) => setRecipeType(e.target.value)}
 													size='small'
-													fullWidth
+													fullWidth={true}
 												/>
 											</Box>
 										</Grid>
@@ -2461,23 +2601,16 @@ function AppSettings() {
 												setDisableRecipeTypeList(false);
 											}}
 										>
-											<EditOutlinedIcon fontSize='small' />
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableRecipeTypeList
+														? "primary.light"
+														: "blue",
+												}}
+											/>
 										</Controls.ActionButton>
-										<Controls.ActionButton
-											disabled={disableRecipeTypeList}
-											color='primary'
-											onClick={() => {
-												removeRecipeType(),
-													// updateRecipeTypeList(),
-													setDisableRecipeTypeList(true),
-													setSelectedRecipeType(""),
-													setRecipeType("");
 
-												//setIsLoading(false);
-											}}
-										>
-											<DeleteIcon fontSize='small' />
-										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disableRecipeTypeList}
 											color='primary'
@@ -2488,7 +2621,33 @@ function AppSettings() {
 													setRecipeType("");
 											}}
 										>
-											<CloseIcon fontSize='small' />
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableRecipeTypeList
+														? "primary.light"
+														: "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableRecipeTypeList}
+											color='primary'
+											onClick={() => {
+												removeRecipeType(),
+													setDisableRecipeTypeList(true),
+													setSelectedRecipeType(""),
+													setRecipeType("");
+											}}
+										>
+											<DeleteIcon
+												fontSize='small'
+												sx={{
+													color: disableRecipeTypeList
+														? "primary.light"
+														: "red",
+												}}
+											/>
 										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disableRecipeTypeList}
@@ -2498,10 +2657,16 @@ function AppSettings() {
 													setDisableRecipeTypeList(true),
 													setSelectedRecipeType(""),
 													setRecipeType("");
-												//setIsLoading(false);
 											}}
 										>
-											<SaveIcon fontSize='small' />
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableRecipeTypeList
+														? "primary.light"
+														: "green",
+												}}
+											/>
 										</Controls.ActionButton>
 									</Stack>
 								</Grid>
@@ -2523,7 +2688,6 @@ function AppSettings() {
 										<TextField
 											select
 											value={selectedIngredientCategory}
-											//disabled={disableIngredientCategoryList}
 											sx={{
 												"& fieldset": { border: "none" },
 												"& .MuiInputBase-root": {
@@ -2592,7 +2756,7 @@ function AppSettings() {
 														setIngredientCategory(e.target.value)
 													}
 													size='small'
-													fullWidth
+													fullWidth={true}
 												/>
 											</Box>
 										</Grid>
@@ -2609,23 +2773,16 @@ function AppSettings() {
 												setDisableIngredientCategoryList(false);
 											}}
 										>
-											<EditOutlinedIcon fontSize='small' />
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableIngredientCategoryList
+														? "primary.light"
+														: "blue",
+												}}
+											/>
 										</Controls.ActionButton>
-										<Controls.ActionButton
-											disabled={disableIngredientCategoryList}
-											color='primary'
-											onClick={() => {
-												removeIngredientCategory(),
-													// updateIngredientCategoryList(),
-													setDisableIngredientCategoryList(true),
-													setSelectedIngredientCategory(""),
-													setIngredientCategory("");
 
-												//setIsLoading(false);
-											}}
-										>
-											<DeleteIcon fontSize='small' />
-										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disableIngredientCategoryList}
 											color='primary'
@@ -2638,7 +2795,33 @@ function AppSettings() {
 													setIngredientCategory("");
 											}}
 										>
-											<CloseIcon fontSize='small' />
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableIngredientCategoryList
+														? "primary.light"
+														: "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disableIngredientCategoryList}
+											color='primary'
+											onClick={() => {
+												removeIngredientCategory(),
+													setDisableIngredientCategoryList(true),
+													setSelectedIngredientCategory(""),
+													setIngredientCategory("");
+											}}
+										>
+											<DeleteIcon
+												fontSize='small'
+												sx={{
+													color: disableIngredientCategoryList
+														? "primary.light"
+														: "red",
+												}}
+											/>
 										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disableIngredientCategoryList}
@@ -2648,10 +2831,16 @@ function AppSettings() {
 													setDisableIngredientCategoryList(true),
 													setSelectedIngredientCategory(""),
 													setIngredientCategory("");
-												//setIsLoading(false);
 											}}
 										>
-											<SaveIcon fontSize='small' />
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableIngredientCategoryList
+														? "primary.light"
+														: "green",
+												}}
+											/>
 										</Controls.ActionButton>
 									</Stack>
 								</Grid>
@@ -2660,7 +2849,6 @@ function AppSettings() {
 							{/* #########################################################     Price List   ######### */}
 							<Grid
 								container
-								// my={4}
 								rowSpacing={1}
 								columnSpacing={0}
 								sx={{ border: "none" }}
@@ -2735,7 +2923,7 @@ function AppSettings() {
 													value={price}
 													onChange={(e) => setPrice(e.target.value)}
 													size='small'
-													fullWidth
+													fullWidth={true}
 												/>
 											</Box>
 										</Grid>
@@ -2752,23 +2940,14 @@ function AppSettings() {
 												setDisablePriceList(false);
 											}}
 										>
-											<EditOutlinedIcon fontSize='small' />
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disablePriceList ? "primary.light" : "blue",
+												}}
+											/>
 										</Controls.ActionButton>
-										<Controls.ActionButton
-											disabled={disablePriceList}
-											color='primary'
-											onClick={() => {
-												removePrice(),
-													// updatePriceList(),
-													setDisablePriceList(true),
-													setSelectedPrice(""),
-													setPrice("");
 
-												//setIsLoading(false);
-											}}
-										>
-											<DeleteIcon fontSize='small' />
-										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disablePriceList}
 											color='primary'
@@ -2779,20 +2958,47 @@ function AppSettings() {
 													setPrice("");
 											}}
 										>
-											<CloseIcon fontSize='small' />
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disablePriceList ? "primary.light" : "blue",
+												}}
+											/>
 										</Controls.ActionButton>
 										<Controls.ActionButton
 											disabled={disablePriceList}
-											color='primary'
+											color='error'
+											type='button'
+											onClick={() => {
+												removePrice(),
+													setDisablePriceList(true),
+													setSelectedPrice(""),
+													setPrice("");
+											}}
+										>
+											<DeleteIcon
+												fontSize='small'
+												sx={{
+													color: disablePriceList ? "primary.light" : "red",
+												}}
+											/>
+										</Controls.ActionButton>
+										<Controls.ActionButton
+											disabled={disablePriceList}
+											color='success'
 											onClick={() => {
 												updatePriceList(),
 													setDisablePriceList(true),
 													setSelectedPrice(""),
 													setPrice("");
-												//setIsLoading(false);
 											}}
 										>
-											<SaveIcon fontSize='small' />
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disablePriceList ? "primary.light" : "green",
+												}}
+											/>
 										</Controls.ActionButton>
 									</Stack>
 								</Grid>

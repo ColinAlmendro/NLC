@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import reducerApp from "./reducerApp";
-import { AuthContext } from "./auth-context";
+import { AuthContext } from "../src/shared/context/auth-context";
 
 
 const initialState = {

@@ -6,30 +6,30 @@ import CartContext from "../../shared/context/cart-context";
 import StarIcon from "@mui/icons-material/Star";
 import {
 	Typography,
-	Box,
-	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
-	Container,
-	Paper,
+	// Box,
+	// Divider,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
+	// Container,
+	// Paper,
 	Stack,
-	TextField,
-	InputLabel,
-	Button,
-	IconButton,
+	// TextField,
+	// InputLabel,
+	// Button,
+	// IconButton,
 	// MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
-	Grid,
-	GridItem,
-	Card,
-	CardMedia,
-	CircularProgress,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
+	// Grid,
+	// GridItem,
+	// Card,
+	// CardMedia,
+	// CircularProgress,
 } from "@mui/material";
 import "./MenuItem.css";
 
@@ -49,14 +49,14 @@ const MenuItem = ({ data, id, day }) => {
 	} = useContext(CartContext); //items
 
 	const addToCartHandler = (item = data) => {
-		console.log("additem", item);
+		//console.log("additem", item);
 		addItem(item, day);
 		// Update item count in menu
 		setCount((prevCount) => prevCount + 1);
 	};
 
 	const removeCartHandler = (id) => {
-		console.log("removeitem", id);
+		//console.log("removeitem", id);
 		removeItem(id, day);
 		// Update item count in menu
 		setCount((prevCount) => {

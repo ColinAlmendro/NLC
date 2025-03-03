@@ -3,42 +3,41 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
 	Container,
 	Paper,
 	Stack,
 	TextField,
 	InputLabel,
 	Button,
-	IconButton,
-	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
+	// IconButton,
+	// MenuItem,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
 	Grid,
 	GridItem,
-	Card,
-	CardMedia,
+	// Card,
+	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import * as Yup from "yup";
 import { useIngredientsValue } from "../../shared/context/IngredientsProvider.js";
-import { ingredientCategories } from "./utils/constants.js";
+import { useValue } from "../../shared/context/SettingsProvider.js";
+
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useNavigate } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import FieldInputText from "./FieldInputText";
-import FieldInputSelect from "./FieldInputSelect";
-//import FieldInputTextarea from "./FieldInputTextarea";
+
+import FieldInputText from "../../components/controls/FieldInputText.jsx";
+import FieldInputSelect from "../../components/controls/FieldInputSelect.jsx";
+
 import {
 	FormProvider,
 	useFormContext,
@@ -89,6 +88,7 @@ const validationSchema = Yup.object()
 function IngredientsForm(props) {
 	const classes = useStyles();
 	const auth = useContext(AuthContext);
+	const { state, dispatch } = useValue();
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(false);
@@ -98,17 +98,21 @@ function IngredientsForm(props) {
 	} = useIngredientsValue();
 
 	const [record, setRecord] = useState(selected_ingredient[0]);
+const [ingredientCategories, setIngredientCategories] = useState(
+	state.ingredient_category_list
+);
+const [typeOptions,setTypeOptions] = useState([]);
 
 	const history = useNavigate();
 
 	let defaultIngredient = {};
 	if (record) {
-		console.log("ISrecordY", record);
+		//console.log("ISrecordY", record);
 		defaultIngredient = {
 			...record,
 		};
 	} else {
-		console.log("ISrecordN", record);
+		//console.log("ISrecordN", record);
 		defaultIngredient = {
 			category: "",
 			name: "",
@@ -145,7 +149,7 @@ function IngredientsForm(props) {
 		submitCount,
 	} = formState;
 
-	const onChangeCategory = (event) => {
+	//const onChangeCategory = (event) => {
 		// let filteredIngredients = ingredientsList;
 		// filteredIngredients = filteredIngredients.filter(
 		// 	(item) => item.category === event.target.value
@@ -156,8 +160,8 @@ function IngredientsForm(props) {
 		// 	category: event.target.value,
 		// });
 		// setFilteredIngredientsList(filteredIngredients);
-	};
-	const onChangeQty = (event) => {
+//	};
+//	const onChangeQty = (event) => {
 		//	console.log("changeqty", event.target.value);
 		// let qty = event.target.value;
 		// let qtyCost = 0;
@@ -173,12 +177,24 @@ function IngredientsForm(props) {
 		// 	cost: qtyCost,
 		// });
 		// setAddItemDisabled(false);
-	};
+//	};
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+	useEffect(() => {
+		let arrayCopy = [...ingredientCategories];
+	//	console.log("arrayCopy", arrayCopy);
+		arrayCopy.map((type) => {
+			
+				type.value = type.value;
+				type.label = type.value.charAt(0).toUpperCase() + type.value.slice(1);
+			
+		});
+	//	console.log("arrayCopy", arrayCopy);
+		setTypeOptions(arrayCopy);
+		}, []);
 
 	const onSubmit = async (data) => {
 		// e.preventDefault();
-		console.log("clicked", data);
+	//	console.log("clicked", data);
 
 		if (record) {
 			try {
@@ -310,7 +326,7 @@ function IngredientsForm(props) {
 	return (
 		<>
 			<Container sx={{ border: "none" }} id='container'>
-				{/* <ToastContainer position='top-center' autoClose={3000} /> */}
+				
 				<Paper>
 					{isLoading && <LoadingSpinner asOverlay />}
 
@@ -321,7 +337,7 @@ function IngredientsForm(props) {
 									container
 									rowSpacing={1}
 									columnSpacing={0}
-									sx={{ border: "none" }} //1px solid
+									sx={{ border: "none" }}
 								>
 									<Grid item xs={12} lg={12}>
 										<Stack direction='row'>
@@ -340,11 +356,11 @@ function IngredientsForm(props) {
 												</Box>
 											</Grid>
 											<Grid item xs={12} lg={2}>
-												<Stack direction='row'>
+												<Stack direction='row' spacing={1}>
 													<Button
 														sx={{ gap: "1rem" }}
-														// width='100px'
-														variant='outlined'
+														
+														variant='contained'
 														color='error'
 														autoFocus
 														onClick={() => {
@@ -356,8 +372,8 @@ function IngredientsForm(props) {
 													</Button>
 													<Button
 														sx={{ display: "flex", gap: "1rem" }}
-														// width='100px'
-														variant='outlined'
+														
+														variant='contained'
 														color='success'
 														type='submit'
 													>
@@ -383,7 +399,7 @@ function IngredientsForm(props) {
 														<FieldInputSelect
 															name='category'
 															control={control}
-															options={ingredientCategories}
+															options={typeOptions}
 														/>
 													</Box>
 												</Stack>
@@ -437,14 +453,13 @@ function IngredientsForm(props) {
 																			onChange={onChange}
 																			control={control}
 																			name='price'
-																			//label='Qty per Kg/L'
+																			
 																			thousandSeparator=','
 																			decimalSeparator='.'
 																			decimalScale={2}
-																			//	getInputRef={ref}
-																			//	{...rest}
+																			
 																			size='small'
-																			//	sx={{ width: "200px" }}
+																			
 																			error={!!error}
 																			helperText={`${
 																				error?.message ? error?.message : ""

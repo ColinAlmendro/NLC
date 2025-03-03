@@ -29,7 +29,7 @@ function FieldInputSelect({ name, label, options, disabled, control }) {
 									textAlign: "left",
 								},
 							},
-							 width: "200px",
+							width: "200px",
 							border: "1px solid",
 						}}
 					>

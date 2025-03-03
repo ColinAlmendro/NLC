@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { MenuMenuItems } from "../NavMenuItems";
+import { MenuMenuItems } from "../src/shared/components/Navigation/NavMenuItems";
 import "./Dropdown.css";
 
 export default function Dropdown() {

@@ -3,11 +3,11 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
 	Container,
 	Paper,
 	Stack,
@@ -16,12 +16,12 @@ import {
 	Button,
 	IconButton,
 	MenuItem,
-	FormLabel,
-	FormControl,
+	// FormLabel,
+	// FormControl,
 	List,
 	ListItem,
 	Grid,
-	GridItem,
+	//GridItem,
 	Card,
 	CardMedia,
 	CircularProgress,
@@ -81,12 +81,12 @@ function PromotionsForm(props) {
 
 	let defaultPromotion = {};
 	if (record) {
-		console.log("ISrecordY", record);
+		//console.log("ISrecordY", record);
 		defaultPromotion = {
 			...record,
 		};
 	} else {
-		console.log("ISrecordN", record);
+		//console.log("ISrecordN", record);
 		defaultPromotion = {
 			promotion: "",
 			items: [],
@@ -333,7 +333,7 @@ function PromotionsForm(props) {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper>
-					{isLoading && <LoadingSpinner asOverlay />}
+					{/* {isLoading && <LoadingSpinner asOverlay />} */}
 
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
@@ -361,11 +361,11 @@ function PromotionsForm(props) {
 												</Box>
 											</Grid>
 											<Grid item xs={12} lg={2}>
-												<Stack direction='row'>
+												<Stack direction='row' spacing={1}>
 													<Button
 														sx={{ gap: "1rem" }}
 														// width='100px'
-														variant='outlined'
+														variant='contained'
 														color='error'
 														autoFocus
 														onClick={() => {
@@ -378,7 +378,7 @@ function PromotionsForm(props) {
 													<Button
 														sx={{ display: "flex", gap: "1rem" }}
 														// width='100px'
-														variant='outlined'
+														variant='contained'
 														color='success'
 														type='submit'
 													>

@@ -1,5 +1,5 @@
-import { useContext,useEffect } from "react";
-import { IconButton, Button } from "@mui/material";
+import { useContext } from "react";
+import { IconButton } from "@mui/material";
 import CartContext from "../../shared/context/cart-context";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 

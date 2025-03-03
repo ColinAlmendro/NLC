@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from "react";
 import {
-	Typography,
-	Box,
+	//Typography,
+	//Box,
 	Stack,
-	TextField,
-	Button,
+	//TextField,
+	//Button,
 	List,
-	ListItem,
-	ListItemText,
-	ListItemButton,
-	ListSubheader,
+	//ListItem,
+	//ListItemText,
+	//ListItemButton,
+	//ListSubheader,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
-	CircularProgress,
-	Collapse,
+	//GridItem,
+	//Card,
+	//CardMedia,
+	//CircularProgress,
+	//Collapse,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
+//import ExpandLess from "@mui/icons-material/ExpandLess";
+//import ExpandMore from "@mui/icons-material/ExpandMore";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 
 import {
@@ -62,8 +62,8 @@ const [selectedPromotion, setSelectedPromotion] = useState(
 );
 
 
-	console.log("selectedrecord", record);
-	console.log("selectedpromo", selectedPromotion);
+	// console.log("selectedrecord", record);
+	// console.log("selectedpromo", selectedPromotion);
 
 
 	return (

@@ -228,11 +228,11 @@ let cost = 0;
 									<Stack direction='row'>
 										<Grid item xs={12} lg={10}></Grid>
 										<Grid item xs={2} lg={2}>
-											<Stack direction='row'>
+											<Stack direction='row' spacing={1}>
 												<Button
 													sx={{ gap: "1rem" }}
 													// width='100px'
-													variant='outlined'
+													variant='contained'
 													color='error'
 													autoFocus
 													onClick={() => {
@@ -245,7 +245,7 @@ let cost = 0;
 												<Button
 													sx={{ display: "flex", gap: "1rem" }}
 													// width='100px'
-													variant='outlined'
+													variant='contained'
 													color='success'
 													type='button'
 													onClick={() => {

@@ -11,7 +11,7 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	Divider,
+	//Divider,
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
@@ -22,15 +22,15 @@ import { Search } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
-import { useValue } from "../../shared/context/SettingsProvider.js";
+//import { useValue } from "../../shared/context/SettingsProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 
 import { toast } from "sonner";
-// import "./CustomerTable.css";
+
 
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
@@ -60,7 +60,7 @@ const headCells = [
 ];
 
 export default function Customer() {
-	//console.log("loading customer");
+
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -74,7 +74,6 @@ export default function Customer() {
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...customers];
-	//console.log("records", records);
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
@@ -96,7 +95,7 @@ export default function Customer() {
 
 	useEffect(() => {
 		async function fetchCustomers() {
-			//console.log("fetching customers");
+		
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -110,11 +109,11 @@ export default function Customer() {
 					}
 				);
 				const data = await response.json();
-				//console.log("Customers list :", data.customers);
+			
 				dispatchCustomer({ type: "UPDATE_CUSTOMERS", data });
 				setIsLoading(false);
 			} catch (err) {
-				//	console.log(err);
+			
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -152,7 +151,13 @@ export default function Customer() {
 				.then(() => {
 					dispatchCustomer({ type: "DELETE_CUSTOMER", _id });
 					setIsLoading(false);
-					alert("Customer deleted !");
+					
+					toast.success("Customer deleted", {
+											style: {
+												background: "green",
+												color: "white",
+											},
+										});
 				});
 		} catch (err) {
 			console.log("Delete error", err);
@@ -186,25 +191,25 @@ export default function Customer() {
 		});
 	};
 
-	const addOrEdit = (customer, resetForm) => {
-		if (customer._id == 0) insertCustomer(customer);
-		else updateCustomer(customer);
-		resetForm();
-		setRecordForEdit(null);
-		setOpenPopup(false);
-		// setRecords(getAllCustomers());
-		setNotify({
-			isOpen: true,
-			message: "Submitted Successfully",
-			type: "success",
-		});
-	};
+	// const addOrEdit = (customer, resetForm) => {
+	// 	if (customer._id == 0) insertCustomer(customer);
+	// 	else updateCustomer(customer);
+	// 	resetForm();
+	// 	setRecordForEdit(null);
+	// 	setOpenPopup(false);
+	// 	// setRecords(getAllCustomers());
+	// 	setNotify({
+	// 		isOpen: true,
+	// 		message: "Submitted Successfully",
+	// 		type: "success",
+	// 	});
+	// };
 
-	const openInPopup = (item) => {
-		// setRecordForEdit(item);
-		dispatchCustomer({ type: "SET_SELECTED_CUSTOMER", _id: item._id });
-		setOpenPopup(true);
-	};
+	// const openInPopup = (item) => {
+	// 	// setRecordForEdit(item);
+	// 	dispatchCustomer({ type: "SET_SELECTED_CUSTOMER", _id: item._id });
+	// 	setOpenPopup(true);
+	// };
 
 	const onDelete = (_id) => {
 		setConfirmDialog({
@@ -229,11 +234,11 @@ export default function Customer() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }}>
+			<Container sx={{ border: "none", width: "100%" }}>
 				<Paper
-					textAlign='center'
+					textalign='center'
 					className={classes.pageContent}
-					sx={{ width: "100%", p: 1 }}
+					sx={{ width: "100%", p: 0 }}
 				>
 					<Box
 						sx={{
@@ -247,7 +252,7 @@ export default function Customer() {
 							Customer Manager
 						</Typography>
 					</Box>
-					{/* <Divider /> */}
+					
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Customers'
@@ -262,9 +267,9 @@ export default function Customer() {
 							onChange={handleSearch}
 						/>
 						<Button
-							//	text='Add New'
+							
 							variant='contained'
-							// startIcon={<AddIcon />}
+							
 							className={classes.newButton}
 							sx={{ marginLeft: "auto" }}
 							onClick={() => {
@@ -285,15 +290,15 @@ export default function Customer() {
 								dob = new Date(item.dob).toLocaleDateString();
 								return (
 									<TableRow key={item._id}>
-										<TableCell>{item.name}</TableCell>
-										<TableCell>{item.surname}</TableCell>
-										<TableCell>{item.cell}</TableCell>
-										<TableCell>{item.email}</TableCell>
-										<TableCell>{item.address1}</TableCell>
-										<TableCell>{item.area}</TableCell>
-										<TableCell>{dob}</TableCell>
-										<TableCell>{item.note}</TableCell>
-										<TableCell>
+										<TableCell width='5%'>{item.name}</TableCell>
+										<TableCell width='5%'>{item.surname}</TableCell>
+										<TableCell width='5%'>{item.cell}</TableCell>
+										<TableCell width='15%'>{item.email}</TableCell>
+										<TableCell width='15%'>{item.address1}</TableCell>
+										<TableCell width='10%'>{item.area}</TableCell>
+										<TableCell width='5%'>{dob}</TableCell>
+										<TableCell width='20%'>{item.note}</TableCell>
+										<TableCell width='20%'>
 											<Controls.ActionButton
 												color='primary'
 												onClick={() => {
@@ -302,13 +307,18 @@ export default function Customer() {
 														id: item._id,
 													}),
 														setOpenPopup(true);
-													// openInPopup(item);
+													
 												}}
 											>
-												<EditOutlinedIcon fontSize='small' />
+												<EditOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "blue",
+													}}
+												/>
 											</Controls.ActionButton>
 											<Controls.ActionButton
-												color='secondary'
+												color='primary'
 												onClick={() => {
 													setConfirmDialog({
 														isOpen: true,
@@ -320,7 +330,12 @@ export default function Customer() {
 													});
 												}}
 											>
-												<CloseIcon fontSize='small' />
+												<DeleteIcon
+													fontSize='small'
+													sx={{
+														color: "red",
+													}}
+												/>
 											</Controls.ActionButton>
 										</TableCell>
 									</TableRow>
@@ -336,9 +351,9 @@ export default function Customer() {
 				openPopup={openPopup}
 				setOpenPopup={setOpenPopup}
 			>
-				{/* <CustomerForm /> */}
+				
 				<CustomersForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
-				{/* <CustomerForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
+				
 			</Popup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog

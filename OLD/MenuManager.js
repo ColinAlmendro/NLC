@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import "./MenuManager.css";
 import { MenuTable } from "./MenuTable";
-import { MenuForm } from "./MenuForm";
+import { MenuForm } from "../src/menus/pages/MenuForm";
 
 function MenuManager() {
 	const [modalOpen, setModalOpen] = useState(false);

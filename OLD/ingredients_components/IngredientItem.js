@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../../shared/components/UIElements/Card";
-import Button from "../../shared/components/FormElements/Button";
-import Modal from "../../shared/components/UIElements/Modal";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-import { AuthContext } from "../../shared/context/auth-context";
-import { useHttpClient } from "../../shared/hooks/http-hook";
+import Card from "../../src/shared/components/UIElements/Card";
+import Button from "../../src/shared/components/FormElements/Button";
+import Modal from "../../src/shared/components/UIElements/Modal";
+import ErrorModal from "../../src/shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../src/shared/components/UIElements/LoadingSpinner";
+import { AuthContext } from "../../src/shared/context/auth-context";
+import { useHttpClient } from "../../src/shared/hooks/http-hook";
 import "./IngredientItem.css";
 
 const IngredientItem = (props) => {

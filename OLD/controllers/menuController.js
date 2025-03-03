@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useHttpClient } from "../../shared/hooks/http-hook";
-import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../src/shared/hooks/http-hook";
+import { AuthContext } from "../../src/shared/context/auth-context";
 
 	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 

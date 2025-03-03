@@ -2,51 +2,19 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../context/auth-context";
 import { useValue } from "../../../context/SettingsProvider";
 import { NavLink } from "react-router-dom";
-import Button from "../Button/Button";
 import DropdownAdmin from "../Dropdown/DropdownAdmin";
 import MenuIcon from "@mui/icons-material/Menu";
-import {
-	// Typography,
-	// Box,
-	// Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
-	// Container,
-	// Paper,
-	// Stack,
-	// TextField,
-	// InputLabel,
-	// Button,
-	// MenuItem,
-	// FormLabel,
-	// FormControl,
-	// List,
-	// ListItem,
-	// Grid,
-	// GridItem,
-	Card,
-	CardMedia,
-} from "@mui/material";
-// import DropdownMenus from "../Dropdown/DropdownMenus";
-// import DropdownIngredients from "../Dropdown/DropdownIngredients";
-// import DropdownRecipes from "../Dropdown/DropdownRecipes";
-// import DropdownMUI from "../Dropdown/DropdownMUI";
+;
 import "./Navbar.css";
 
 function Navbar() {
 	const { state, dispatch } = useValue();
 	const auth = useContext(AuthContext);
-	//console.log("loggedin:", auth);
 
-	// State click menu-icon
 	const [click, setClick] = useState(false);
-	// State dropdown
+
 	const [dropdownAdmin, setDropdownAdmin] = useState(false);
 
-	// Toggle menu-icon
 	const handleClick = () => setClick(!click);
 	const closeMobileMenu = () => setClick(false);
 
@@ -68,9 +36,7 @@ function Navbar() {
 	return (
 		<>
 			<nav className='navbar'>
-				{/* <Card sx={{ maxWidth: 100 }}>
-					<CardMedia component='img' image={state.app_logo} alt='Menu Logo' />
-				</Card> */}
+
 				<NavLink to='/' className='navbar-logo'>
 					{state.app_title}
 					{/* Next Level Cuisine */}
@@ -92,7 +58,7 @@ function Navbar() {
 							<NavLink
 								to='/admin'
 								className='nav-links'
-								// onClick={closeMobileMenu}
+								
 							>
 								Admin <i className='fas fa-caret-down'></i>
 							</NavLink>
@@ -141,8 +107,6 @@ function Navbar() {
 									auth.logout();
 									closeMobileMenu();
 								}}
-
-								//onClick={auth.logout}
 							>
 								Logout
 							</NavLink>

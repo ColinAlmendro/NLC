@@ -19,7 +19,7 @@ import { DevTool } from "@hookform/devtools";
 // import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 // import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
-import { AuthContext } from "../../shared/context/auth-context";
+import { AuthContext } from "../src/shared/context/auth-context";
 
 const categories = [
 	{ value: "", label: "None" },

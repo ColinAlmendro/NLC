@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import MenuForm from "./MenuForm.jsx";
 import ViewMenu from "./ViewMenu.jsx";
-
 import {
 	Container,
 	Button,
@@ -14,27 +13,21 @@ import {
 	Typography,
 	Divider,
 	CircularProgress,
-	InputAdornment,
-	Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable";
-// import * as menuController from "../controllers/menuController";
+
 import Controls from "../../components/controls/Controls";
-import { Search } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
+// import { Search } from "@mui/icons-material";
+// import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup";
 import ViewPopup from "./ViewPopup.js";
 import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "../../components/Notification";
 import ConfirmDialog from "../../components/ConfirmDialog";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-//import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-//import { useHttpClient } from "../../shared/hooks/http-hook";
+
 import { AuthContext } from "../../shared/context/auth-context";
 import { useLocation } from "react-router";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
@@ -166,7 +159,7 @@ export default function Menu() {
 					}
 				);
 				const data = await response.json();
-				console.log("Recipes list :", data.recipes);
+				//	console.log("Recipes list :", data.recipes);
 				if (data.recipes.length > 0) {
 					dispatchMenu({ type: "UPDATE_MAIN_RECIPES", data });
 					dispatchMenu({ type: "UPDATE_SIDE_RECIPES", data });
@@ -277,7 +270,13 @@ export default function Menu() {
 				.then(() => {
 					dispatchMenu({ type: "DELETE_MENU", _id });
 					setIsLoading(false);
-					alert("Menu deleted !");
+					// alert("Menu deleted !");
+					toast.success("Menu deleted", {
+						style: {
+							background: "green",
+							color: "white",
+						},
+					});
 				});
 		} catch (err) {
 			console.log("Delete error", err);
@@ -319,25 +318,25 @@ export default function Menu() {
 		// });
 	};
 
-	const addOrEdit = (menu, resetForm) => {
-		if (menu._id == 0) insertMenu(menu);
-		else updateMenu(menu);
-		resetForm();
-		setRecordForEdit(null);
-		setOpenPopup(false);
-		// setRecords(getAllMenus());
-		setNotify({
-			isOpen: true,
-			message: "Submitted Successfully",
-			type: "success",
-		});
-	};
+	// const addOrEdit = (menu, resetForm) => {
+	// 	if (menu._id == 0) insertMenu(menu);
+	// 	else updateMenu(menu);
+	// 	resetForm();
+	// 	setRecordForEdit(null);
+	// 	setOpenPopup(false);
+	// 	// setRecords(getAllMenus());
+	// 	setNotify({
+	// 		isOpen: true,
+	// 		message: "Submitted Successfully",
+	// 		type: "success",
+	// 	});
+	// };
 
-	const openInPopup = (item) => {
-		// setRecordForEdit(item);
-		dispatchMenu({ type: "SET_SELECTED_MENU", _id: item._id });
-		setOpenPopup(true);
-	};
+	// const openInPopup = (item) => {
+	// 	// setRecordForEdit(item);
+	// 	dispatchMenu({ type: "SET_SELECTED_MENU", _id: item._id });
+	// 	setOpenPopup(true);
+	// };
 
 	const onDelete = (_id) => {
 		setConfirmDialog({
@@ -365,7 +364,7 @@ export default function Menu() {
 		<>
 			<Container sx={{ border: "none" }} id='container'>
 				<Paper
-					textAlign='center'
+					textalign='center'
 					className={classes.pageContent}
 					sx={{ width: "100%", p: 1 }}
 				>
@@ -465,7 +464,12 @@ export default function Menu() {
 													// openInPopup(item);
 												}}
 											>
-												<PageviewOutlinedIcon fontSize='small' />
+												<PageviewOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "#e65100",
+													}}
+												/>
 											</Controls.ActionButton>
 											<Controls.ActionButton
 												color='primary'
@@ -478,10 +482,15 @@ export default function Menu() {
 													// openInPopup(item);
 												}}
 											>
-												<EditOutlinedIcon fontSize='small' />
+												<EditOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "blue",
+													}}
+												/>
 											</Controls.ActionButton>
 											<Controls.ActionButton
-												color='secondary'
+												color='primary'
 												onClick={() => {
 													setConfirmDialog({
 														isOpen: true,
@@ -493,7 +502,12 @@ export default function Menu() {
 													});
 												}}
 											>
-												<CloseIcon fontSize='small' />
+												<DeleteIcon
+													fontSize='small'
+													sx={{
+														color: "red",
+													}}
+												/>
 											</Controls.ActionButton>
 										</TableCell>
 									</TableRow>

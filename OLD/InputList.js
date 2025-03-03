@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import RecipeIngredients from "./RecipeIngredients";
 import Input from "../../shared/components/FormElements/Input";
 import InputSelect from "../../shared/components/FormElements/InputSelect";
-import Button from "./Button";
+import Button from "../src/shared/components/FormElements/Button";
 //import "./ImageUpload.css";
 
 const ingredientOptions = RecipeIngredients.map((ingredient) => ({
@@ -12,16 +12,13 @@ const ingredientOptions = RecipeIngredients.map((ingredient) => ({
 
 const InputList = (props) => {
 	const [ingredientList, setIngredientList] = useState([null]);
-	
-	const [isValid, setIsValid] = useState(false);
 
-	
+	const [isValid, setIsValid] = useState(false);
 
 	// useEffect(() => {
 	// 	if (!ingredientList) {
 	// 		return;
 	// 	}
-		
 
 	const pickedHandler = (event) => {
 		// let pickedFile;
@@ -38,7 +35,6 @@ const InputList = (props) => {
 
 		props.onInput(props.ingredientList, fileIsValid);
 	};
-	
 
 	// const pickImageHandler = () => {
 	// 	filePickerRef.current.click();
@@ -47,11 +43,10 @@ const InputList = (props) => {
 	return (
 		<div className='form-control'>
 			<ul>
-				{ingredientList.map(
-					({ ingredient, unit, qty}, index) => {
-						return (
-							<li key={id}>
-								{/* <Select
+				{ingredientList.map(({ ingredient, unit, qty }, index) => {
+					return (
+						<li key={id}>
+							{/* <Select
 									id='ingredient'
 									labelId='Inglabel'
 									sx={{ width: "200px" }}
@@ -62,18 +57,18 @@ const InputList = (props) => {
 										</MenuItem>
 									))}
 								</Select> */}
-								<InputSelect
-									id='ingredient'
-									//element='input'
-									//type='text'
-									label='Ingredient'
-									validators={[VALIDATOR_REQUIRE()]}
-									errorText='Please select an ingredient.'
-									onInput={inputHandler}
-									options={ingredientOptions}
-								/>
+							<InputSelect
+								id='ingredient'
+								//element='input'
+								//type='text'
+								label='Ingredient'
+								validators={[VALIDATOR_REQUIRE()]}
+								errorText='Please select an ingredient.'
+								onInput={inputHandler}
+								options={ingredientOptions}
+							/>
 
-								{/* <input
+							{/* <input
 									type='text'
 									name={`ingredients[${index}].unit`}
 									defaultValue={unit}
@@ -82,16 +77,16 @@ const InputList = (props) => {
 										message: "Unit is required",
 									})}
 								/> */}
-								<Input
-									id={`ingredients[${index}].unit`}
-									element='input'
-									type='text'
-									label='Unit'
-									validators={[VALIDATOR_REQUIRE()]}
-									errorText='Please enter a valid unit.'
-									onInput={inputHandler}
-								/>
-								{/* <input
+							<Input
+								id={`ingredients[${index}].unit`}
+								element='input'
+								type='text'
+								label='Unit'
+								validators={[VALIDATOR_REQUIRE()]}
+								errorText='Please enter a valid unit.'
+								onInput={inputHandler}
+							/>
+							{/* <input
 									type='number'
 									min='0'
 									name={`ingredients[${index}].qty`}
@@ -101,30 +96,29 @@ const InputList = (props) => {
 										message: "Quantity is required",
 									})}
 								/> */}
-								<Input
-									id={`ingredients[${index}].qty`}
-									element='input'
-									type='text'
-									label='Quantity'
-									validators={[VALIDATOR_REQUIRE()]}
-									errorText='Please enter a valid quantity.'
-									onInput={inputHandler}
-								/>
+							<Input
+								id={`ingredients[${index}].qty`}
+								element='input'
+								type='text'
+								label='Quantity'
+								validators={[VALIDATOR_REQUIRE()]}
+								errorText='Please enter a valid quantity.'
+								onInput={inputHandler}
+							/>
 
-								{canDelete && (
-									<button
-										type='button'
-										onClick={() => {
-											remove(index);
-										}}
-									>
-										Remove
-									</button>
-								)}
-							</li>
-						);
-					}
-				)}
+							{canDelete && (
+								<button
+									type='button'
+									onClick={() => {
+										remove(index);
+									}}
+								>
+									Remove
+								</button>
+							)}
+						</li>
+					);
+				})}
 			</ul>
 			<div>
 				<button

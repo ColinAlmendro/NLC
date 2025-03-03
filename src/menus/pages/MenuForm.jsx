@@ -2,27 +2,21 @@ import React, { useState, useEffect, useContext } from "react";
 import {
 	Typography,
 	Box,
-	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
 	Container,
 	Paper,
 	Stack,
-	TextField,
-	InputLabel,
+	// TextField,
+	// InputLabel,
 	Button,
-	MenuItem,
-	FormLabel,
-	FormControl,
+	// MenuItem,
+	// FormLabel,
+	// FormControl,
 	List,
 	ListItem,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
+	// GridItem,
+	// Card,
+	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
 
@@ -90,11 +84,11 @@ function MenuForm(props) {
 	} = useMenuValue();
 
 	const { state } = useValue(); //app state
-	console.log("state", state);
+	//console.log("state", state);
 	const [record, setRecord] = useState(selected_menu[0]);
 	const [open, setOpen] = useState(false);
 	const [prices, setPrices] = useState(state.price_list);
-	console.log("stateprices", state);
+	//console.log("stateprices", state);
 
 	let defaultMenu = {};
 	if (record) {
@@ -295,8 +289,6 @@ function MenuForm(props) {
 		<>
 			<Container sx={{ border: "none" }} id='container'>
 				<Paper>
-					{/* {isLoading && <LoadingSpinner asOverlay />} */}
-
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
 							<form onSubmit={handleSubmit(onSubmit)}>
@@ -304,13 +296,13 @@ function MenuForm(props) {
 									container
 									rowSpacing={1}
 									columnSpacing={0}
-									sx={{ border: "none" }} //1px solid
+									sx={{ border: "none" }}
 								>
 									<Grid item xs={12} lg={12}>
-										<Stack direction='row' sx={{ justifyContent: "right" }}>
+										<Stack direction='row' sx={{ justifyContent: "right" }} spacing={1}>
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
-												variant='outlined'
+												variant='contained'
 												color='error'
 												autoFocus
 												onClick={() => {
@@ -320,14 +312,10 @@ function MenuForm(props) {
 												Cancel
 											</Button>
 											<Button
-												// form='menuForm'
 												sx={{ display: "flex", gap: "1rem" }}
-												variant='outlined'
+												variant='contained'
 												color='success'
 												type='submit'
-												// onClick={() => {
-												// 	onSubmit();
-												// }}
 											>
 												Save
 											</Button>

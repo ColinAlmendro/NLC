@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { RecipeMenuItems } from "../NavMenuItems";
+import { MuiMenuItems } from "../src/shared/components/Navigation/NavMenuItems";
 import "./Dropdown.css";
 
 export default function Dropdown() {
@@ -12,7 +12,7 @@ export default function Dropdown() {
 				onClick={handleClick}
 				className={click ? "dropdown-menu clicked" : "dropdown-menu"}
 			>
-				{RecipeMenuItems.map((item, index) => {
+				{MuiMenuItems.map((item, index) => {
 					return (
 						<li key={index}>
 							<NavLink

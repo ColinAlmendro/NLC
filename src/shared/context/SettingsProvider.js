@@ -4,6 +4,7 @@ import reducerSettings from "./reducerSettings";
 
 //// appSettingId : "66b5f09f69754eb8fc08c421"  mongodb _id  ////
 const initialState = {
+	id : "66b5f09f69754eb8fc08c421",
 	//Navbar
 	app_title: "Next Level Cuisine",
 	app_logo: "",

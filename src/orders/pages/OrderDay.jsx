@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import {
-	Typography,
-	Box,
+	// Typography,
+	// Box,
 	Stack,
-	TextField,
-	Button,
+	// TextField,
+	// Button,
 	List,
-	ListItem,
+	//ListItem,
 	ListItemText,
 	ListItemButton,
-	ListSubheader,
+	//ListSubheader,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
-	CircularProgress,
+	// GridItem,
+	// Card,
+	// CardMedia,
+	// CircularProgress,
 	Collapse,
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -69,28 +69,27 @@ const OrderDay = ({ weekday }) => {
 	let menuOptions = [];
 	switch (weekday) {
 		case "monday":
-			//fields = [...record.vegies];
-			//	console.log("selected_menu[0].monday", selected_menu[0].monday);
+			
 			menuOptions = [...selected_menu[0].monday];
 			break;
 		case "tuesday":
-			//fields = [...record.salads];
+			
 			menuOptions = [...selected_menu[0].tuesday];
 			break;
 		case "wednesday":
-			//fields = [...record.soups];
+			
 			menuOptions = [...selected_menu[0].wednesday];
 			break;
 		case "thursday":
-			//fields = [...record.sides];
+			
 			menuOptions = [...selected_menu[0].thursday];
 			break;
 		case "friday":
-			//fields = [...record.sides];
+			
 			menuOptions = [...selected_menu[0].friday];
 			break;
 		case "frozen":
-			//fields = [...record.sides];
+			
 			menuOptions = [...selected_menu[0].frozen];
 			break;
 		default:
@@ -101,7 +100,7 @@ const OrderDay = ({ weekday }) => {
 	const saladsOptions = [...selected_menu[0].salads];
 	const soupsOptions = [...selected_menu[0].soups];
 	const sidesOptions = [...selected_menu[0].sides];
-	// const frozenOptions = [...selected_menu[0].frozen];
+
 	
 
 	const handleVegiesClick = () => {
@@ -116,9 +115,7 @@ const OrderDay = ({ weekday }) => {
 	const handleSidesClick = () => {
 		setOpenSides(!openSides);
 	};
-		// const handleFrozenClick = () => {
-		// 	setOpenFrozen(!openFrozen);
-		// };
+		
 
 	return (
 		<Grid item xs={12} lg={12}>
@@ -193,19 +190,7 @@ const OrderDay = ({ weekday }) => {
 									</List>
 								</Collapse>
 
-								{/* <ListItemButton onClick={handleFrozenClick} sx={{ width: 200 }}>
-									<ListItemText primary='Frozen Meals' />
-									{openFrozen ? <ExpandLess /> : <ExpandMore />}
-								</ListItemButton>
-								<Collapse in={openFrozen} timeout='auto' unmountOnExit>
-									<List component='div' disablePadding>
-										{frozenOptions.map((item, i) => {
-											return (
-												<MenuItem data={item} id={i} key={i} day={weekday} />
-											);
-										})}
-									</List>
-								</Collapse> */}
+								
 							</>
 						)}
 					/>

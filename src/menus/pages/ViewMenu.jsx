@@ -1,36 +1,36 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
 	Typography,
 	Box,
-	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
+	// Divider,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
 	Container,
 	Paper,
 	Stack,
-	TextField,
-	InputLabel,
+	// TextField,
+	// InputLabel,
 	Button,
-	IconButton,
-	MenuItem,
-	FormLabel,
-	FormControl,
+	// IconButton,
+	// MenuItem,
+	// FormLabel,
+	// FormControl,
 	List,
 	ListItem,
-	ListItemText,
-	ListItemButton,
-	ListSubheader,
-	Tabs,
-	Tab,
+	// ListItemText,
+	// ListItemButton,
+	// ListSubheader,
+	// Tabs,
+	// Tab,
 	Grid,
-	GridItem,
+	//GridItem,
 	Card,
 	CardMedia,
 	CircularProgress,
-	Collapse,
+	//Collapse,
 	ImageList,
 	ImageListItem,
 	ImageListItemBar,
@@ -38,10 +38,9 @@ import {
 import { makeStyles } from "@mui/styles";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useValue } from "../../shared/context/SettingsProvider.js";
-// import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
-// import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
-import { AuthContext } from "../../shared/context/auth-context.js";
-import { useNavigate } from "react-router-dom";
+
+// import { AuthContext } from "../../shared/context/auth-context.js";
+// import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./ViewMenu.css";
@@ -75,7 +74,7 @@ function ViewMenu(props) {
 	const {
 		menuState: {
 			menus,
-			prices,
+			//prices,
 			selected_menu,
 			main_recipes,
 			side_recipes,
@@ -84,7 +83,6 @@ function ViewMenu(props) {
 			soup_recipes,
 			frozen_recipes,
 			week,
-			//period,
 			introduction,
 			promotions,
 		},
@@ -93,19 +91,11 @@ function ViewMenu(props) {
 	const [record, setRecord] = useState(selected_menu[0]);
 	const [open, setOpen] = useState(false);
 	const { openViewPopup, setOpenViewPopup } = props;
-
-	// const [period, setPeriod] = useState(null);
-	// let selDate = new Date();
-	// if (record) {
-	// 	selDate = new Date(selected_menu[0].date);
-	// } else {
-	// 	selDate = new Date();
-	// }
-	// const [selectedDate, setSelectedDate] = useState(selDate);
+	const [prices, setPrices] = useState(state.price_list);
 
 	let defaultMenu = {};
 	if (record) {
-		console.log("ISrecordY", record);
+		//console.log("ISrecordY", record);
 		defaultMenu = {
 			...record,
 			logo: state.logo,
@@ -113,7 +103,7 @@ function ViewMenu(props) {
 			contact: state.contact,
 		};
 	} else {
-		console.log("ISrecordN", record);
+		//console.log("ISrecordN", record);
 		defaultMenu = {
 			date: new Date(),
 			logo: state.logo,
@@ -211,11 +201,11 @@ function ViewMenu(props) {
 			const pdf = new jsPDF("p", "mm", "a4", true);
 			const pdfWidth = pdf.internal.pageSize.getWidth();
 			const pdfHeight = pdf.internal.pageSize.getHeight();
-			const imgWidth = canvas.width + 800 ;
+			const imgWidth = canvas.width + 800;
 			const imgHeight = canvas.height + 800;
-			
+
 			const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-			console.log("kkk", pdfWidth, imgWidth, pdfHeight, imgHeight,ratio);
+			console.log("kkk", pdfWidth, imgWidth, pdfHeight, imgHeight, ratio);
 			const imgX = (pdfWidth - imgWidth * ratio) / 2;
 			const imgY = 0;
 			pdf.addImage(
@@ -226,9 +216,7 @@ function ViewMenu(props) {
 				imgWidth * ratio,
 				imgHeight * ratio
 			);
-			pdf.save(
-				`Menu_${period}.pdf`
-			);
+			pdf.save(`Menu_${period}.pdf`);
 		});
 	};
 
@@ -245,8 +233,6 @@ function ViewMenu(props) {
 			<Container sx={{ border: "none", width: "100%" }}>
 				<Paper>
 					<Stack display='flex' p={0}>
-						{/* <FormProvider {...formProps}>
-							<form onSubmit={handleSubmit(onSubmit)}> */}
 						<Grid
 							container
 							rowSpacing={0}
@@ -258,11 +244,11 @@ function ViewMenu(props) {
 								<Stack direction='row'>
 									<Grid item xs={12} lg={10}></Grid>
 									<Grid item xs={2} lg={2}>
-										<Stack direction='row'>
+										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
 												// width='100px'
-												variant='outlined'
+												variant='contained'
 												color='error'
 												autoFocus
 												onClick={() => {
@@ -275,7 +261,7 @@ function ViewMenu(props) {
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
 												// width='100px'
-												variant='outlined'
+												variant='contained'
 												color='success'
 												type='button'
 												onClick={() => {
@@ -315,19 +301,6 @@ function ViewMenu(props) {
 								<Grid item xs={4} lg={4}>
 									{state.menu_logo && (
 										<Box
-											// sx={{
-											// 	// "& fieldset": { border: "none" },
-											// 	// "& .MuiInputBase-root": {
-											// 	// 	"& input": {
-											// 	// 		textAlign: "center",
-											// 	// 	},
-											// 	// },
-											// 	border: "none",
-											// 	mx: "auto",
-											// 	textAlign: "center",
-											// 	p: 1,
-											// 	m: 0,
-											// }}
 											style={{
 												display: "flex",
 												alignItems: "center",
@@ -350,12 +323,6 @@ function ViewMenu(props) {
 								<Grid item xs={12} lg={12}>
 									<Typography variant='caption'>
 										<Box
-											// sx={{
-											// 	mx: "auto",
-											// 	textAlign: "center",
-											// 	p: 0,
-											// 	m: 0,
-											// }}
 											style={{
 												display: "flex",
 												alignItems: "center",
@@ -366,7 +333,6 @@ function ViewMenu(props) {
 										</Box>
 									</Typography>
 								</Grid>
-								{/* <Grid item xs={3} lg={3}></Grid> */}
 
 								{/* ***********************************************  IMAGE & INTRO */}
 
@@ -410,30 +376,6 @@ function ViewMenu(props) {
 										<Typography fontWeight='500' variant='caption'>
 											{defaultMenu.introduction}
 										</Typography>
-										{/* <TextField
-											type='text'
-											//	onChange={onChange}
-											value={defaultMenu.introduction}
-											//	defaultValue={value ? value : ""}
-											//label='Introduction'
-											size='small'
-											// helperText={`${error?.message ? error?.message : ""}`}
-											// error={!!error}
-											//	fullWidth
-											minRows={8}
-											multiline='true'
-											InputProps={{ style: { fontSize: 13 } }}
-											sx={{
-												"& fieldset": { border: "none" },
-												"& .MuiInputBase-root": {
-													"& input": {
-														textAlign: "left",
-													},
-												},
-												width: "99%",
-												border: "none",
-											}}
-										/> */}
 									</Box>
 								</Grid>
 
@@ -459,11 +401,7 @@ function ViewMenu(props) {
 
 											<Grid item xs={12} lg={12} mt={2}>
 												{/* Promotion Items */}
-												<Box
-													// alignItems='center'
-													// justifyContent='center'
-													className={classes.root}
-												>
+												<Box className={classes.root}>
 													<ImageList
 														className={classes.imageList}
 														// sx={{ height: 300 }}
@@ -550,12 +488,23 @@ function ViewMenu(props) {
 
 								{/* ************************************************      PRICELIST */}
 								<Grid item xs={12} lg={12}>
-									<List dense='true'>
+									{/* <List dense='true'>
 										{prices.map((price, i) => (
 											<ListItem key={i}>
 												<Typography variant='caption'>
 													<Box sx={{ fontWeight: "bold", height: "25%" }}>
 														{price.item}
+													</Box>
+												</Typography>
+											</ListItem>
+										))}
+									</List> */}
+									<List>
+										{prices.map((price, i) => (
+											<ListItem key={i}>
+												<Typography variant='caption'>
+													<Box sx={{ fontWeight: "bold", height: "25%" }}>
+														{price.value}
 													</Box>
 												</Typography>
 											</ListItem>
@@ -939,7 +888,7 @@ function ViewMenu(props) {
 									)}
 								</Grid>
 
-								{/* <Extra extra='sides' /> */}
+								{/* Frozen meals */}
 								<Grid item xs={12} lg={12}>
 									{defaultMenu.frozen && (
 										<div>
@@ -992,6 +941,3 @@ function ViewMenu(props) {
 	);
 }
 export default ViewMenu;
-
-
-

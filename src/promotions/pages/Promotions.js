@@ -11,19 +11,19 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	Divider,
+	//Divider,
 	CircularProgress,
 	InputAdornment,
-	Snackbar,
+	//Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
+//import AddIcon from "@mui/icons-material/Add";
 import Popup from "../../components/Popup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
@@ -60,7 +60,7 @@ export default function Promotion() {
 	const location = useLocation();
 
 	const {
-		promotionsState: { promotions},
+		promotionsState: { promotions },
 		dispatch,
 	} = usePromotionsValue();
 
@@ -154,15 +154,15 @@ export default function Promotion() {
 		fetchRecipes();
 	}, []);
 
-	const insertPromotion = (promotion) => {
-		console.log("insertdata:", promotion),
-			dispatch({ type: "INSERT_PROMOTION", promotion });
-	};
+	// const insertPromotion = (promotion) => {
+	// 	console.log("insertdata:", promotion),
+	// 		dispatch({ type: "INSERT_PROMOTION", promotion });
+	// };
 
-	const updatePromotion = (promotion) => {
-		console.log("updatedata:", promotion),
-			dispatch({ type: "UPDATE_PROMOTION", promotion });
-	};
+	// const updatePromotion = (promotion) => {
+	// 	console.log("updatedata:", promotion),
+	// 		dispatch({ type: "UPDATE_PROMOTION", promotion });
+	// };
 
 	const deletePromotionItem = async (_id) => {
 		console.log("deleteitem:", _id);
@@ -219,25 +219,25 @@ export default function Promotion() {
 		});
 	};
 
-	const addOrEdit = (promotion, resetForm) => {
-		if (promotion._id == 0) insertPromotion(promotion);
-		else updatePromotion(promotion);
-		resetForm();
-		setRecordForEdit(null);
-		setOpenPopup(false);
-		// setRecords(getAllPromotions());
-		setNotify({
-			isOpen: true,
-			message: "Submitted Successfully",
-			type: "success",
-		});
-	};
+	// const addOrEdit = (promotion, resetForm) => {
+	// 	if (promotion._id == 0) insertPromotion(promotion);
+	// 	else updatePromotion(promotion);
+	// 	resetForm();
+	// 	setRecordForEdit(null);
+	// 	setOpenPopup(false);
+	// 	// setRecords(getAllPromotions());
+	// 	setNotify({
+	// 		isOpen: true,
+	// 		message: "Submitted Successfully",
+	// 		type: "success",
+	// 	});
+	// };
 
-	const openInPopup = (item) => {
-		// setRecordForEdit(item);
-		dispatch({ type: "SET_SELECTED_PROMOTION", _id: item._id });
-		setOpenPopup(true);
-	};
+	// const openInPopup = (item) => {
+	// 	// setRecordForEdit(item);
+	// 	dispatch({ type: "SET_SELECTED_PROMOTION", _id: item._id });
+	// 	setOpenPopup(true);
+	// };
 
 	const onDelete = (_id) => {
 		setConfirmDialog({
@@ -251,7 +251,7 @@ export default function Promotion() {
 			type: "error",
 		});
 	};
-	let period = "";
+	//let period = "";
 
 	if (isLoading) {
 		return (
@@ -264,7 +264,7 @@ export default function Promotion() {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper
-					textAlign='center'
+					textalign='center'
 					className={classes.pageContent}
 					sx={{ width: "100%", p: 1 }}
 				>
@@ -329,10 +329,15 @@ export default function Promotion() {
 												// openInPopup(item);
 											}}
 										>
-											<EditOutlinedIcon fontSize='small' />
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: "blue",
+												}}
+											/>
 										</Controls.ActionButton>
 										<Controls.ActionButton
-											color='secondary'
+											color='primary'
 											onClick={() => {
 												setConfirmDialog({
 													isOpen: true,
@@ -344,7 +349,12 @@ export default function Promotion() {
 												});
 											}}
 										>
-											<CloseIcon fontSize='small' />
+											<DeleteIcon
+												fontSize='small'
+												sx={{
+													color: "red",
+												}}
+											/>
 										</Controls.ActionButton>
 									</TableCell>
 								</TableRow>

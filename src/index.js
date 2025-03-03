@@ -2,7 +2,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import SettingsProvider from "./shared/context/SettingsProvider";
-import AppProvider from "./shared/context/AppProvider";
+// import AppProvider from "./shared/context/AppProvider";
 import MenuProvider from "./shared/context/MenuProvider";
 import PromotionsProvider from "./shared/context/PromotionsProvider";
 import RecipeProvider from "./shared/context/RecipeProvider";
@@ -21,7 +21,7 @@ root.render(
 	//	<React.StrictMode>
 	<>
 		<SettingsProvider>
-			<AppProvider>
+			{/* <AppProvider> */}
 				<UsersProvider>
 					<PromotionsProvider>
 						<IngredientsProvider>
@@ -39,7 +39,7 @@ root.render(
 						</IngredientsProvider>
 					</PromotionsProvider>
 				</UsersProvider>
-				</AppProvider>
+				{/* </AppProvider> */}
 			</SettingsProvider>
 		</>
 		// //{" "}

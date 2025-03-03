@@ -25,7 +25,7 @@ import { categories } from "./IngredientCategories";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { AuthContext } from "../../shared/context/auth-context";
+import { AuthContext } from "../src/shared/context/auth-context";
 import { StringSchema } from "yup";
 
 const Example = () => {

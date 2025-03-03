@@ -1,29 +1,29 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
 	Container,
 	Paper,
 	Stack,
 	TextField,
 	InputLabel,
 	Button,
-	IconButton,
+	// IconButton,
 	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
+	// GridItem,
+	// Card,
+	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
 
@@ -35,13 +35,13 @@ import { useNavigate } from "react-router-dom";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import FieldInputText from "./FieldInputText";
-import FieldInputTextarea from "./FieldInputTextarea";
+import FieldInputText from "../../components/controls/FieldInputText";
+import FieldInputTextarea from "../../components/controls/FieldInputTextarea";
 import {
 	FormProvider,
-	useFormContext,
+	//useFormContext,
 	useForm,
-	useFieldArray,
+	//useFieldArray,
 	Controller,
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -115,12 +115,12 @@ function CustomersForm(props) {
 
 	let defaultCustomer = {};
 	if (record) {
-		console.log("ISrecordY", record);
+		//console.log("ISrecordY", record);
 		defaultCustomer = {
 			...record,
 		};
 	} else {
-		console.log("ISrecordN", record);
+		//console.log("ISrecordN", record);
 		defaultCustomer = {
 			name: "",
 			surname: "",
@@ -164,8 +164,8 @@ function CustomersForm(props) {
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	const onSubmit = async (data) => {
-		// e.preventDefault();
-		console.log("clicked", data);
+	
+		//console.log("clicked", data);
 
 		if (record) {
 			try {
@@ -210,7 +210,7 @@ function CustomersForm(props) {
 				setOpen(false);
 				setOpenPopup(false);
 				history("/customers");
-				//alert("Customer updated");
+
 				toast.success("Customer updated", {
 					style: {
 						background: "green",
@@ -253,7 +253,7 @@ function CustomersForm(props) {
 
 				setIsLoading(false);
 				history("/customers");
-				//alert("New customer added");
+
 				toast.success("New customer added", {
 					style: {
 						background: "green",
@@ -289,8 +289,6 @@ function CustomersForm(props) {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper>
-					{/* {isLoading && <LoadingSpinner asOverlay />} */}
-
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
 							<form onSubmit={handleSubmit(onSubmit)}>
@@ -298,7 +296,7 @@ function CustomersForm(props) {
 									container
 									rowSpacing={1}
 									columnSpacing={0}
-									sx={{ border: "none" }} //1px solid
+									sx={{ border: "none" }}
 								>
 									<Grid item xs={12} lg={12}>
 										<Stack direction='row'>
@@ -317,11 +315,10 @@ function CustomersForm(props) {
 												</Box>
 											</Grid>
 											<Grid item xs={12} lg={2}>
-												<Stack direction='row'>
+												<Stack direction='row' spacing={1}>
 													<Button
 														sx={{ gap: "1rem" }}
-														
-														variant='outlined'
+														variant='contained'
 														color='error'
 														autoFocus
 														onClick={() => {
@@ -333,8 +330,7 @@ function CustomersForm(props) {
 													</Button>
 													<Button
 														sx={{ display: "flex", gap: "1rem" }}
-														
-														variant='outlined'
+														variant='contained'
 														color='success'
 														type='submit'
 													>
@@ -357,11 +353,7 @@ function CustomersForm(props) {
 														Name
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
-														<FieldInputText
-															name='name'
-															control={control}
-														
-														/>
+														<FieldInputText name='name' control={control} />
 													</Box>
 												</Stack>
 												<Stack style={{ width: "100%" }}>
@@ -372,11 +364,7 @@ function CustomersForm(props) {
 														Surname
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
-														<FieldInputText
-															name='surname'
-															control={control}
-														
-														/>
+														<FieldInputText name='surname' control={control} />
 													</Box>
 												</Stack>
 											</Stack>
@@ -389,11 +377,7 @@ function CustomersForm(props) {
 														Cell
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
-														<FieldInputText
-															name='cell'
-															control={control}
-														
-														/>
+														<FieldInputText name='cell' control={control} />
 													</Box>
 												</Stack>
 												<Stack style={{ width: "100%" }}>
@@ -404,11 +388,7 @@ function CustomersForm(props) {
 														Email
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
-														<FieldInputText
-															name='email'
-															control={control}
-															
-														/>
+														<FieldInputText name='email' control={control} />
 													</Box>
 												</Stack>
 											</Stack>
@@ -420,11 +400,7 @@ function CustomersForm(props) {
 													Address
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
-													<FieldInputText
-														name='address1'
-														control={control}
-														// label='Address'
-													/>
+													<FieldInputText name='address1' control={control} />
 												</Box>
 											</Stack>
 											<Stack direction='row' spacing={2}>
@@ -462,7 +438,6 @@ function CustomersForm(props) {
 																				border: "1px solid",
 																			}}
 																			size='small'
-																			// fullWidth
 																			style={{ width: 200 }}
 																			helperText={`${
 																				error?.message ? error?.message : ""
@@ -485,7 +460,7 @@ function CustomersForm(props) {
 													/>
 												</Stack>
 
-												<Stack >
+												<Stack>
 													<InputLabel
 														sx={{ textAlign: "left" }}
 														className={classes.label}
@@ -502,7 +477,6 @@ function CustomersForm(props) {
 															},
 															mx: "auto",
 															mt: 0,
-															//	bgcolor: "primary.light",
 														}}
 													>
 														<Controller
@@ -512,19 +486,16 @@ function CustomersForm(props) {
 																field: { onChange, value },
 																fieldState: { error },
 															}) => {
-																console.log("datevalue", value);
+																//console.log("datevalue", value);
 																return (
 																	<LocalizationProvider
 																		dateAdapter={AdapterDateFns}
 																	>
 																		<DatePicker
 																			id='dobPicker'
-																			// label='Birthday'
 																			variant='inline'
 																			inputFormat='dd MMMM yyyy'
 																			value={new Date(value)}
-																			//	 value={value}
-																			// onChange={(newValue) => setValue(newValue)}
 																			onChange={(date) => {
 																				onChange(date);
 																			}}
@@ -539,10 +510,6 @@ function CustomersForm(props) {
 																				mb: 2,
 																			}}
 																			size='small'
-																			// helperText={`${
-																			// 	error?.message ? error?.message : ""
-																			// }`}
-																			// error={!!error}
 																		/>
 																	</LocalizationProvider>
 																);
@@ -559,11 +526,7 @@ function CustomersForm(props) {
 													Note
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
-													<FieldInputTextarea
-														name='note'
-														// label='Note'
-														control={control}
-													/>
+													<FieldInputTextarea name='note' control={control} />
 												</Box>
 											</Stack>
 										</Stack>

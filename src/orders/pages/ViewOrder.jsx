@@ -3,41 +3,41 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
 	Container,
 	Paper,
 	Stack,
-	TextField,
-	InputLabel,
+	//TextField,
+	//InputLabel,
 	Button,
-	IconButton,
-	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemButton,
-	ListSubheader,
-	Tabs,
-	Tab,
+	// IconButton,
+	// MenuItem,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
+	// ListItemText,
+	// ListItemButton,
+	// ListSubheader,
+	// Tabs,
+	// Tab,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
+	// GridItem,
+	// Card,
+	// CardMedia,
 	CircularProgress,
-	Collapse,
+	//Collapse,
 } from "@mui/material";
 
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
-import { AuthContext } from "../../shared/context/auth-context.js";
-import { useNavigate } from "react-router-dom";
+//import { AuthContext } from "../../shared/context/auth-context.js";
+//import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./ViewOrder.css";
@@ -137,14 +137,6 @@ function ViewOrder(props) {
 			endDate.getMonth()
 		)} ${endDate.getFullYear()}`;
 		setPeriod(period);
-
-		// let beforeDate = new Date(week);
-		// // Subtract 1 day from the start date
-		// beforeDate.setDate(week.getDate() - 1);
-		// let instruction = `Orders to please be in by 22h00 on Sunday, ${beforeDate.getDate()} ${monthName(
-		// 	beforeDate.getMonth()
-		// )} ${beforeDate.getFullYear()}`;
-		// setInstruction(instruction);
 	}, []);
 
 	const createPDF = async () => {
@@ -172,7 +164,6 @@ function ViewOrder(props) {
 				`Order_${order.customer.name}_${order.customer.surname}_${menuDate}.pdf`
 			);
 		});
-		
 	};
 
 	if (isLoading) {
@@ -188,8 +179,6 @@ function ViewOrder(props) {
 			<Container sx={{ border: "none", width: "100%" }}>
 				<Paper>
 					<Stack display='flex' p={0}>
-						{/* <FormProvider {...formProps}>
-							<form onSubmit={handleSubmit(onSubmit)}> */}
 						<Grid
 							container
 							rowSpacing={0}
@@ -201,11 +190,11 @@ function ViewOrder(props) {
 								<Stack direction='row'>
 									<Grid item xs={12} lg={10}></Grid>
 									<Grid item xs={2} lg={2}>
-										<Stack direction='row'>
+										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
 												// width='100px'
-												variant='outlined'
+												variant='contained'
 												color='error'
 												autoFocus
 												onClick={() => {
@@ -218,7 +207,7 @@ function ViewOrder(props) {
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
 												// width='100px'
-												variant='outlined'
+												variant='contained'
 												color='success'
 												type='button'
 												onClick={() => {
@@ -551,16 +540,6 @@ function ViewOrder(props) {
 									{/* 66666666666666666666666666666666666666666666666666666666666666666666666666666666666666 */}
 									<Divider sx={{ mt: 5 }} />
 									<Grid item xs={12} lg={12}>
-										{/* <Stack direction='row'>
-											<Grid item xs={6} lg={6}></Grid>
-											<Grid item xs={3} lg={3}>
-												<Typography fontWeight='600'>Total Items</Typography>
-											</Grid>
-
-											<Grid item xs={3} lg={3}>
-												<span>{order.item_count}</span>
-											</Grid>
-										</Stack> */}
 										<Stack direction='row'>
 											<Grid item xs={6} lg={6}></Grid>
 											<Grid item xs={3} lg={3}>

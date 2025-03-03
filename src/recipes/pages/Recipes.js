@@ -27,7 +27,7 @@ import Popup from "../../components/Popup.js";
 import ViewPopup from "./ViewPopup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 //import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
@@ -39,25 +39,7 @@ import { useRecipeValue } from "../../shared/context/RecipeProvider.js";
  import "./RecipeTable.css";
 import { toast } from "sonner";
 
-// const useStyles = makeStyles((theme) => ({
-// 	pageContent: {
-// 		align: "center",
-// 		margin: theme.spacing(5),
-// 		padding: theme.spacing(3),
-// 	},
-// 	searchInput: {
-// 		width: "50%",
-// 	},
-// 	newButton: {
-// 		position: "absolute",
-// 		right: "10px",
-// 	},
-// 	img: {
-// 		height: "50px",
-// 		width: "50px",
-// 		borderRadius: "50%",
-// 	},
-// }));
+
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
 		align: "center",
@@ -106,7 +88,7 @@ export default function Recipes() {
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...recipes];
-	//console.log("records", records);
+	console.log("reciperecords", records);
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
@@ -270,9 +252,9 @@ export default function Recipes() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }} fullwidth>
+			<Container sx={{ border: "none" }} fullwidth='true'>
 				<Paper
-					textAlign='center'
+					textalign='center'
 					className={classes.pageContent}
 					sx={{ width:"100%", p: 1 }}
 				
@@ -338,25 +320,21 @@ export default function Recipes() {
 											/>
 										</TableCell>
 										<TableCell width='5%'>{item.category}</TableCell>
-										<TableCell  width= "5%">
-											{item.freezable}
-										</TableCell>
-										<TableCell  width= "5%">{item.name}</TableCell>
-										<TableCell  width= "5%">
-											{item.description}
-										</TableCell>
-										<TableCell  width= "5%">
+										<TableCell width='5%'>{item.freezable}</TableCell>
+										<TableCell width='10%'>{item.name}</TableCell>
+										<TableCell width='15%'>{item.description}</TableCell>
+										<TableCell width='10%'>
 											{Number(item.cost).toFixed(2)}
 										</TableCell>
-										<TableCell  width= "5%">
+										<TableCell width='10%'>
 											{Number(item.cost * item.feeds).toFixed(2)}
 										</TableCell>
-										<TableCell  width= "5%">
+										<TableCell width='10%'>
 											{Number(item.price).toFixed(2)}
 										</TableCell>
-										<TableCell  width= "5%">{item.orders}</TableCell>
+										<TableCell width='5%'>{item.orders}</TableCell>
 
-										<TableCell>
+										<TableCell width='25%'>
 											<Controls.ActionButton
 												color='primary'
 												onClick={() => {
@@ -369,7 +347,12 @@ export default function Recipes() {
 													// openInPopup(item);
 												}}
 											>
-												<PageviewOutlinedIcon fontSize='small' />
+												<PageviewOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "#e65100",
+													}}
+												/>
 											</Controls.ActionButton>
 											<Controls.ActionButton
 												color='primary'
@@ -382,10 +365,15 @@ export default function Recipes() {
 													// openInPopup(item);
 												}}
 											>
-												<EditOutlinedIcon fontSize='small' />
+												<EditOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "blue",
+													}}
+												/>
 											</Controls.ActionButton>
 											<Controls.ActionButton
-												color='secondary'
+												color='primary'
 												onClick={() => {
 													setConfirmDialog({
 														isOpen: true,
@@ -397,7 +385,12 @@ export default function Recipes() {
 													});
 												}}
 											>
-												<CloseIcon fontSize='small' />
+												<DeleteIcon
+													fontSize='small'
+													sx={{
+														color: "red",
+													}}
+												/>
 											</Controls.ActionButton>
 										</TableCell>
 									</TableRow>

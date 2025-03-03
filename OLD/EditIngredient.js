@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import Input from "../../shared/components/FormElements/Input";
-import Button from "../../shared/components/FormElements/Button";
-import Card from "../../shared/components/UIElements/Card";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import Input from "../src/shared/components/FormElements/Input";
+import Button from "../src/shared/components/FormElements/Button";
+import Card from "../src/shared/components/UIElements/Card";
+import LoadingSpinner from "../src/shared/components/UIElements/LoadingSpinner";
 // import ImageUpload from "../../shared/components/FormElements/ImageUpload";
-import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import ErrorModal from "../src/shared/components/UIElements/ErrorModal";
 import {
 	VALIDATOR_REQUIRE,
 	VALIDATOR_MINLENGTH,
-} from "../../shared/util/validators";
-import { useForm } from "../../shared/hooks/form-hook";
-import { useHttpClient } from "../../shared/hooks/http-hook";
-import { AuthContext } from "../../shared/context/auth-context";
+} from "../src/shared/util/validators";
+import { useForm } from "../src/shared/hooks/form-hook";
+import { useHttpClient } from "../src/shared/hooks/http-hook";
+import { AuthContext } from "../src/shared/context/auth-context";
 import "./IngredientForm.css";
 
 const EditIngredient = () => {

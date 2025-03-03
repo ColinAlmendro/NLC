@@ -288,7 +288,6 @@ const CartList = (props) => {
 						Authorization: "Bearer " + auth.token,
 					},
 					body: JSON.stringify(order),
-
 				}
 			);
 			const dataNew = await responseNew.json();
@@ -298,22 +297,22 @@ const CartList = (props) => {
 			history("/orders");
 			// alert("New order added");
 			toast.success("New order added", {
-								style: {
-									background: "green",
-									color: "white",
-								},
-							});
+				style: {
+					background: "green",
+					color: "white",
+				},
+			});
 			setOpen(false);
 			//	setOpenPopup(false);
 			return dataNew;
 		} catch (err) {
 			console.log("SubmitNew err:", err);
 			toast.error(err, {
-								style: {
-									background: "red",
-									color: "white",
-								},
-							});
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -330,11 +329,7 @@ const CartList = (props) => {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper>
-					{/* {isLoading && <LoadingSpinner asOverlay />} */}
-
 					<Box display='flex' p={2}>
-						{/* <FormProvider {...formProps}>
-							<form onSubmit={handleSubmit(onSubmit)}> */}
 						<Grid
 							container
 							rowSpacing={1}
@@ -359,15 +354,11 @@ const CartList = (props) => {
 										</Box>
 									</Grid>
 									<Grid item xs={12} lg={2}>
-										<Stack direction='row'>
-											{/* <Cart
-														openCartPopup={openCartPopup}
-														setOpenCartPopup={setOpenCartPopup}
-													/> */}
+										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
 												// width='100px'
-												variant='outlined'
+												variant='contained'
 												color='error'
 												autoFocus
 												onClick={() => {
@@ -380,7 +371,7 @@ const CartList = (props) => {
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
 												// width='100px'
-												variant='outlined'
+												variant='contained'
 												color='success'
 												type='submit'
 												onClick={() => {
@@ -789,10 +780,7 @@ const CartList = (props) => {
 								</div>
 							</Grid>
 						</Grid>
-						{/* </form>
-						</FormProvider> */}
 					</Box>
-					{/* {control && <DevTool control={control} />} */}
 				</Paper>
 			</Container>
 		</>

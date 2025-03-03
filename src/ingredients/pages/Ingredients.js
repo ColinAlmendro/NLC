@@ -21,11 +21,12 @@ import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
 import Popup from "../../components/Popup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+//import CloseIcon from "@mui/icons-material/Close";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
-
+import { toast } from "sonner";
 import { useIngredientsValue } from "../../shared/context/IngredientsProvider.js";
 import "./Ingredients.css";
 import "./IngredientsTable.css";
@@ -53,7 +54,7 @@ const headCells = [
 	{ id: "actions", label: "Actions", disableSorting: true },
 ];
 
-export default function Ingredient() {
+export default function Ingredients() {
 	//console.log("loading ingredient");
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
@@ -68,6 +69,7 @@ export default function Ingredient() {
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...ingredients];
+	console.log("record ingredient",records);
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
@@ -108,21 +110,27 @@ export default function Ingredient() {
 				setIsLoading(false);
 			} catch (err) {
 				console.log(err);
+				toast.error(err, {
+									style: {
+										background: "red",
+										color: "white",
+									},
+								});
 				setIsLoading(false);
 			}
 		}
 		fetchIngredients();
 	}, [location.key]);
 
-	const insertIngredient = (ingredient) => {
-		console.log("insertdata:", ingredient),
-			dispatchIngredient({ type: "INSERT_INGREDIENT", ingredient });
-	};
+	// const insertIngredient = (ingredient) => {
+	// 	console.log("insertdata:", ingredient),
+	// 		dispatchIngredient({ type: "INSERT_INGREDIENT", ingredient });
+	// };
 
-	const updateIngredient = (ingredient) => {
-		console.log("updatedata:", ingredient),
-			dispatchIngredient({ type: "UPDATE_INGREDIENT", ingredient });
-	};
+	// const updateIngredient = (ingredient) => {
+	// 	console.log("updatedata:", ingredient),
+	// 		dispatchIngredient({ type: "UPDATE_INGREDIENT", ingredient });
+	// };
 
 	const deleteIngredientItem = async (_id) => {
 		console.log("deleteitem:", _id);
@@ -139,10 +147,22 @@ export default function Ingredient() {
 				.then(() => {
 					dispatchIngredient({ type: "DELETE_INGREDIENT", _id });
 					setIsLoading(false);
-					alert("Ingredient deleted !");
+					// alert("Ingredient deleted !");
+					toast.success("Ingredient deleted", {
+											style: {
+												background: "green",
+												color: "white",
+											},
+										});
 				});
 		} catch (err) {
 			console.log("Delete error", err);
+			toast.error(err, {
+								style: {
+									background: "red",
+									color: "white",
+								},
+							});
 			setIsLoading(false);
 		}
 	};
@@ -167,25 +187,25 @@ export default function Ingredient() {
 		});
 	};
 
-	const addOrEdit = (ingredient, resetForm) => {
-		if (ingredient._id == 0) insertIngredient(ingredient);
-		else updateIngredient(ingredient);
-		resetForm();
-		setRecordForEdit(null);
-		setOpenPopup(false);
-		// setRecords(getAllIngredients());
-		setNotify({
-			isOpen: true,
-			message: "Submitted Successfully",
-			type: "success",
-		});
-	};
+	// const addOrEdit = (ingredient, resetForm) => {
+	// 	if (ingredient._id == 0) insertIngredient(ingredient);
+	// 	else updateIngredient(ingredient);
+	// 	resetForm();
+	// 	setRecordForEdit(null);
+	// 	setOpenPopup(false);
+	// 	// setRecords(getAllIngredients());
+	// 	setNotify({
+	// 		isOpen: true,
+	// 		message: "Submitted Successfully",
+	// 		type: "success",
+	// 	});
+	// };
 
-	const openInPopup = (item) => {
-		// setRecordForEdit(item);
-		dispatchIngredient({ type: "SET_SELECTED_INGREDIENT", _id: item._id });
-		setOpenPopup(true);
-	};
+	// const openInPopup = (item) => {
+	// 	// setRecordForEdit(item);
+	// 	dispatchIngredient({ type: "SET_SELECTED_INGREDIENT", _id: item._id });
+	// 	setOpenPopup(true);
+	// };
 
 	const onDelete = (_id) => {
 		setConfirmDialog({
@@ -212,7 +232,7 @@ export default function Ingredient() {
 		<>
 			<Container id='container' sx={{ border: "none" }}>
 				<Paper
-					textAlign='center'
+					textalign='center'
 					className={classes.pageContent}
 					sx={{ width: "100%", p: 1 }}
 				>
@@ -320,10 +340,15 @@ export default function Ingredient() {
 													// openInPopup(item);
 												}}
 											>
-												<EditOutlinedIcon fontSize='small' />
+												<EditOutlinedIcon
+													fontSize='small'
+													sx={{
+														color: "blue",
+													}}
+												/>
 											</Controls.ActionButton>
 											<Controls.ActionButton
-												color='secondary'
+												color='primary'
 												onClick={() => {
 													setConfirmDialog({
 														isOpen: true,
@@ -335,7 +360,12 @@ export default function Ingredient() {
 													});
 												}}
 											>
-												<CloseIcon fontSize='small' />
+												<DeleteIcon
+													fontSize='small'
+													sx={{
+														color: "red",
+													}}
+												/>
 											</Controls.ActionButton>
 										</TableCell>
 									</TableRow>

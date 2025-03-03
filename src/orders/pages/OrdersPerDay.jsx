@@ -318,7 +318,7 @@ function OrdersPerDay(props) {
 							>
 								<Grid item xs={12} lg={12}>
 									<Stack direction='row'>
-										<Grid item xs={12} lg={10}>
+										<Grid item xs={12} lg={9}>
 											<Box
 												sx={{
 													mx: "auto",
@@ -332,12 +332,12 @@ function OrdersPerDay(props) {
 												</Typography>
 											</Box>
 										</Grid>
-										<Grid item xs={12} lg={2}>
-											<Stack direction='row'>
+										<Grid item xs={12} lg={3}>
+											<Stack direction='row' spacing={1}>
 												<Button
-													sx={{ gap: "1rem" }}
+													sx={{ gap: "1rem", p: 1 }}
 													// width='100px'
-													variant='outlined'
+													variant='contained'
 													color='error'
 													autoFocus
 													onClick={() => {
@@ -350,9 +350,9 @@ function OrdersPerDay(props) {
 													Close
 												</Button>
 												<Button
-													sx={{ display: "flex", gap: "1rem" }}
+													sx={{ display: "flex", gap: "1rem", p: 1 }}
 													// width='100px'
-													variant='outlined'
+													variant='contained'
 													color='success'
 													onClick={() => {
 														createPDF();
@@ -373,14 +373,7 @@ function OrdersPerDay(props) {
 									>
 										<Grid item xs={4} lg={4}></Grid>
 										<Grid item xs={4} lg={4}>
-											{/* <Controller
-													name='menu'
-													control={control}
-													render={({
-														field: { onChange, value },
-														fieldState: { error },
-													}) => {
-														return ( */}
+			
 											<>
 												<InputLabel
 													sx={{ textAlign: "left" }}
@@ -391,16 +384,16 @@ function OrdersPerDay(props) {
 												<Box bgcolor='primary.light' p={0}>
 													<TextField
 														select
-														// value={value}
+												
 														onChange={(event) => {
-															//onChange(event.target.value);
+													
 															dispatchMenu({
 																type: "SET_SELECTED_MENU",
 																id: event.target.value,
 															});
 															getOrderNotes(event);
 														}}
-														//label='Menu'
+													
 														name='menu'
 														size='small'
 														sx={{

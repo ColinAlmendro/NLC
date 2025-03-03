@@ -3,26 +3,26 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
 	Container,
 	Paper,
 	Stack,
 	TextField,
 	InputLabel,
 	Button,
-	IconButton,
+	//IconButton,
 	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemButton,
-	ListSubheader,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
+	// ListItemText,
+	// ListItemButton,
+	// ListSubheader,
 	Tabs,
 	Tab,
 	Grid,
@@ -32,9 +32,9 @@ import {
 	CircularProgress,
 	Collapse,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import ExpandLess from "@mui/icons-material/ExpandLess";
+// import ExpandMore from "@mui/icons-material/ExpandMore";
+//import DeleteIcon from "@mui/icons-material/Delete";
 import OrderDay from "./OrderDay.jsx";
 import OrderPromotion from "./OrderPromotion.jsx";
 import * as Yup from "yup";
@@ -47,7 +47,7 @@ import Cart from "./Cart";
 import CartContext from "../../shared/context/cart-context";
 import CartList from "./CartList";
 import CartPopup from "./CartPopup.js";
-import FieldInputTextarea from "./FieldInputTextarea";
+// import FieldInputTextarea from "./FieldInputTextarea";
 
 import {
 	FormProvider,
@@ -78,26 +78,32 @@ const validationSchema = Yup.object()
 
 function OrdersForm(props) {
 	const classes = useStyles();
-	const auth = useContext(AuthContext);
+	//const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const [disableMenu, setDisableMenu] = useState(true);
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(false);
 	const [openCartPopup, setOpenCartPopup] = useState(false);
 
-	const [openMonday, setOpenMonday] = useState(false);
-	const [openTuesday, setOpenTuesday] = useState(false);
-	const [openWednesday, setOpenWednesday] = useState(false);
-	const [openThursday, setOpenThursday] = useState(false);
-	const [openFriday, setOpenFriday] = useState(false);
-    const [openFrozen, setOpenFrozen] = useState(false);
-	const [openPromo,setOpenPromo] = useState(false);
-    const [memo, setMemo] = useState("");
-	const [promoId,setPromoId] = useState('');
+	// const [openMonday, setOpenMonday] = useState(false);
+	// const [openTuesday, setOpenTuesday] = useState(false);
+	// const [openWednesday, setOpenWednesday] = useState(false);
+	// const [openThursday, setOpenThursday] = useState(false);
+	// const [openFriday, setOpenFriday] = useState(false);
+	// const [openFrozen, setOpenFrozen] = useState(false);
+	// const [openPromo,setOpenPromo] = useState(false);
+	const [memo, setMemo] = useState("");
+	//const [promoId,setPromoId] = useState('');
 
-	let { items, totalCount,totalCost,totalAmount, addItem, removeItem, resetCart } = useContext(
-		CartContext
-	);
+	let {
+		items,
+		totalCount,
+		totalCost,
+		totalAmount,
+		addItem,
+		removeItem,
+		resetCart,
+	} = useContext(CartContext);
 
 	useEffect(() => {
 		console.log("resetcart");
@@ -209,33 +215,32 @@ function OrdersForm(props) {
 	const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
 	const handleTabChange = (e, tabIndex) => {
-	//	console.log(tabIndex);
+		//	console.log(tabIndex);
 		setCurrentTabIndex(tabIndex);
 	};
 
-	const handleMondayClick = () => {
-		setOpenMonday(!openMonday);
-	};
-	const handleTuesdayClick = () => {
-		setOpenTuesday(!openTuesday);
-	};
-	const handleWednesdayClick = () => {
-		setOpenWednesday(!openWednesday);
-	};
-	const handleThursdayClick = () => {
-		setOpenThursday(!openThursday);
-	};
-	const handleFridayClick = () => {
-		setOpenFriday(!openFriday);
-	};
-	const handleFrozenClick = () => {
-		setOpenFrozen(!openFrozen);
-	};
+	// const handleMondayClick = () => {
+	// 	setOpenMonday(!openMonday);
+	// };
+	// const handleTuesdayClick = () => {
+	// 	setOpenTuesday(!openTuesday);
+	// };
+	// const handleWednesdayClick = () => {
+	// 	setOpenWednesday(!openWednesday);
+	// };
+	// const handleThursdayClick = () => {
+	// 	setOpenThursday(!openThursday);
+	// };
+	// const handleFridayClick = () => {
+	// 	setOpenFriday(!openFriday);
+	// };
+	// const handleFrozenClick = () => {
+	// 	setOpenFrozen(!openFrozen);
+	// };
 
-	const handlePromoClick = () => {
-		setOpenPromo(!openPromo);
-	};
-
+	// const handlePromoClick = () => {
+	// 	setOpenPromo(!openPromo);
+	// };
 
 	if (isLoading) {
 		return (
@@ -275,11 +280,11 @@ function OrdersForm(props) {
 												</Box>
 											</Grid>
 											<Grid item xs={12} lg={2}>
-												<Stack direction='row'>
+												<Stack direction='row' spacing={1}>
 													<Button
 														sx={{ gap: "1rem" }}
 														// width='100px'
-														variant='outlined'
+														variant='contained'
 														color='error'
 														autoFocus
 														onClick={() => {
@@ -292,7 +297,7 @@ function OrdersForm(props) {
 													<Button
 														sx={{ display: "flex", gap: "1rem" }}
 														// width='100px'
-														variant='outlined'
+														variant='contained'
 														color='success'
 														onClick={() => {
 															setOpenCartPopup(true);
@@ -383,7 +388,7 @@ function OrdersForm(props) {
 																</InputLabel>
 																<Box bgcolor='primary.light' p={0}>
 																	<TextField
-																	disabled={disableMenu}
+																		disabled={disableMenu}
 																		select
 																		value={value}
 																		onChange={(event) => {
