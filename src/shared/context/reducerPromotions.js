@@ -44,7 +44,7 @@ const reducerPromotions = (state, action) => {
 		}
 
 		case "SET_SELECTED_PROMOTION": {
-			console.log("set selected", action.id);
+		//	console.log("set selected", action.id);
 			return {
 				...state,
 				selected_promotion: state.promotions.filter(

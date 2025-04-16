@@ -5,8 +5,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import "./CartCount.css";
 
 const CartCount = ({ count, onAddToCart, onRemoveFromCart, showCount }) => {
-	//console.log("showCount", showCount);
-
+	
 	return (
 		<div>
 			{showCount === "true" && (
@@ -19,7 +18,7 @@ const CartCount = ({ count, onAddToCart, onRemoveFromCart, showCount }) => {
 			)}
 			{showCount === "true" ? (
 				<IconButton onClick={onAddToCart}>
-					{/* {showCount === "true" ? "+" : "Add Item"} */}
+					
 					<AddCircleOutlineIcon />
 				</IconButton>
 			) : (

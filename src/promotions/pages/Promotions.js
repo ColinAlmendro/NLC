@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import PromotionsForm from "./PromotionsForm.jsx";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import {
 	Container,
 	Box,
@@ -11,16 +11,14 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	//Divider,
 	CircularProgress,
 	InputAdornment,
-	//Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
-//import AddIcon from "@mui/icons-material/Add";
+
 import Popup from "../../components/Popup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -29,7 +27,7 @@ import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 
 import { usePromotionsValue } from "../../shared/context/PromotionsProvider.js";
-// import "./PromotionTable.css";
+
 import { toast } from "sonner";
 
 const useStyles = makeStyles((theme) => ({
@@ -48,13 +46,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-	//{ id: "id", label: "Id" },
 	{ id: "promotion", label: "Promotion" },
 	{ id: "actions", label: "Actions", disableSorting: true },
 ];
 
 export default function Promotion() {
-	console.log("loading promotion");
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -68,11 +64,9 @@ export default function Promotion() {
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...promotions];
-	//console.log("records", records);
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			console.log("filteritems", items);
 			return items;
 		},
 	});
@@ -90,7 +84,6 @@ export default function Promotion() {
 
 	useEffect(() => {
 		async function fetchPromotions() {
-			//console.log("fetching promotions");
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -104,11 +97,11 @@ export default function Promotion() {
 					}
 				);
 				const data = await response.json();
-				console.log("Promotions list :", data.promotions);
+
 				dispatch({ type: "UPDATE_PROMOTIONS", data });
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -141,7 +134,7 @@ export default function Promotion() {
 				}
 				setIsLoading(false);
 			} catch (err) {
-				console.log("Fetch recipes error:", err);
+				//console.log("Fetch recipes error:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -154,18 +147,8 @@ export default function Promotion() {
 		fetchRecipes();
 	}, []);
 
-	// const insertPromotion = (promotion) => {
-	// 	console.log("insertdata:", promotion),
-	// 		dispatch({ type: "INSERT_PROMOTION", promotion });
-	// };
-
-	// const updatePromotion = (promotion) => {
-	// 	console.log("updatedata:", promotion),
-	// 		dispatch({ type: "UPDATE_PROMOTION", promotion });
-	// };
-
 	const deletePromotionItem = async (_id) => {
-		console.log("deleteitem:", _id);
+		//console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/promotions/delete/${_id}`, {
@@ -179,7 +162,7 @@ export default function Promotion() {
 				.then(() => {
 					dispatch({ type: "DELETE_PROMOTION", _id });
 					setIsLoading(false);
-					// alert("Promotion deleted !");
+
 					toast.success("Promotion deleted", {
 						style: {
 							background: "green",
@@ -188,7 +171,7 @@ export default function Promotion() {
 					});
 				});
 		} catch (err) {
-			console.log("Delete error", err);
+			//console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -219,26 +202,6 @@ export default function Promotion() {
 		});
 	};
 
-	// const addOrEdit = (promotion, resetForm) => {
-	// 	if (promotion._id == 0) insertPromotion(promotion);
-	// 	else updatePromotion(promotion);
-	// 	resetForm();
-	// 	setRecordForEdit(null);
-	// 	setOpenPopup(false);
-	// 	// setRecords(getAllPromotions());
-	// 	setNotify({
-	// 		isOpen: true,
-	// 		message: "Submitted Successfully",
-	// 		type: "success",
-	// 	});
-	// };
-
-	// const openInPopup = (item) => {
-	// 	// setRecordForEdit(item);
-	// 	dispatch({ type: "SET_SELECTED_PROMOTION", _id: item._id });
-	// 	setOpenPopup(true);
-	// };
-
 	const onDelete = (_id) => {
 		setConfirmDialog({
 			...confirmDialog,
@@ -251,7 +214,6 @@ export default function Promotion() {
 			type: "error",
 		});
 	};
-	//let period = "";
 
 	if (isLoading) {
 		return (
@@ -280,7 +242,7 @@ export default function Promotion() {
 							Promotion Manager
 						</Typography>
 					</Box>
-					{/* <Divider /> */}
+
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Promotions'
@@ -295,16 +257,13 @@ export default function Promotion() {
 							onChange={handleSearch}
 						/>
 						<Button
-							//	text='Add New'
 							variant='contained'
-							//startIcon={<AddIcon />}
 							className={classes.newButton}
 							onClick={() => {
 								dispatch({
 									type: "RESET_SELECTED_PROMOTION",
 								}),
 									setOpenPopup(true);
-								// setRecordForEdit(null);
 							}}
 						>
 							{" "}
@@ -326,7 +285,6 @@ export default function Promotion() {
 													id: item._id,
 												}),
 													setOpenPopup(true);
-												// openInPopup(item);
 											}}
 										>
 											<EditOutlinedIcon
@@ -371,7 +329,6 @@ export default function Promotion() {
 			>
 				{/* <PromotionForm /> */}
 				<PromotionsForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
-				{/* <PromotionForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
 			</Popup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog

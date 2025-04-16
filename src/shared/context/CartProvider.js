@@ -19,30 +19,26 @@ const defaultContext = {
 const cartReducer = (state, action) => {
 	//3333###########################################################################  DELIVERY RATE
 
-	console.log("reducer_set del rate", state.deliveryRate, action.rate);
+	//console.log("reducer_set del rate", state.deliveryRate, action.rate);
 	if (action.type === "SET_DELIVERY_RATE") {
 		return {
 			...state,
 			deliveryRate : action.rate,
 		};
-		//state.deliveryRate = action.rate;
+		
 	}
 	if (action.type === "SET_TOTAL_DELIVERY") {
 		return {
 			...state,
 			totalDelivery: action.rate,
 		};
-		//state.totalDelivery = action.rate;
+		
 	}
 
 	//3333###########################################################################  ADD
 
 	if (action.type === "ADD_MONDAY") {
-		console.log(
-			"reducer_add monday count",
-			state.totalCount,
-			action.data.count
-		);
+		
 		let newItems;
 		// Check if item exists
 		let itemIndex = state.monday.findIndex(
@@ -64,17 +60,11 @@ const cartReducer = (state, action) => {
 			newItems = [...state.monday, action.data];
 		}
 		let newCount = state.totalCount + 1;
-		console.log(
-			"reducer_new monday cost",
-			state.totalCost,
-			action.data.cost,
-			action.data.count
-		);
+		
 		let newCost = state.totalCost + action.data.cost;
 		let newAmount = state.totalAmount + action.data.price;
-		// let newCost = state.totalCost + action.data.cost * action.data.count;
-		// let newAmount = state.totalAmount + action.data.price * action.data.count;
-		console.log("reducer_new monday count", newCount, newCost, newAmount);
+		
+		//console.log("reducer_new monday count", newCount, newCost, newAmount);
 		return {
 			...state,
 			monday: newItems,
@@ -84,11 +74,7 @@ const cartReducer = (state, action) => {
 		};
 	}
 	if (action.type === "ADD_TUESDAY") {
-		console.log(
-			"reducer_add tuesday count",
-			state.totalCount,
-			action.data.count
-		);
+		
 		let newItems;
 		// Check if item exists
 		let itemIndex = state.tuesday.findIndex(
@@ -113,7 +99,7 @@ const cartReducer = (state, action) => {
 		let newCount = state.totalCount + 1;
 		let newCost = state.totalCost + action.data.cost;
 		let newAmount = state.totalAmount + action.data.price;
-		console.log("reducer_new tuesday count", newCount);
+		//console.log("reducer_new tuesday count", newCount);
 		return {
 			...state,
 			tuesday: newItems,

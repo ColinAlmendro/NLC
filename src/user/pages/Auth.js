@@ -3,8 +3,10 @@ import React, { useState, useContext } from "react";
 import Card from "../../shared/components/UIElements/Card";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
+import { Button as Btn, Box, Stack } from "@mui/material";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-
+import Popup from "../../components/Popup.js";
+import ChngPwd from "./ChngPwd.jsx";
 import {
 	VALIDATOR_EMAIL,
 	VALIDATOR_MINLENGTH,
@@ -20,7 +22,7 @@ const Auth = () => {
 	const auth = useContext(AuthContext);
 	const [isLoginMode, setIsLoginMode] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
-
+	const [openPopup, setOpenPopup] = useState(false);
 	const [formState, inputHandler, setFormData] = useForm(
 		{
 			email: {
@@ -65,7 +67,7 @@ const Auth = () => {
 		if (isLoginMode) {
 			try {
 				setIsLoading(true);
-				console.log("in login");
+
 				const responseData = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/users/login`,
 					{
@@ -83,7 +85,6 @@ const Auth = () => {
 				);
 				const dataLogin = await responseData.json();
 				if (!responseData.ok) {
-					console.log("response error", dataLogin.message);
 					toast.error(dataLogin.message, {
 						style: {
 							background: "red",
@@ -94,20 +95,23 @@ const Auth = () => {
 
 					return dataLogin;
 				}
-				console.log("UpDate", dataLogin);
 
 				auth.login(dataLogin.userId, dataLogin.token, dataLogin.admin);
 				setIsLoading(false);
 
 				return dataLogin;
 			} catch (err) {
-				console.log("Login err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		} else {
 			try {
 				setIsLoading(true);
-				console.log("in new submit");
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/users/signup",
@@ -127,7 +131,6 @@ const Auth = () => {
 					}
 				);
 				const dataNew = await responseNew.json();
-				console.log("ret user data", dataNew);
 
 				setIsLoading(false);
 
@@ -140,7 +143,6 @@ const Auth = () => {
 
 				return dataNew;
 			} catch (err) {
-				console.log("New User err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -154,7 +156,6 @@ const Auth = () => {
 
 	return (
 		<React.Fragment>
-			{/* <ErrorModal error={error} onClear={clearError} /> */}
 			<Card className='authentication'>
 				{isLoading && <LoadingSpinner asOverlay />}
 				<h2>Login Required</h2>
@@ -165,21 +166,13 @@ const Auth = () => {
 							element='input'
 							id='name'
 							type='text'
-							label='Your Name'
+							label='User Name'
 							validators={[VALIDATOR_REQUIRE()]}
-							errorText='Please enter a name.'
+							errorText='Please enter a user name.'
 							onInput={inputHandler}
 						/>
 					)}
-					{/* {!isLoginMode && (
-						<ImageUpload
-							center
-							id='image'
-							onInput={inputHandler}
-							btn='Pick Image'
-							//errorText='Please provide an image.'
-						/>
-					)} */}
+
 					<Input
 						element='input'
 						id='email'
@@ -189,6 +182,7 @@ const Auth = () => {
 						errorText='Please enter a valid email address.'
 						onInput={inputHandler}
 					/>
+
 					<Input
 						element='input'
 						id='password'
@@ -198,14 +192,43 @@ const Auth = () => {
 						errorText='Please enter a valid password, at least 6 characters.'
 						onInput={inputHandler}
 					/>
-					<Button type='submit' disabled={!formState.isValid}>
-						{isLoginMode ? "Login" : "Signup"}
-					</Button>
+
+					<Stack>
+						<Box
+							sx={{
+								mx: "auto",
+								textAlign: "center",
+								p: 0,
+								m: 0,
+							}}
+						>
+							<Button type='submit' disabled={!formState.isValid}>
+								{isLoginMode ? "Login" : "Signup"}
+							</Button>
+						</Box>
+						{isLoginMode && (
+							<Btn
+								disabled={!formState.isValid}
+								onClick={() => {
+									setOpenPopup(true);
+								}}
+							>
+								Change Password
+							</Btn>
+						)}
+					</Stack>
 				</form>
 				<Button inverse onClick={switchModeHandler}>
 					Switch to {isLoginMode ? "Signup" : "Login"}
 				</Button>
 			</Card>
+			<Popup
+				title='Loading...'
+				openPopup={openPopup}
+				setOpenPopup={setOpenPopup}
+			>
+				<ChngPwd openPopup={openPopup} setOpenPopup={setOpenPopup} />
+			</Popup>
 		</React.Fragment>
 	);
 };

@@ -2,35 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import {
 	Typography,
 	Box,
-	// Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
 	Container,
 	Paper,
 	Stack,
-	// TextField,
-	// InputLabel,
 	Button,
-	// IconButton,
-	// MenuItem,
-	// FormLabel,
-	// FormControl,
 	List,
 	ListItem,
-	// ListItemText,
-	// ListItemButton,
-	// ListSubheader,
-	// Tabs,
-	// Tab,
 	Grid,
-	//GridItem,
 	Card,
 	CardMedia,
 	CircularProgress,
-	//Collapse,
 	ImageList,
 	ImageListItem,
 	ImageListItemBar,
@@ -39,8 +20,6 @@ import { makeStyles } from "@mui/styles";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useValue } from "../../shared/context/SettingsProvider.js";
 
-// import { AuthContext } from "../../shared/context/auth-context.js";
-// import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./ViewMenu.css";
@@ -73,17 +52,8 @@ function ViewMenu(props) {
 	const { state } = useValue(); //app state
 	const {
 		menuState: {
-			menus,
-			//prices,
 			selected_menu,
-			main_recipes,
-			side_recipes,
-			vegie_recipes,
-			salad_recipes,
-			soup_recipes,
-			frozen_recipes,
-			week,
-			introduction,
+
 			promotions,
 		},
 		dispatchMenu,
@@ -95,7 +65,6 @@ function ViewMenu(props) {
 
 	let defaultMenu = {};
 	if (record) {
-		//console.log("ISrecordY", record);
 		defaultMenu = {
 			...record,
 			logo: state.logo,
@@ -103,7 +72,6 @@ function ViewMenu(props) {
 			contact: state.contact,
 		};
 	} else {
-		//console.log("ISrecordN", record);
 		defaultMenu = {
 			date: new Date(),
 			logo: state.logo,
@@ -173,7 +141,7 @@ function ViewMenu(props) {
 
 	useEffect(() => {
 		const week = selectedDate;
-		console.log("getValues_date", week);
+		//console.log("getValues_date", week);
 		let endDate = new Date(week);
 		// Add 5 days to the start date
 		endDate.setDate(week.getDate() + 5);
@@ -205,7 +173,7 @@ function ViewMenu(props) {
 			const imgHeight = canvas.height + 800;
 
 			const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-			console.log("kkk", pdfWidth, imgWidth, pdfHeight, imgHeight, ratio);
+			//console.log("kkk", pdfWidth, imgWidth, pdfHeight, imgHeight, ratio);
 			const imgX = (pdfWidth - imgWidth * ratio) / 2;
 			const imgY = 0;
 			pdf.addImage(
@@ -247,7 +215,6 @@ function ViewMenu(props) {
 										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
-												// width='100px'
 												variant='contained'
 												color='error'
 												autoFocus
@@ -260,7 +227,6 @@ function ViewMenu(props) {
 											</Button>
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
-												// width='100px'
 												variant='contained'
 												color='success'
 												type='button'
@@ -284,18 +250,17 @@ function ViewMenu(props) {
 							style={{
 								width: "1050px",
 								margin: "0px",
-								padding: "5px",
-								border: "1px solid",
+								padding: "15px",
+								border: "0px solid",
 							}}
 						>
 							<Grid
 								container
 								rowSpacing={1}
 								columnSpacing={0}
-								sx={{ border: "none" }} //1px solid
+								sx={{ border: "none" }}
 							>
-								{/* <Intro /> */}
-
+								
 								{/* 7777777777777777777777777777777777777777777777777777777777777777777777777777777777 */}
 								<Grid item xs={4} lg={4}></Grid>
 								<Grid item xs={4} lg={4}>
@@ -319,9 +284,8 @@ function ViewMenu(props) {
 								</Grid>
 								<Grid item xs={4} lg={4}></Grid>
 								{/* ************************************************ CONTACT */}
-								{/* <Grid item xs={2} lg={2}></Grid> */}
 								<Grid item xs={12} lg={12}>
-									<Typography variant='caption'>
+									<Typography variant='caption' component='div'>
 										<Box
 											style={{
 												display: "flex",
@@ -333,9 +297,7 @@ function ViewMenu(props) {
 										</Box>
 									</Typography>
 								</Grid>
-
 								{/* ***********************************************  IMAGE & INTRO */}
-
 								<Grid item xs={2} lg={2} sx={{ border: "none" }}>
 									{state.menu_image && (
 										<Box
@@ -362,7 +324,6 @@ function ViewMenu(props) {
 								</Grid>
 								<Grid item xs={10} lg={10}>
 									<Box
-										//bgcolor='primary.light'
 										p={2}
 										border='none'
 										sx={{
@@ -378,9 +339,7 @@ function ViewMenu(props) {
 										</Typography>
 									</Box>
 								</Grid>
-
 								{/* ***********************************************    PROMOTION**** */}
-
 								{selectedPromotion.length > 0 ? (
 									<Grid item xs={12} lg={12}>
 										<>
@@ -404,21 +363,9 @@ function ViewMenu(props) {
 												<Box className={classes.root}>
 													<ImageList
 														className={classes.imageList}
-														// sx={{ height: 300 }}
-														// sx={{
-														// 	height: 200,
-														// 	columnCount: {
-														// 		xs: "1 !important",
-														// 		sm: "2 !important",
-														// 		md: "4 !important",
-														// 		lg: "6 !important",
-														// 		xl: "8 !important",
-														// 	},
-														// }}
 														cols={6}
 														rowHeight={50}
 														gap={5}
-														//	fullWidth
 													>
 														{selectedPromotion.map((item) => (
 															<ImageListItem key={item.id}>
@@ -427,7 +374,6 @@ function ViewMenu(props) {
 																	src={`${item.image}?w=164&fit=crop&auto=format`}
 																	alt={item.name}
 																	loading='lazy'
-																	//width="100px"
 																	height='50px'
 																/>
 																<ImageListItemBar
@@ -451,12 +397,11 @@ function ViewMenu(props) {
 										</>
 									</Grid>
 								) : null}
-
 								{/* ************************************************      PERIOD */}
 								<Grid item xs={2} lg={2}></Grid>
 								<Grid item xs={8} lg={8}>
 									<Stack spacing={0}>
-										<Typography variant='caption'>
+										<Typography variant='caption' component='div'>
 											<Box
 												sx={{
 													mx: "auto",
@@ -469,7 +414,7 @@ function ViewMenu(props) {
 												{period}
 											</Box>
 										</Typography>
-										<Typography variant='caption'>
+										<Typography variant='caption' component='div'>
 											<Box
 												sx={{
 													mx: "auto",
@@ -485,24 +430,12 @@ function ViewMenu(props) {
 									</Stack>
 								</Grid>
 								<Grid item xs={2} lg={2}></Grid>
-
 								{/* ************************************************      PRICELIST */}
 								<Grid item xs={12} lg={12}>
-									{/* <List dense='true'>
-										{prices.map((price, i) => (
-											<ListItem key={i}>
-												<Typography variant='caption'>
-													<Box sx={{ fontWeight: "bold", height: "25%" }}>
-														{price.item}
-													</Box>
-												</Typography>
-											</ListItem>
-										))}
-									</List> */}
 									<List>
 										{prices.map((price, i) => (
 											<ListItem key={i}>
-												<Typography variant='caption'>
+												<Typography variant='caption' component='div'>
 													<Box sx={{ fontWeight: "bold", height: "25%" }}>
 														{price.value}
 													</Box>
@@ -511,7 +444,6 @@ function ViewMenu(props) {
 										))}
 									</List>
 								</Grid>
-
 								{/* ############################################################################################################################################################ */}
 								{/* <Day weekday='monday' /> */}
 								<Grid item xs={12} lg={12}>
@@ -535,11 +467,11 @@ function ViewMenu(props) {
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
 																		<br />
-																		<span lineHeight='0.5rem'>
+																		<span lineheight='0.5rem'>
 																			&nbsp;&nbsp;
 																			<Typography
 																				variant='caption'
-																				lineHeight='0.5rem'
+																				lineheight='0.5rem'
 																			>
 																				{item.maindescription}
 																			</Typography>
@@ -557,7 +489,6 @@ function ViewMenu(props) {
 										</div>
 									)}
 								</Grid>
-
 								{/* <Day weekday='tuesday' /> */}
 								<Grid item xs={12} lg={12}>
 									{defaultMenu.tuesday && (
@@ -579,7 +510,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -620,7 +551,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -661,7 +592,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -702,7 +633,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -744,7 +675,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -785,7 +716,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -826,7 +757,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -867,7 +798,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>
@@ -887,7 +818,6 @@ function ViewMenu(props) {
 										</div>
 									)}
 								</Grid>
-
 								{/* Frozen meals */}
 								<Grid item xs={12} lg={12}>
 									{defaultMenu.frozen && (
@@ -909,7 +839,7 @@ function ViewMenu(props) {
 																<Grid item xs={9} lg={9}>
 																	<span className='cartlist_content'>
 																		<span>{item.mainname}</span>
-																		{/* <br /> */}
+
 																		<span>
 																			&nbsp;~&nbsp;
 																			<Typography variant='caption'>

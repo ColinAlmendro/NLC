@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 
 function FieldInputSelect({ name, label, options, disabled, control }) {
+	
 	return (
 		<Controller
 			name={name}
@@ -13,8 +14,9 @@ function FieldInputSelect({ name, label, options, disabled, control }) {
 				return (
 					<TextField
 						select
-						value={value}
-						defaultValue={value ? value : ""}
+						value={(value === undefined || value === null || options.length === 0) ? '' : value}
+						//defaultValue={value ? value : ""}
+						defaultValue= ""
 						onChange={onChange}
 						label={label}
 						size='small'

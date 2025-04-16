@@ -1,7 +1,6 @@
 import React from "react";
 
 const CartContext = React.createContext({
-	// items: [],
 	monday: [],
 	tuesday: [],
 	wednesday: [],
@@ -11,11 +10,11 @@ const CartContext = React.createContext({
 	promotion: [],
 	totalCount: 0,
 	totalCost: 0,
-	deliveryRate:0,
-	totalDelivery:0,
+	deliveryRate: 0,
+	totalDelivery: 0,
 	totalAmount: 0,
 	isCartShowing: false,
-	setDeliveryRate:(rate)=>{},
+	setDeliveryRate: (rate) => {},
 	addItem: (item) => {},
 	removeItem: (id) => {},
 	showCart: () => {},

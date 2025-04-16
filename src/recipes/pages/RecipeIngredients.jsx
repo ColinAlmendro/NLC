@@ -9,15 +9,11 @@ import {
 	List,
 	ListItem,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
 	InputLabel,
 	IconButton,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-// import { useMenuValue } from "../../shared/context/MenuProvider.js";
 
 import {
 	FormProvider,
@@ -26,9 +22,7 @@ import {
 	useFieldArray,
 	Controller,
 } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { DevTool } from "@hookform/devtools";
-// import { typeOptions } from "./utils/constants";
+
 import { NumericFormat } from "react-number-format";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useValue } from "../../shared/context/SettingsProvider.js";
@@ -53,8 +47,10 @@ const RecipeIngredients = (params) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [addItemDisabled, setAddItemDisabled] = useState(true);
 	const [qtyDisabled, setQtyDisabled] = useState(true);
-	const [ingredientCategoryList, setIngredientCategoryList] = useState(state.ingredient_category_list);
-	const [typeOptions,setTypeOptions] = useState([]);
+	const [ingredientCategoryList, setIngredientCategoryList] = useState(
+		state.ingredient_category_list
+	);
+	const [typeOptions, setTypeOptions] = useState([]);
 	const { control } = useFormContext();
 
 	const [ingredientsList, setIngredientsList] = useState([]);
@@ -76,17 +72,15 @@ const RecipeIngredients = (params) => {
 	useEffect(() => {
 		let arrayCopy = [...ingredientCategoryList];
 		arrayCopy.map((type) => {
-			
-				type.value = type.value;
-				type.label = type.value.charAt(0).toUpperCase() + type.value.slice(1);
-			
+			type.value = type.value;
+			type.label = type.value.charAt(0).toUpperCase() + type.value.slice(1);
 		});
 		setTypeOptions(arrayCopy);
-		}, []);
-		//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+	}, []);
+	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	useEffect(() => {
-		//console.log("useeffect");
+		
 		async function fetchIngredients() {
 			try {
 				setIsLoading(true);
@@ -102,10 +96,10 @@ const RecipeIngredients = (params) => {
 				);
 				const data = await response.json();
 				setIngredientsList(data.ingredients);
-				//	console.log("IngredientsList", data.ingredients);
+				
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+			
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -123,7 +117,7 @@ const RecipeIngredients = (params) => {
 		filteredIngredients = filteredIngredients.filter(
 			(item) => item.category === event.target.value
 		);
-		//	console.log("filteredingredients:", filteredIngredients);
+
 		setIngredientItem({
 			...ingredientItem,
 			category: event.target.value,
@@ -131,13 +125,12 @@ const RecipeIngredients = (params) => {
 		setFilteredIngredientsList(filteredIngredients);
 	};
 	const onChangeQty = (event) => {
-		//	console.log("changeqty", event.target.value);
 		let qty = event.target.value;
 		let qtyCost = 0;
 		let ingred = ingredientsList.find(
 			(item) => item._id === ingredientItem.ingredient
 		);
-		//	console.log("ingred", ingred);
+
 		qtyCost = qty * ingred.price;
 		qtyCost = qtyCost.toFixed(2);
 		setIngredientItem({
@@ -155,9 +148,6 @@ const RecipeIngredients = (params) => {
 
 	return (
 		<Grid item xs={12} lg={12}>
-			{/* <Stack>
-				<Grid item xs={12} lg={12}> */}
-
 			<Stack direction='row' spacing={2}>
 				<Grid item xs={2} lg={2}>
 					<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
@@ -167,13 +157,8 @@ const RecipeIngredients = (params) => {
 						<TextField
 							select
 							value={ingredientItem.category}
-							// defaultValue={""}
 							name='categorySelect'
-							//label='Category'
 							size='small'
-							//fullwidth='true'
-							//	sx={{ width: "100%" }}
-							// error={!!error}
 							onChange={(event) => {
 								onChangeCategory(event), setQtyDisabled(true);
 							}}
@@ -204,13 +189,8 @@ const RecipeIngredients = (params) => {
 						<TextField
 							select
 							value={ingredientItem.ingredient}
-							// defaultValue={""}
 							name='ingredientSelect'
-							//label='Ingredient'
 							size='small'
-							//fullwidth='true'
-							//	sx={{ width: "100%" }}
-							// error={!!error}
 							onChange={(event) => {
 								setIngredientItem({
 									...ingredientItem,
@@ -252,11 +232,9 @@ const RecipeIngredients = (params) => {
 									amount: event.target.value,
 								});
 							}}
-							//label='Amount'
 							name='ingredientAmount'
 							size='small'
 							fullwidth='true'
-							//	sx={{ width: "100%" }}
 							sx={{
 								"& fieldset": { border: "none" },
 								"& .MuiInputBase-root": {
@@ -264,7 +242,7 @@ const RecipeIngredients = (params) => {
 										textAlign: "left",
 									},
 								},
-								//width: "200px",
+
 								border: "1px solid",
 							}}
 						/>
@@ -282,15 +260,10 @@ const RecipeIngredients = (params) => {
 								onChangeQty(event);
 							}}
 							name='itemQty'
-							//label='Qty per Kg/L'
 							thousandSeparator=','
 							decimalSeparator='.'
 							decimalScale={2}
-							//	getInputRef={ref}
-							//	{...rest}
 							size='small'
-							//	sx={{ width: "200px" }}
-							//	error={!!error}
 							disabled={qtyDisabled}
 							sx={{
 								"& fieldset": { border: "none" },
@@ -299,7 +272,7 @@ const RecipeIngredients = (params) => {
 										textAlign: "left",
 									},
 								},
-								//width: "200px",
+
 								border: "1px solid",
 							}}
 						/>
@@ -307,18 +280,11 @@ const RecipeIngredients = (params) => {
 				</Grid>
 				<Grid item xs={1} lg={1}>
 					<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-						Cost
+						Cost Kg/L
 					</InputLabel>
 					<Box bgcolor='primary.light' p={0}>
 						<TextField
 							value={ingredientItem.cost}
-							// onChange={(event) => {
-							// 	setIngredientItem({
-							// 		...ingredientItem,
-							// 		cost: e.target.value,
-							// 	});
-							// }}
-							//label='Cost'
 							name='ingredientCost'
 							size='small'
 							sx={{
@@ -328,7 +294,7 @@ const RecipeIngredients = (params) => {
 										textAlign: "left",
 									},
 								},
-								//width: "200px",
+
 								border: "1px solid",
 							}}
 						/>
@@ -348,7 +314,6 @@ const RecipeIngredients = (params) => {
 							append({
 								...ingredientItem,
 							}),
-								//	console.log("addcost", params.totalCost, ingredientItem.cost),
 								params.setTotalCost(
 									params.totalCost + Number(ingredientItem.cost)
 								),
@@ -367,8 +332,6 @@ const RecipeIngredients = (params) => {
 				</Grid>
 			</Stack>
 
-			{/* </Grid>
-			</Stack> */}
 			{/* // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */}
 			{fields.length > 0 && (
 				<Box sx={{ border: 1, mt: 2 }}>
@@ -415,24 +378,17 @@ const RecipeIngredients = (params) => {
 						name={"ingredients"}
 						control={control}
 						render={({ fieldState: { error } }) => (
-							<List dense='true'>
-								{/* {console.log("fields", fields)} */}
+							<List dense={true}>
 								{fields.map(
 									({ category, ingredient, amount, qty, cost }, index) => {
 										{
-											{
-												/* console.log("curr", qty,cost);
-									console.log("currname", ingredient.name);
-									console.log("currilist", ingredientsList); */
-											}
+											
 
 											if (ingredient.name === undefined) {
 												let currIngredient = ingredientsList.find(
 													(item) => item._id === ingredient
 												);
-												{
-													/* console.log("currIng", currIngredient); */
-												}
+												
 
 												if (currIngredient !== undefined) {
 													ingredientName = currIngredient.name;
@@ -499,11 +455,11 @@ const RecipeIngredients = (params) => {
 																color='error'
 																type='button'
 																onClick={() => {
-																	console.log(
-																		"removecost",
-																		params.totalCost,
-																		ingredientItem.cost
-																	),
+																	// console.log(
+																	// 	"removecost",
+																	// 	params.totalCost,
+																	// 	ingredientItem.cost
+																	// ),
 																		params.setTotalCost(
 																			params.totalCost -
 																				Number(ingredientItem.cost)

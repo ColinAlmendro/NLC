@@ -9,26 +9,26 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
+	// Dialog,
+	// DialogTitle,
+	// DialogContent,
+	// DialogContentText,
+	// DialogActions,
 	Container,
 	Paper,
 	Stack,
-	TextField,
-	InputLabel,
+	// TextField,
+	// InputLabel,
 	Button,
-	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
+	// MenuItem,
+	// FormLabel,
+	// FormControl,
+	// List,
+	// ListItem,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
+	// GridItem,
+	// Card,
+	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
 
@@ -159,9 +159,7 @@ const CartList = (props) => {
 	}, [monday, tuesday, wednesday, thursday, friday, frozen, promotion]);
 
 	const onSubmit = async () => {
-		// e.preventDefault();
-		// console.log("clicked", monday);
-		//console.log("clicked", promotion);
+		
 
 		if (monday.length > 0) {
 			monday.map((item) => {
@@ -271,11 +269,11 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-				console.log("new_promotion", new_promotion);
+			//	console.log("new_promotion", new_promotion);
 				order.promotion.push(new_promotion);
 			});
 		}
-		console.log("order", order);
+	//	console.log("order", order);
 		try {
 			setIsLoading(true);
 
@@ -291,11 +289,11 @@ const CartList = (props) => {
 				}
 			);
 			const dataNew = await responseNew.json();
-			//		console.log("ret data", dataNew);
+			
 
 			setIsLoading(false);
 			history("/orders");
-			// alert("New order added");
+			
 			toast.success("New order added", {
 				style: {
 					background: "green",
@@ -303,10 +301,10 @@ const CartList = (props) => {
 				},
 			});
 			setOpen(false);
-			//	setOpenPopup(false);
+			
 			return dataNew;
 		} catch (err) {
-			console.log("SubmitNew err:", err);
+		//	console.log("SubmitNew err:", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -357,7 +355,7 @@ const CartList = (props) => {
 										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
-												// width='100px'
+												
 												variant='contained'
 												color='error'
 												autoFocus
@@ -370,7 +368,7 @@ const CartList = (props) => {
 											</Button>
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
-												// width='100px'
+												
 												variant='contained'
 												color='success'
 												type='submit'
@@ -434,7 +432,7 @@ const CartList = (props) => {
 														</span>
 														<span className='cartlist_content'>
 															<span>{item.mainname}</span>
-															{/* <br /> */}
+															
 															<span>&nbsp;&nbsp;{item.maindescription}</span>
 															<br />
 															<span>
@@ -760,10 +758,7 @@ const CartList = (props) => {
 							</Grid>
 							{/* 77777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */}
 							<Grid item xs={12} lg={12}>
-								{/* <div className='total_wrapper'>
-									<span>Total Items</span>
-									<span>{totalCount}</span>
-								</div> */}
+								
 								<div className='total_wrapper'>
 									<span>Sub Total</span>
 									<span>R{parseFloat(totalAmount).toFixed(2)}</span>

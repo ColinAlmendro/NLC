@@ -5,18 +5,15 @@ import {
 	Container,
 	Paper,
 	Stack,
-	// TextField,
-	// InputLabel,
 	Button,
-	// MenuItem,
-	// FormLabel,
-	// FormControl,
+	FormLabel,
+	FormControl,
+	FormGroup,
+	FormControlLabel,
+	Checkbox,
 	List,
 	ListItem,
 	Grid,
-	// GridItem,
-	// Card,
-	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
 
@@ -24,7 +21,6 @@ import Intro from "./Intro.jsx";
 import Day from "./Day.jsx";
 import Frozen from "./Frozen.jsx";
 import Extra from "./Extra.jsx";
-// import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner.js";
 
 import * as Yup from "yup";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
@@ -42,57 +38,31 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 import "./Menu.css";
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
-import { toast } from "sonner";
 
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-});
+import { toast } from "sonner";
 
 const validationSchema = Yup.object()
 	.shape({})
 	.required();
 
 function MenuForm(props) {
-	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const history = useNavigate();
 	const { openPopup, setOpenPopup } = props;
 	const {
-		menuState: {
-			menus,
-			// prices,
-			selected_menu,
-			main_recipes,
-			side_recipes,
-			vegie_recipes,
-			salad_recipes,
-			soup_recipes,
-			frozen_recipes,
-			week,
-			period,
-			introduction,
-			promotions,
-		},
+		menuState: { selected_menu },
 		dispatchMenu,
 	} = useMenuValue();
 
 	const { state } = useValue(); //app state
-	//console.log("state", state);
+
 	const [record, setRecord] = useState(selected_menu[0]);
 	const [open, setOpen] = useState(false);
 	const [prices, setPrices] = useState(state.price_list);
-	//console.log("stateprices", state);
 
 	let defaultMenu = {};
 	if (record) {
-		console.log("ISrecordY", record);
 		defaultMenu = {
 			...record,
 			logo: state.logo,
@@ -100,7 +70,6 @@ function MenuForm(props) {
 			contact: state.contact,
 		};
 	} else {
-		console.log("ISrecordN", record);
 		defaultMenu = {
 			date: new Date(),
 			logo: state.logo,
@@ -122,7 +91,33 @@ function MenuForm(props) {
 			note: "",
 		};
 	}
-	// console.log("defaultmenu",defaultMenu)
+
+	const [chkFrozen, setChkFrozen] = useState(
+		record && record.frozen.length > 0 ? true : false
+	);
+	const [chkFresh, setChkFresh] = useState(
+		record &&
+			(record.monday.length > 0 ||
+				record.tuesday.length > 0 ||
+				record.wednesday.length > 0 ||
+				record.thursday.length > 0 ||
+				record.friday.length > 0)
+			? true
+			: false
+	);
+	const [chkSide, setChkSide] = useState(
+		record && record.sides.length > 0 ? true : false
+	);
+	const [chkVegie, setChkVegie] = useState(
+		record && record.vegies.length > 0 ? true : false
+	);
+	const [chkSalad, setChkSalad] = useState(
+		record && record.salads.length > 0 ? true : false
+	);
+	const [chkSoup, setChkSoup] = useState(
+		record && record.soups.length > 0 ? true : false
+	);
+
 	const formProps = useForm({
 		defaultValues: defaultMenu,
 		resolver: yupResolver(validationSchema),
@@ -151,13 +146,32 @@ function MenuForm(props) {
 		submitCount,
 	} = formState;
 
+	const handleChkFrozen = () => {
+		setChkFrozen(!chkFrozen);
+	};
+	const handleChkFresh = () => {
+		setChkFresh(!chkFresh);
+	};
+	const handleChkVegie = () => {
+		setChkVegie(!chkVegie);
+	};
+	const handleChkSalad = () => {
+		setChkSalad(!chkSalad);
+	};
+	const handleChkSoup = () => {
+		setChkSoup(!chkSoup);
+	};
+	const handleChkSide = () => {
+		setChkSide(!chkSide);
+	};
+
 	const onSubmit = async (data) => {
-		console.log("clicked", data);
+		//console.log("clicked", data);
 
 		if (record) {
 			try {
 				setIsLoading(true);
-				console.log("in edit submit");
+				//console.log("in edit submit");
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/menus/edit/${record._id}`,
 					{
@@ -186,7 +200,7 @@ function MenuForm(props) {
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-					console.log("response error", dataEdit.message);
+				//	console.log("response error", dataEdit.message);
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -195,14 +209,14 @@ function MenuForm(props) {
 					});
 					return data;
 				}
-				console.log("UpDate", data);
+				//console.log("UpDate", data);
 
 				setIsLoading(false);
 
 				setOpen(false);
 				setOpenPopup(false);
 				history("/menus");
-				//alert("Menu updated");
+
 				toast.success("Menu updated", {
 					style: {
 						background: "green",
@@ -211,7 +225,7 @@ function MenuForm(props) {
 				});
 				return data.menus;
 			} catch (err) {
-				console.log("Update err:", err);
+				//console.log("Update err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -223,7 +237,7 @@ function MenuForm(props) {
 		} else {
 			try {
 				setIsLoading(true);
-				console.log("in new submit");
+				//console.log("in new submit");
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/menus/new",
@@ -251,11 +265,11 @@ function MenuForm(props) {
 					}
 				);
 				const dataNew = await responseNew.json();
-				console.log("ret data", dataNew);
+				//console.log("ret data", dataNew);
 
 				setIsLoading(false);
 				history("/menus");
-				//alert("New menu added");
+
 				toast.success("New menu added", {
 					style: {
 						background: "green",
@@ -266,7 +280,7 @@ function MenuForm(props) {
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
-				console.log("SubmitNew err:", err);
+				//console.log("SubmitNew err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -299,7 +313,11 @@ function MenuForm(props) {
 									sx={{ border: "none" }}
 								>
 									<Grid item xs={12} lg={12}>
-										<Stack direction='row' sx={{ justifyContent: "right" }} spacing={1}>
+										<Stack
+											direction='row'
+											sx={{ justifyContent: "right" }}
+											spacing={1}
+										>
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
 												variant='contained'
@@ -322,14 +340,15 @@ function MenuForm(props) {
 										</Stack>
 									</Grid>
 									{/* &&&&&&&&&&&&&&&&&&&&&&&&&&&7     INTRO */}
-									<Intro />
-
+									<Grid item xs={12} lg={12}>
+										<Intro />
+									</Grid>
 									{/* ************************************************      PRICELIST */}
 									<Grid item xs={12} lg={12}>
 										<List>
 											{prices.map((price, i) => (
 												<ListItem key={i}>
-													<Typography>
+													<Typography component='div'>
 														<Box sx={{ fontWeight: "bold", height: "25%" }}>
 															{price.value}
 														</Box>
@@ -340,18 +359,119 @@ function MenuForm(props) {
 									</Grid>
 
 									{/* ############################################################################################################################################################ */}
-									<Day weekday='monday' />
-									<Day weekday='tuesday' />
-									<Day weekday='wednesday' />
-									<Day weekday='thursday' />
-									<Day weekday='friday' />
-									{/* ############################################################################################################################################################ */}
-									<Extra extra='vegies' />
-									<Extra extra='salads' />
-									<Extra extra='soups' />
-									<Extra extra='sides' />
+									<Box>
+										<FormControl
+											component='fieldset'
+											sx={{ m: 3 }}
+											variant='standard'
+										>
+											<FormLabel>
+												<Typography fontWeight='500' variant='h6'>
+													Display Options
+												</Typography>
+											</FormLabel>
+											<FormGroup>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={chkFrozen}
+															onChange={handleChkFrozen}
+															name='chkFrozen'
+														/>
+													}
+													label='Frozen Meals'
+												/>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={chkFresh}
+															onChange={handleChkFresh}
+															name='chkFresh'
+														/>
+													}
+													label='Fresh Meals'
+												/>
 
-									<Frozen weekday='frozen' />
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={chkVegie}
+															onChange={handleChkVegie}
+															name='chkVegie'
+														/>
+													}
+													label='Vegetables'
+												/>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={chkSalad}
+															onChange={handleChkSalad}
+															name='chkSalad'
+														/>
+													}
+													label='Salads'
+												/>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={chkSoup}
+															onChange={handleChkSoup}
+															name='chkSoup'
+														/>
+													}
+													label='Soups'
+												/>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={chkSide}
+															onChange={handleChkSide}
+															name='chkSide'
+														/>
+													}
+													label='Side Dishes'
+												/>
+											</FormGroup>
+										</FormControl>
+									</Box>
+
+									{/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5 */}
+									{chkFrozen && (
+										<>
+											<Frozen weekday='frozen' />
+										</>
+									)}
+									{chkFresh && (
+										<>
+											<Day weekday='monday' />
+											<Day weekday='tuesday' />
+											<Day weekday='wednesday' />
+											<Day weekday='thursday' />
+											<Day weekday='friday' />
+										</>
+									)}
+									{/* ############################################################################################################################################################ */}
+									{chkVegie && (
+										<>
+											<Extra extra='vegies' />
+										</>
+									)}
+									{chkSalad && (
+										<>
+											<Extra extra='salads' />
+										</>
+									)}
+									{chkSoup && (
+										<>
+											<Extra extra='soups' />
+										</>
+									)}
+									{chkSide && (
+										<>
+											<Extra extra='sides' />
+										</>
+									)}
 								</Grid>
 							</form>
 						</FormProvider>

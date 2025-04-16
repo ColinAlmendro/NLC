@@ -9,7 +9,6 @@ import {
 	List,
 	ListItem,
 	Grid,
-	GridItem,
 	Card,
 	CardMedia,
 	IconButton,
@@ -31,60 +30,43 @@ const Extra = ({ extra }) => {
 	const { control } = useFormContext();
 	const {
 		menuState: {
-			menus,
-			prices,
 			selected_menu,
-			main_recipes,
+
 			side_recipes,
 			vegie_recipes,
 			salad_recipes,
 			soup_recipes,
-			monday,
-			wednesday,
-			thursday,
-			friday,
-			vegies,
-			salads,
-			soups,
 		},
 		dispatch,
 	} = useMenuValue();
-
-	const [record, setRecord] = useState(selected_menu[0]);
 
 	const { fields, append, remove } = useFieldArray({
 		control,
 		name: `${extra}`,
 	});
-	//console.log("xtra record",record)
 
 	const [meal, setMeal] = useState({
 		image: "",
 		main: "",
 		mainname: "",
 		maindescription: "",
-		count:1,
-		cost:0,
-		price:0,
+		count: 1,
+		cost: 0,
+		price: 0,
 	});
 
-	
 	let extraOptions = [];
 	switch (extra) {
 		case "vegies":
-		
 			extraOptions = [...vegie_recipes];
 			break;
 		case "salads":
-			
 			extraOptions = [...salad_recipes];
 			break;
 		case "soups":
-		
 			extraOptions = [...soup_recipes];
 			break;
 		case "sides":
-			
 			extraOptions = [...side_recipes];
 			break;
 		default:
@@ -92,7 +74,6 @@ const Extra = ({ extra }) => {
 	}
 
 	const extraMainChange = (e) => {
-		//	console.log("E", e.target.value)
 		let obj = {};
 
 		switch (extra) {
@@ -118,9 +99,9 @@ const Extra = ({ extra }) => {
 			main: e.target.value,
 			mainname: obj.name,
 			maindescription: obj.description,
-			count:1,
-			cost:obj.cost,
-			price:obj.price,
+			count: 1,
+			cost: obj.cost,
+			price: obj.price,
 		};
 		setMeal((meal) => ({
 			...meal,
@@ -128,7 +109,6 @@ const Extra = ({ extra }) => {
 		}));
 
 		document.getElementById("extraMainDescInput").value = obj.description;
-		//	console.log("GETMealmain", meal);
 	};
 
 	return (
@@ -230,7 +210,7 @@ const Extra = ({ extra }) => {
 												mainname: "",
 												maindescription: "",
 											}),
-											console.log("appendedmeal", meal),
+										//	console.log("appendedmeal", meal),
 											(document.getElementById("extraMainDescInput").value =
 												"");
 									}}
@@ -250,9 +230,8 @@ const Extra = ({ extra }) => {
 				render={({ fieldState: { error } }) => (
 					<List>
 						{fields.map(({ image, main, mainname, maindescription }, index) => {
-							
 							return (
-								<ListItem>
+								<ListItem key={index}>
 									<Grid width='95%'>
 										<Stack direction='row' width='100%'>
 											<Grid item xs={9} lg={9}>

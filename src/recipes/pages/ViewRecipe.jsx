@@ -2,12 +2,6 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import {
 	Typography,
 	Box,
-	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
 	Container,
 	Paper,
 	Stack,
@@ -15,34 +9,19 @@ import {
 	InputLabel,
 	Button,
 	IconButton,
-	MenuItem,
-	FormLabel,
-	FormControl,
 	List,
 	ListItem,
-	ListItemText,
-	ListItemButton,
-	ListSubheader,
-	Tabs,
-	Tab,
 	Grid,
-	GridItem,
 	Card,
 	CardMedia,
 	CircularProgress,
-	Collapse,
 } from "@mui/material";
-// import { IconButton, Button } from "@mui/material";
+
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-// import { useMenuValue } from "../../shared/context/MenuProvider.js";
-// import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
-// import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
 import { useRecipeValue } from "../../shared/context/RecipeProvider.js";
 
-import { AuthContext } from "../../shared/context/auth-context.js";
-import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./ViewRecipe.css";
@@ -64,14 +43,6 @@ function ViewRecipe(props) {
 	const classes = useStyles();
 	const pdfRef = useRef();
 
-	// const {
-	// 	menuState: { menus, selected_menu, promotions },
-	// 	dispatchMenu,
-	// } = useMenuValue();
-	// const {
-	// 	customersState: { customers, selected_customer },
-	// 	dispatchCustomer,
-	// } = useCustomersValue();
 	const {
 		recipeState: { recipes, selected_recipe },
 		dispatchRecipe,
@@ -80,29 +51,23 @@ function ViewRecipe(props) {
 	const [record, setRecord] = useState(selected_recipe[0]);
 	const { openViewPopup, setOpenViewPopup } = props;
 	const [open, setOpen] = useState(false);
-	// const [period, setPeriod] = useState(null);
-	// let selDate = new Date();
-	// if (record) {
-	// 	selDate = new Date(selected_menu[0].date);
-	// } else {
-	// 	selDate = new Date();
-	// }
-	// const [selectedDate, setSelectedDate] = useState(selDate);
-	console.log("loadrecord", record);
+
+	//console.log("loadrecord", record);
+	const ingredientsPrice = record.ingredients.reduce((accumulator, item) => {
+		//console.log("accumulator", item);
+		return (accumulator += item.ingredient.price * item.qty);
+	}, 0);
 	const [servingsCount, setServingsCount] = useState(record.feeds);
-	const [unitCost, setUnitCost] = useState(record.cost);
-	const [totalCost, setTotalCost] = useState(record.cost * record.feeds);
-	let recordCost = 0;
+	const [unitCost, setUnitCost] = useState(ingredientsPrice / record.feeds);
+	const [totalCost, setTotalCost] = useState(ingredientsPrice);
 
 	let recipe = {};
 	if (record) {
-
 		recipe = {
 			...record,
 		};
-		console.log("recipe", recipe);
+		//console.log("recipe", recipe);
 	} else {
-
 		recipe = {
 			category: "",
 			freezable: "",
@@ -119,14 +84,11 @@ function ViewRecipe(props) {
 		};
 	}
 
-	
 	const decrementServings = () => {
 		setServingsCount(servingsCount - 1);
-			//setUnitCost(totalCost / servingsCount);
 	};
 	const incrementServings = () => {
 		setServingsCount(servingsCount + 1);
-			//setUnitCost(totalCost / servingsCount);
 	};
 
 	const calcIngredientAmount = (amount, qty) => {
@@ -134,49 +96,39 @@ function ViewRecipe(props) {
 		let ingredientUnit = "gr";
 		let pattern = /l/;
 		const res = (qty / record.feeds) * servingsCount;
-		//console.log("res", res);
+
 		if (res < 1) {
-			
 			ingredientAmount = Math.round(res * 1000);
-			console.log("res-1", res, ingredientAmount);
-			// ingredientAmount = res.toFixed(2);
-			//ingredientAmount = res;
+			//console.log("res-1", res, ingredientAmount);
+
 			pattern.test(amount) ? (ingredientUnit = "ml") : (ingredientUnit = "gr");
 		} else {
-			console.log("res+1", res);
-			 Number.isInteger(res)
-			 	? (ingredientAmount = Math.round(res))
-			 	: (ingredientAmount = res.toFixed(2));
-			//  ingredientAmount = res.toFixed(2);
-			  console.log("res+1", res, ingredientAmount);
-			//ingredientAmount = res;
+			//console.log("res+1", res);
+			Number.isInteger(res)
+				? (ingredientAmount = Math.round(res))
+				: (ingredientAmount = res.toFixed(2));
+
+			//console.log("res+1", res, ingredientAmount);
+
 			pattern.test(amount) ? (ingredientUnit = "L") : (ingredientUnit = "Kg");
-			
 		}
-		// return `${Math.round(ingredientAmount)} ${ingredientUnit}`;
+
 		return `${ingredientAmount} ${ingredientUnit}`;
 	};
 
 	const calcIngredientCost = (cost) => {
-		console.log("cost", cost);
-		 const res = (cost / record.feeds) * servingsCount;
-		//const res = cost * servingsCount;
-		console.log("res", res);
-return res.toFixed(2);
-		// return Math.round(res);
-	};
-let cost = 0;
-	useEffect(() => {
-		console.log("useEffectView", unitCost, totalCost, record.cost, record.feeds, servingsCount);
-		
-		// setTotalCost( (record.cost / record.feeds) * servingsCount);
-		setTotalCost(unitCost* servingsCount);
-		//setUnitCost(totalCost / servingsCount);
+		//console.log("cost", cost);
+		const res = (cost / record.feeds) * servingsCount;
 
-	}, [incrementServings,decrementServings]);
+		//console.log("res", res);
+		return res.toFixed(2);
+	};
+	let cost = 0;
+	useEffect(() => {
+		setTotalCost(unitCost * servingsCount);
+	}, [incrementServings, decrementServings]);
 
 	const createPDF = async () => {
-	
 		const input = pdfRef.current;
 		html2canvas(input, { useCORS: true }).then((canvas) => {
 			const imgData = canvas.toDataURL("image/png");
@@ -199,9 +151,6 @@ let cost = 0;
 			pdf.save(`Recipe_${recipe.name}.pdf`);
 		});
 	};
-	let ingredientName = "";
-	let ingredientDescription = "";
-	
 
 	if (isLoading) {
 		return (
@@ -221,7 +170,7 @@ let cost = 0;
 								container
 								rowSpacing={0}
 								columnSpacing={0}
-								sx={{ border: "none" }} //1px solid
+								sx={{ border: "none" }}
 							>
 								{/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */}
 								<Grid item xs={12} lg={12}>
@@ -231,7 +180,6 @@ let cost = 0;
 											<Stack direction='row' spacing={1}>
 												<Button
 													sx={{ gap: "1rem" }}
-													// width='100px'
 													variant='contained'
 													color='error'
 													autoFocus
@@ -244,7 +192,6 @@ let cost = 0;
 												</Button>
 												<Button
 													sx={{ display: "flex", gap: "1rem" }}
-													// width='100px'
 													variant='contained'
 													color='success'
 													type='button'
@@ -265,9 +212,8 @@ let cost = 0;
 							{/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                         RECIPE  */}
 							<div
 								ref={pdfRef}
-								style={{ width: "770px", margin: "0px", border: "1px solid" }}
+								style={{ width: "760px", margin: "0px", padding:"15px", border: "0px solid" }}
 							>
-								{/* <Divider sx={{ my: 2 }} /> */}
 								<Stack gap={2}>
 									<Grid item xs={12} lg={12}>
 										<Box
@@ -283,7 +229,7 @@ let cost = 0;
 											</Typography>
 										</Box>
 									</Grid>
-									{/* <br /> */}
+
 									<Stack direction='row' gap={2}>
 										{recipe.image && (
 											<Box
@@ -299,6 +245,7 @@ let cost = 0;
 														component='img'
 														image={recipe.image}
 														alt='Image'
+														style={{ border: "1px solid" }}
 													/>
 												</Card>
 											</Box>
@@ -338,19 +285,17 @@ let cost = 0;
 
 									<div>
 										<InputLabel
-											sx={{ textAlign: "left", fontWeight: "bold" }}
+											sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 											className={classes.label}
 										>
 											Description
 										</InputLabel>
-										<Box bgcolor='primary.light' p={0}>
-											{/* <p>{recipe.description}</p> */}
+										<Box bgcolor='primary.light' p={0} m={1}>
 											<TextField
 												value={recipe.description}
 												fullWidth
 												minRows={1}
-												//maxRows={10}
-												multiline='true'
+												multiline={true}
 												sx={{
 													"& fieldset": { border: "none" },
 													"& .MuiInputBase-root": {
@@ -358,7 +303,6 @@ let cost = 0;
 															textAlign: "left",
 														},
 													},
-													border: "1px solid",
 												}}
 											/>
 										</Box>
@@ -367,75 +311,59 @@ let cost = 0;
 									{/* 77777777777777777777777777777777777777777777777777777777777777777777777777777777777     INGREDIENTS */}
 									<div>
 										<InputLabel
-											sx={{ textAlign: "left", fontWeight: "bold" }}
+											sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 											className={classes.label}
 										>
 											Ingredients
 										</InputLabel>
-										{/* <RecipeIngredients
-										totalCost={totalCost}
-										setTotalCost={setTotalCost}
-									/> */}
-										<List
-											dense='true'
-											// style={{
-											// 	width: "770px",
-											// 	margin: "0px",
-											// 	border: "1px solid",
-											// }}
-										>
-											{/* {console.log("fields", fields)} */}
-											{recipe.ingredients.map(
-												({ cost, ingredient, amount, qty }, index) => {
-													{
-														console.log("curr", qty);
-														console.log("currname", ingredient.name);
-														//console.log("currilist", ingredientsList);
-														amount = calcIngredientAmount(amount, qty);
-														console.log("newr", amount);
-														cost = calcIngredientCost(cost);
-													}
-													return (
-														<ListItem
-															key={`${index}_${recipe.ingredients.length}`}
-														>
-															<Grid
-																container
-																rowSpacing={0}
-																columnSpacing={0}
-																sx={{ border: "none" }}
+										<Box bgcolor='primary.light' p={0} m={1}>
+											<List dense={true}>
+												{recipe.ingredients.map(
+													({ cost, ingredient, amount, qty }, index) => {
+														{
+															amount = calcIngredientAmount(amount, qty);
+															//console.log("newr", amount);
+															cost = calcIngredientCost(cost);
+														}
+														return (
+															<ListItem
+																key={`${index}_${recipe.ingredients.length}`}
 															>
-																<Grid item xs={2} lg={2}>
-																	{amount}
-																</Grid>
-																<Grid item xs={9} lg={9}>
-																	{`${ingredient.name} ${ingredient.description}`}
-																</Grid>
+																<Grid
+																	container
+																	rowSpacing={0}
+																	columnSpacing={0}
+																	sx={{ border: "none" }}
+																>
+																	<Grid item xs={2} lg={2}>
+																		{amount}
+																	</Grid>
+																	<Grid item xs={9} lg={9}>
+																		{`${ingredient.name} ${ingredient.description}`}
+																	</Grid>
 
-																<Grid item xs={1} lg={1}>
-																	{/* R{cost.toFixed(2)}
-																	 */}
-																	{cost}
+																	<Grid item xs={1} lg={1}>
+																		{cost}
+																	</Grid>
 																</Grid>
-															</Grid>
-														</ListItem>
-													);
-												}
-											)}
-										</List>
+															</ListItem>
+														);
+													}
+												)}
+											</List>
+										</Box>
 									</div>
 									{/*777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */}
 
-									{/* <Divider sx={{ mt: 2 }} /> */}
 									<Box display='flex' gap={2}>
 										<div style={{ width: "100%" }}>
 											<InputLabel
-												sx={{ textAlign: "left", fontWeight: "bold" }}
+												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 												className={classes.label}
 											>
 												Instructions
 											</InputLabel>
-											<Box bgcolor='primary.light' p={0}>
+											<Box bgcolor='primary.light' p={0} m={1}>
 												<p>{recipe.description}</p>
 											</Box>
 										</div>
@@ -445,101 +373,80 @@ let cost = 0;
 										{/* */}
 										<div>
 											<InputLabel
-												sx={{ textAlign: "left", fontWeight: "bold" }}
+												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 												className={classes.label}
 											>
 												Original Servings
 											</InputLabel>
-											<Box bgcolor='primary.light' p={0}>
+											<Box bgcolor='primary.light' p={0} m={1}>
 												<p>{recipe.feeds}</p>
 											</Box>
 										</div>
 										<div>
 											<InputLabel
-												sx={{ textAlign: "left", fontWeight: "bold" }}
+												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 												className={classes.label}
 											>
 												Unit Cost
 											</InputLabel>
-											<Box bgcolor='primary.light' p={0}>
-												<TextField
+											<Box bgcolor='primary.light' p={0} m={1}>
+												{/* <TextField
 													value={Number(unitCost).toFixed(2)}
 													name='cost'
-													//control={control}
-													//	label='Cost'
 													size='small'
-												/>
+												/> */}
+												<p>{Number(unitCost).toFixed(2)}</p>
 											</Box>
 										</div>
 										<div>
 											<InputLabel
-												sx={{ textAlign: "left", fontWeight: "bold" }}
+												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 												className={classes.label}
 											>
 												Total Cost
 											</InputLabel>
-											<Box bgcolor='primary.light' p={0}>
-												<TextField
+											<Box bgcolor='primary.light' p={0} m={1}>
+												{/* <TextField
 													value={Number(totalCost).toFixed(2)}
 													name='totalcost'
-													//control={control}
-													//	label='Cost'
 													size='small'
-												/>
+												/> */}
+												<p>{Number(unitCost).toFixed(2)}</p>
 											</Box>
 										</div>
 										<div>
 											<InputLabel
-												sx={{ textAlign: "left", fontWeight: "bold" }}
+												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 												className={classes.label}
 											>
 												Premium
 											</InputLabel>
-											<Box bgcolor='primary.light' p={0}>
-												<TextField
+											<Box bgcolor='primary.light' p={0} m={1}>
+												{/* <TextField
 													name='premium'
 													value={recipe.premium}
-													//control={control}
-													//	label='Premium'
 													size='small'
-												/>
+												/> */}
+												<p>{recipe.premium}</p>
 											</Box>
 										</div>
 										<div>
 											<InputLabel
-												sx={{ textAlign: "left", fontWeight: "bold" }}
+												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
 												className={classes.label}
 											>
 												Unit Price
 											</InputLabel>
-											<Box bgcolor='primary.light' p={0}>
-												<TextField
+											<Box bgcolor='primary.light' p={0} m={1}>
+												{/* <TextField
 													value={Number(recipe.price).toFixed(2)}
 													name='price'
-													//control={control}
-													//	label='Price'
 													size='small'
-												/>
+												/> */}
+												<p>{Number(recipe.price).toFixed(2)}</p>
 											</Box>
 										</div>
 									</Stack>
-									<div>
-										<InputLabel
-											sx={{ textAlign: "left", fontWeight: "bold" }}
-											className={classes.label}
-										>
-											Website
-										</InputLabel>
-										<Box bgcolor='primary.light' p={0}>
-											<TextField
-												value={recipe.url}
-												name='url'
-												fullWidth
-												//control={control}
-												//label='Website'
-											/>
-										</Box>
-									</div>
 								</Stack>
 							</div>
 						</Stack>

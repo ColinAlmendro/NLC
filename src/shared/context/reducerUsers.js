@@ -2,26 +2,8 @@ const reducerUsers = (state, action) => {
 	switch (action.type) {
 		case "UPDATE_USERS":
 			return { ...state, users: action.data.users };
-		// case "INSERT_USER": {
-		// 	console.log("insertuser", action.data);
-		// 	return [
-		// 		...state.users,action.data
-				
-		// 	];
-		// }
-		// case "UPDATE_USER": {
-		// 	console.log("updateuser", action.data);
-		// 	return stateusers.map((t) => {
-		// 		if (t._id === action.data._id) {
-		// 			return {...action.data};
-		// 		} else {
-		// 			return t;
-		// 		}
-		// 	});
-			
-		// }
+
 		case "DELETE_USER": {
-			//	console.log("deleteuser", action._id)
 			const indexUser = state.users.findIndex(
 				(item) => action._id === item._id
 			);
@@ -44,12 +26,9 @@ const reducerUsers = (state, action) => {
 		}
 
 		case "SET_SELECTED_USER": {
-			console.log("set selected user", action.id);
 			return {
 				...state,
-				selected_user: state.users.filter(
-					(user) => user._id === action.id
-				),
+				selected_user: state.users.filter((user) => user._id === action.id),
 			};
 		}
 		case "RESET_SELECTED_USER": {

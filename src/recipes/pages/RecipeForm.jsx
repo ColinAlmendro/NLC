@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { Typography, Box, Divider } from "@mui/material";
+
 import * as Yup from "yup";
 import {
 	FormProvider,
@@ -19,11 +19,6 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
 	Container,
 	Paper,
 	Stack,
@@ -31,14 +26,9 @@ import {
 	Grid,
 	InputLabel,
 	Button,
-	MenuItem,
-	List,
-	ListItem,
 	Card,
 	CardMedia,
 	CircularProgress,
-	Radio,
-	Checkbox,
 } from "@mui/material";
 
 import RecipeIngredients from "./RecipeIngredients.jsx";
@@ -69,13 +59,7 @@ const validationSchema = Yup.object()
 			.required()
 			.label("Freezable")
 			.typeError("Freezable required"),
-		// image: Yup.mixed()
-		// 	.test("fileType", "Unsupported file format", (value) =>
-		// 		["image/jpeg", "image/jpg", "image/png"].includes(value?.type)
-		// 	)
-		// 	.required("Images are required")
-		// 	.label("Image")
-		// 	.typeError("Image required"),
+
 		name: Yup.string()
 			.required()
 			.label("Name")
@@ -84,27 +68,7 @@ const validationSchema = Yup.object()
 			.required()
 			.label("Description")
 			.typeError("Description required"),
-		// ingredients: Yup.array()
-		// 	.of(
-		// 		Yup.object().shape({
-		// 			ingredient: Yup.string()
-		// 				.required()
-		// 				.label("Ingredient")
-		// 				.typeError("Ingredient required"),
-		// 			unit: Yup.string()
-		// 				.required()
-		// 				.label("Unit")
-		// 				.typeError("Unit required"),
-		// 			qty: Yup.number()
-		// 				.required()
-		// 				.label("Quantity")
-		// 				.typeError("Quantity required"),
-		// 		})
-		// 	)
-		// 	.required()
-		// 	.min(1, "Ingredients are required")
-		// 	.label("Ingredients")
-		// 	.typeError("Ingredients required"),
+
 		instructions: Yup.string()
 			.required()
 			.label("Instructions")
@@ -120,12 +84,7 @@ const validationSchema = Yup.object()
 			.required()
 			.label("Premium")
 			.typeError("Premium required"),
-		// cost: Yup.number()
-		// 	.nullable()
-		// 	.positive()
-		// 	.required()
-		// 	.label("Cost")
-		// 	.typeError("Cost required"),
+
 		price: Yup.number()
 			.nullable()
 			.positive()
@@ -150,26 +109,20 @@ function FormRecipe(props) {
 
 	const [record, setRecord] = useState(selected_recipe[0]);
 	const [recipeTypeList, setRecipeTypeList] = useState(state.recipe_type_list);
-const [typeOptions,setTypeOptions] = useState([]);
+	const [typeOptions, setTypeOptions] = useState([]);
 
-
-	const [ingredientsList, setIngredientsList] = useState([]);
-	const [filteredIngredientsList, setFilteredIngredientsList] = useState([]);
 	const [recipeImage, setRecipeImage] = useState(null);
 	const [recipeImagePreview, setRecipeImagePreview] = useState(null);
 	const [servingsCount, setServingsCount] = useState(6);
 	const [unitCost, setUnitCost] = useState(0);
 	const [totalCost, setTotalCost] = useState(0);
-	// const [freezable, setFreezable] = useState(null);
-	let recordCost = 0;
+
 	let defaultRecipe = {};
 	if (record) {
-		// console.log("ISrecordY", record);
 		defaultRecipe = {
 			...record,
 		};
 	} else {
-		// console.log("ISrecordN", record);
 		defaultRecipe = {
 			category: "",
 			freezable: "",
@@ -221,29 +174,35 @@ const [typeOptions,setTypeOptions] = useState([]);
 	];
 
 	useEffect(() => {
-	let arrayCopy = [...recipeTypeList];
-	arrayCopy.map((type) => {
-		
+		let arrayCopy = [...recipeTypeList];
+		arrayCopy.map((type) => {
 			type.value = type.value;
 			type.label = type.value.charAt(0).toUpperCase() + type.value.slice(1);
-		
-	});
-	setTypeOptions(arrayCopy);
+		});
+		setTypeOptions(arrayCopy);
 	}, []);
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	useEffect(() => {
 		if (record) {
+			const ingredientsPrice = record.ingredients.reduce(
+				(accumulator, item) => {
+				//	console.log("accumulator", item);
+					return (accumulator += item.ingredient.price * item.qty);
+				},
+				0
+			);
+		//	console.log("ingredientsPrice", ingredientsPrice);
+
 			setRecipeImagePreview(record.image);
-			setUnitCost(record.cost);
-			setTotalCost(record.cost * record.feeds);
+			setUnitCost(ingredientsPrice / record.feeds);
+			setTotalCost(ingredientsPrice);
 		} else {
 			setRecipeImagePreview(null);
 		}
 	}, []);
 
 	useEffect(() => {
-		//console.log("servingsCount", servingsCount);
 		setUnitCost(totalCost / servingsCount);
 		setValue("feeds", servingsCount);
 	}, [servingsCount]);
@@ -256,7 +215,7 @@ const [typeOptions,setTypeOptions] = useState([]);
 
 	const handelImageChange = (event) => {
 		let file = event.target.files[0];
-		console.log("handlechangefile:", file);
+
 		if (file) {
 			let reader = new FileReader();
 			reader.onloadend = () => {
@@ -288,12 +247,10 @@ const [typeOptions,setTypeOptions] = useState([]);
 			const imgData = await response.json();
 
 			imageUrl = imgData.url.toString();
-			console.log("cloudinary url:", imageUrl);
 
 			setIsLoading(false);
 			return imageUrl;
 		} catch (error) {
-			console.log("cloudinary upload error:", error);
 			toast.error(error, {
 				style: {
 					background: "red",
@@ -310,22 +267,16 @@ const [typeOptions,setTypeOptions] = useState([]);
 		}
 	};
 
-	// const toggleFreezable = () => {
-	// 	// 👇️ Passed function to setState
-	// 	setFreezable((current) => !current);
-	// };
 	const onInvalid = (errors) => console.error(errors);
 
 	const onSubmit = async (data) => {
-		console.log("clicked", data);
-
-		const imgUrl = await uploadFile(recipeImagePreview);
-		//	console.log("imgUrl", imgUrl);
+		let imgUrl = await uploadFile(recipeImagePreview);
+		imgUrl = imgUrl.replace("upload/", "upload/c_crop,w_600,h_600/"); //crop image 600px X 600px
 
 		if (record) {
 			try {
 				setIsLoading(true);
-				//	console.log("in edit submit");
+
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/recipes/edit/${record._id}`,
 					{
@@ -342,19 +293,18 @@ const [typeOptions,setTypeOptions] = useState([]);
 							ingredients: data.ingredients,
 							instructions: data.instructions,
 							image: imgUrl,
-							//feeds: data.feeds,
+
 							feeds: servingsCount,
 							url: data.url,
 							premium: data.premium,
 							cost: unitCost,
-							// cost: data.cost,
+
 							price: data.price,
 						}),
 					}
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-					console.log("response error", dataEdit.message);
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -363,14 +313,13 @@ const [typeOptions,setTypeOptions] = useState([]);
 					});
 					return data;
 				}
-				console.log("UpDate", data);
 
 				setIsLoading(false);
 
 				setOpen(false);
 				setOpenPopup(false);
 				history("/recipes");
-				//alert("Recipe updated");
+
 				toast.success("Recipe updated", {
 					style: {
 						background: "green",
@@ -379,7 +328,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 				});
 				return data.recipes;
 			} catch (err) {
-				console.log("Update err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -391,7 +339,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 		} else {
 			try {
 				setIsLoading(true);
-				console.log("in new submit");
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/recipes/new",
@@ -410,22 +357,21 @@ const [typeOptions,setTypeOptions] = useState([]);
 							ingredients: data.ingredients,
 							instructions: data.instructions,
 							image: imgUrl,
-							// feeds: data.feeds,
+
 							feeds: servingsCount,
 							url: data.url,
 							premium: data.premium,
 							cost: unitCost,
-							// cost: data.cost,
+
 							price: data.price,
 						}),
 					}
 				);
 				const dataNew = await responseNew.json();
-				console.log("ret data", dataNew);
 
 				setIsLoading(false);
 				history("/recipes");
-				// alert("New recipe added");
+
 				toast.success("New recipe added", {
 					style: {
 						background: "green",
@@ -436,7 +382,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
-				console.log("SubmitNew err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -448,7 +393,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 		}
 
 		// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-		//console.log("XXXX", totalCost);
 	};
 	if (isLoading) {
 		return (
@@ -471,7 +415,7 @@ const [typeOptions,setTypeOptions] = useState([]);
 									container
 									rowSpacing={1}
 									columnSpacing={0}
-									sx={{ border: "none" }} //1px solid
+									sx={{ border: "none" }}
 								>
 									<Grid item xs={12} lg={12}>
 										<Stack direction='row'>
@@ -527,7 +471,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 												<Box bgcolor='primary.light' p={0}>
 													<FieldInputSelect
 														name='category'
-														//	label='Category'
 														control={control}
 														options={typeOptions}
 													/>
@@ -548,19 +491,16 @@ const [typeOptions,setTypeOptions] = useState([]);
 															>
 																Image
 															</InputLabel>
-															<Box bgcolor='primary.light' p={0}>
+															<Box bgcolor='primary.light' p={0}  border= "1px solid">
 																<TextField
-																	//sx={{ border: "none", width: "100%" }}
-																	// {...field}
-																	// value={value?.File}
 																	onChange={(event) => {
 																		onChange(event.target.files[0]);
 																		handelImageChange(event);
 
-																		console.log(
-																			"onChange",
-																			event.target.files[0]
-																		);
+																		// console.log(
+																		// 	"onChange",
+																		// 	event.target.files[0]
+																		// );
 																	}}
 																	type='file'
 																	id='image'
@@ -572,8 +512,9 @@ const [typeOptions,setTypeOptions] = useState([]);
 																				textAlign: "left",
 																			},
 																		},
-																		//width: "200px",
-																		border: "1px solid",
+																		width: "120px",
+																		overFlow: "hidden",
+																		// border: "1px solid",
 																	}}
 																/>
 
@@ -590,6 +531,7 @@ const [typeOptions,setTypeOptions] = useState([]);
 																				component='img'
 																				image={recipeImagePreview}
 																				alt='Preview'
+																				style={{ border: "1px solid" }}
 																			/>
 																		</Card>
 																	</Box>
@@ -610,10 +552,19 @@ const [typeOptions,setTypeOptions] = useState([]);
 												<Box bgcolor='primary.light' p={0}>
 													<FieldInputSelect
 														name='freezable'
-														//	label='Freezable'
 														control={control}
 														options={freezableOptions}
 													/>
+												</Box>
+											</div>
+											<div>
+												<Box sx={{ pt: 3, textAlign: "right" }}>
+													<Button
+														href='https://www.culinaryschools.org/career-info/conversion/'
+														target='_blank'
+													>
+														Conversion Calculator
+													</Button>
 												</Box>
 											</div>
 										</Stack>
@@ -628,11 +579,7 @@ const [typeOptions,setTypeOptions] = useState([]);
 												Recipe Name
 											</InputLabel>
 											<Box bgcolor='primary.light' p={0}>
-												<FieldInputText
-													name='name'
-													control={control}
-													//label='Recipe Name'
-												/>
+												<FieldInputText name='name' control={control} />
 											</Box>
 										</div>
 										<div>
@@ -643,15 +590,10 @@ const [typeOptions,setTypeOptions] = useState([]);
 												Description
 											</InputLabel>
 											<Box bgcolor='primary.light' p={0}>
-												<FieldInputText
-													name='description'
-													control={control}
-													//	label='Recipe Description'
-												/>
+												<FieldInputText name='description' control={control} />
 											</Box>
 										</div>
-										{/* </Stack> */}
-										{/* <Divider sx={{ mt: 2 }} /> */}
+
 										{/* 77777777777777777777777777777777777777777777777777777777777777777777777777777777777     INGREDIENTS */}
 										<div>
 											<InputLabel
@@ -667,7 +609,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 										</div>
 										{/*777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */}
 
-										{/* <Divider sx={{ mt: 2 }} /> */}
 										<Box display='flex' gap={2}>
 											<div style={{ width: "100%" }}>
 												<InputLabel
@@ -679,7 +620,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 												<Box bgcolor='primary.light' p={0}>
 													<FieldInputTextarea
 														name='instructions'
-														//	label='Instructions'
 														control={control}
 													/>
 												</Box>
@@ -700,12 +640,10 @@ const [typeOptions,setTypeOptions] = useState([]);
 														name='feeds'
 														control={control}
 														value={servingsCount}
-														//label='Servings'
 														onChange={(event) => {
-															//onChange(event.target.value);
 															setServingsCount(event.target.value);
 
-															console.log("onChangeFeeds", event.target.value);
+															//console.log("onChangeFeeds", event.target.value);
 														}}
 														size='small'
 													/>
@@ -722,8 +660,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 													<TextField
 														value={Number(unitCost).toFixed(2)}
 														name='cost'
-														//	control={control}
-														//	label='Cost'
 														size='small'
 													/>
 												</Box>
@@ -739,8 +675,6 @@ const [typeOptions,setTypeOptions] = useState([]);
 													<TextField
 														value={Number(totalCost).toFixed(2)}
 														name='cost'
-														//	control={control}
-														//	label='Cost'
 														size='small'
 													/>
 												</Box>
@@ -753,11 +687,7 @@ const [typeOptions,setTypeOptions] = useState([]);
 													Premium
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
-													<FieldInputText
-														name='premium'
-														control={control}
-														//	label='Premium'
-													/>
+													<FieldInputText name='premium' control={control} />
 												</Box>
 											</div>
 											<div>
@@ -768,11 +698,7 @@ const [typeOptions,setTypeOptions] = useState([]);
 													Unit Price
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
-													<FieldInputText
-														name='price'
-														control={control}
-														//	label='Price'
-													/>
+													<FieldInputText name='price' control={control} />
 												</Box>
 											</div>
 										</Stack>
@@ -784,11 +710,7 @@ const [typeOptions,setTypeOptions] = useState([]);
 												Website (optional)
 											</InputLabel>
 											<Box bgcolor='primary.light' p={0}>
-												<FieldInputText
-													name='url'
-													control={control}
-													//label='Website'
-												/>
+												<FieldInputText name='url' control={control} />
 											</Box>
 										</div>
 									</Stack>

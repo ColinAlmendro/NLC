@@ -11,9 +11,6 @@ import { useValue } from "./shared/context/SettingsProvider.js";
 import { makeStyles } from "@mui/styles";
 import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 
-
-
-
 const Home = React.lazy(() => import("./shared/home/pages/Home"));
 const Users = React.lazy(() => import("./user/pages/Users.js"));
 const AppSettings = React.lazy(() => import("./appSettings/AppSettings.jsx"));
@@ -40,9 +37,6 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
-// import { toast } from "sonner";
-
-// import "./App.css";
 
 const theme = createTheme({
 	palette: {
@@ -55,7 +49,7 @@ const theme = createTheme({
 			light: "#f8324526",
 		},
 		background: {
-			default: "#f4f5fd",
+			default: "#f7ffbf",
 		},
 	},
 	overrides: {
@@ -69,13 +63,6 @@ const theme = createTheme({
 		MuiIconButton: {
 			disableRipple: true,
 		},
-	},
-});
-
-const useStyles = makeStyles({
-	appMain: {
-		paddingLeft: "320px",
-		width: "100%",
 	},
 });
 
@@ -99,7 +86,6 @@ const App = () => {
 				}
 			);
 			const data = await response.json();
-			//	console.log("AppSettings list :", data.settings);
 
 			dispatch({ type: "UPDATE_APP_SETTINGS", data });
 		}
@@ -109,7 +95,7 @@ const App = () => {
 	////////////////////////////////
 
 	let routes;
-	//	 console.log("app auth",token, admin);
+
 	if (token) {
 		{
 		}
@@ -143,18 +129,15 @@ const App = () => {
 					</>
 				)}
 
-
 				<Route path='*' element={<Navigate to='/' replace />} />
 			</Routes>
 		);
 	} else {
 		routes = (
 			<Routes>
-				
 				<Route path='/' element={<Home />} exact='true' />
 				<Route path='/about' element={<About />} exact='true' />
 				<Route path='/auth' element={<Auth />} exact='true' />
-				{/* <Route path='*' element={<Navigate to='/auth' replace />} /> */}
 				<Route path='*' element={<Navigate to='/' replace />} />
 			</Routes>
 		);

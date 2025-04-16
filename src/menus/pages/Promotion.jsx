@@ -2,29 +2,10 @@ import React, { useState } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 
 import {
-	//Typography,
 	Box,
-	// Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
-	// Container,
-	// Paper,
-	// Stack,
 	TextField,
-	// InputLabel,
-	// Button,
 	MenuItem,
-	// FormLabel,
-	// FormControl,
-	// List,
-	// ListItem,
 	Grid,
-	// GridItem,
-	// Card,
-	// CardMedia,
 	ImageList,
 	ImageListItem,
 	ImageListItemBar,
@@ -41,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: theme.palette.background.paper,
 	},
 	imageList: {
-		// width: 500,
 		height: 300,
 	},
 	icon: {
@@ -53,20 +33,7 @@ const Promotion = () => {
 	const classes = useStyles();
 	const { control } = useFormContext();
 	const {
-		menuState: {
-			menus,
-			prices,
-			selected_menu,
-			main_recipes,
-			side_recipes,
-			vegie_recipes,
-			salad_recipes,
-			soup_recipes,
-			week,
-
-			introduction,
-			promotions,
-		},
+		menuState: { selected_menu, promotions },
 		dispatch,
 	} = useMenuValue();
 	const [promotionsList, setPromotionsList] = useState(promotions);
@@ -91,12 +58,10 @@ const Promotion = () => {
 	);
 
 	const handelPromotionChange = (value) => {
-		//	console.log("promovalue:", value.target.value);
 		if (value.target.value !== "none") {
 			let promo = promotionsList.find((obj) => obj._id === value.target.value);
-			//	console.log("arr:", promo.items);
+
 			setSelectedPromotion(promo.items);
-			//	console.log("SelectedPromo:", selectedPromotion);
 		} else {
 			setSelectedPromotion([]);
 		}
@@ -151,7 +116,6 @@ const Promotion = () => {
 									</Box>
 								)}
 							/>
-							{/* </Stack> */}
 						</Grid>
 						{selectedPromotion.length > 0 ? (
 							<Grid item xs={12} lg={12} mt={2}>
@@ -159,21 +123,10 @@ const Promotion = () => {
 								<Box className={classes.root}>
 									<ImageList
 										className={classes.imageList}
-										// sx={{ height: 300 }}
-										// sx={{
-										// 	height: 200,
-										// 	columnCount: {
-										// 		xs: "1 !important",
-										// 		sm: "2 !important",
-										// 		md: "4 !important",
-										// 		lg: "6 !important",
-										// 		xl: "8 !important",
-										// 	},
-										// }}
 										cols={6}
 										rowHeight={100}
 										gap={10}
-										fullWidth
+										fullwidth="true"
 									>
 										{selectedPromotion.map((item) => (
 											<ImageListItem key={item.id}>
@@ -182,7 +135,6 @@ const Promotion = () => {
 													src={`${item.image}?w=164&fit=crop&auto=format`}
 													alt={item.name}
 													loading='lazy'
-													//width="100px"
 													height='100px'
 												/>
 												<ImageListItemBar

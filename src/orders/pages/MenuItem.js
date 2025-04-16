@@ -37,13 +37,13 @@ import "./MenuItem.css";
 const MenuItem = ({ data, id, day }) => {
 	let [count, setCount] = useState(0);
 	let {
-		monday,
-		tuesday,
-		wednesday,
-		thursday,
-		friday,
-		frozen,
-		promotion,
+		// monday,
+		// tuesday,
+		// wednesday,
+		// thursday,
+		// friday,
+		// frozen,
+		// promotion,
 		addItem,
 		removeItem,
 	} = useContext(CartContext); //items

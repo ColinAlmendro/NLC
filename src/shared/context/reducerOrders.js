@@ -27,7 +27,7 @@ const reducerOrders = (state, action) => {
 		}
 
 		case "SET_SELECTED_ORDER": {
-			console.log("set selected", action.id);
+		//	console.log("set selected", action.id);
 			return {
 				...state,
 				selected_order: state.orders.filter(

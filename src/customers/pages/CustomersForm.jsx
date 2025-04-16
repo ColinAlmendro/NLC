@@ -1,34 +1,22 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
 	Typography,
 	Box,
 	Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
 	Container,
 	Paper,
 	Stack,
 	TextField,
 	InputLabel,
 	Button,
-	// IconButton,
 	MenuItem,
-	// FormLabel,
-	// FormControl,
-	// List,
-	// ListItem,
 	Grid,
-	// GridItem,
-	// Card,
-	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
 
 import * as Yup from "yup";
 import { useValue } from "../../shared/context/SettingsProvider.js";
+import { useUsersValue } from "../../shared/context/UsersProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useNavigate } from "react-router-dom";
@@ -105,22 +93,29 @@ function CustomersForm(props) {
 	const [open, setOpen] = useState(false);
 	const { state, dispatch } = useValue();
 	const {
+		usersState: { users, selected_user },
+		dispatchUser,
+	} = useUsersValue();
+	const {
 		customersState: { customers, selected_customer },
 		dispatchCustomer,
 	} = useCustomersValue();
 	const [areaList, setAreaList] = useState(state.area_list);
 	const [record, setRecord] = useState(selected_customer[0]);
 
+	const [customerEmail, setCustomerEmail] = useState("");
+	const [registered, setRegistered] = useState("Not Registered");
+
 	const history = useNavigate();
 
 	let defaultCustomer = {};
 	if (record) {
-		//console.log("ISrecordY", record);
+		
 		defaultCustomer = {
 			...record,
 		};
 	} else {
-		//console.log("ISrecordN", record);
+		
 		defaultCustomer = {
 			name: "",
 			surname: "",
@@ -132,6 +127,7 @@ function CustomersForm(props) {
 			note: "",
 		};
 	}
+	
 
 	const formProps = useForm({
 		defaultValues: defaultCustomer,
@@ -163,14 +159,32 @@ function CustomersForm(props) {
 
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-	const onSubmit = async (data) => {
-	
-		//console.log("clicked", data);
+	const checkRegistered = () => {
+		
+		const regUser = users.filter((user) => user.email === customerEmail);
+		
+		if (regUser[0]) {
+			
+			setRegistered(regUser[0].name);
+			console.log("click usr", regUser[0].name);
+		} else {
+			
+			setRegistered("Not Registered");
+		}
+	};
 
+	useEffect(() => {
+		if (record) {
+			setCustomerEmail(defaultCustomer.email);
+			checkRegistered();
+		}
+	}, [customerEmail]);
+
+	const onSubmit = async (data) => {
 		if (record) {
 			try {
 				setIsLoading(true);
-				console.log("in edit submit");
+				
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/customers/edit/${record._id}`,
 					{
@@ -194,7 +208,7 @@ function CustomersForm(props) {
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-					console.log("response error", dataEdit.message);
+					
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -203,7 +217,7 @@ function CustomersForm(props) {
 					});
 					return data;
 				}
-				console.log("UpDate", data);
+				
 
 				setIsLoading(false);
 
@@ -220,12 +234,18 @@ function CustomersForm(props) {
 				return data.customers;
 			} catch (err) {
 				console.log("Update err:", err);
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		} else {
 			try {
 				setIsLoading(true);
-				console.log("in new submit");
+				
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/customers/new",
@@ -249,7 +269,7 @@ function CustomersForm(props) {
 					}
 				);
 				const dataNew = await responseNew.json();
-				console.log("ret data", dataNew);
+				
 
 				setIsLoading(false);
 				history("/customers");
@@ -388,7 +408,41 @@ function CustomersForm(props) {
 														Email
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
-														<FieldInputText name='email' control={control} />
+														<Controller
+															name='email'
+															control={control}
+															render={({
+																field: { onChange, value },
+																fieldState: { error },
+															}) => {
+																return (
+																	<TextField
+																		type='email'
+																		onChange={(e) => {
+																			onChange(e.target.value);
+																			setCustomerEmail(e.target.value);
+																		}}
+																		onBlur={checkRegistered}
+																		value={value}
+																		size='small'
+																		helperText={`${
+																			error?.message ? error?.message : ""
+																		}`}
+																		error={!!error}
+																		fullWidth
+																		sx={{
+																			"& fieldset": { border: "none" },
+																			"& .MuiInputBase-root": {
+																				"& input": {
+																					textAlign: "left",
+																				},
+																			},
+																			border: "1px solid",
+																		}}
+																	/>
+																);
+															}}
+														/>
 													</Box>
 												</Stack>
 											</Stack>
@@ -486,7 +540,6 @@ function CustomersForm(props) {
 																field: { onChange, value },
 																fieldState: { error },
 															}) => {
-																//console.log("datevalue", value);
 																return (
 																	<LocalizationProvider
 																		dateAdapter={AdapterDateFns}
@@ -513,6 +566,32 @@ function CustomersForm(props) {
 																		/>
 																	</LocalizationProvider>
 																);
+															}}
+														/>
+													</Box>
+												</Stack>
+												<Stack>
+													<InputLabel
+														sx={{ textAlign: "left" }}
+														className={classes.label}
+													>
+														Login Username
+													</InputLabel>
+													<Box bgcolor='primary.light' p={0}>
+														<TextField
+															name='user'
+															value={registered}
+															disabled={true}
+															size='small'
+															fullWidth
+															sx={{
+																"& fieldset": { border: "none" },
+																"& .MuiInputBase-root": {
+																	"& input": {
+																		textAlign: "left",
+																	},
+																},
+																border: "1px solid",
 															}}
 														/>
 													</Box>

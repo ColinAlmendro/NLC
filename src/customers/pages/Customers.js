@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import CustomersForm from "./CustomersForm.jsx";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import {
 	Container,
 	Box,
@@ -11,7 +11,6 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	//Divider,
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
@@ -19,18 +18,18 @@ import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
+
 import Popup from "../../components/Popup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
-//import { useValue } from "../../shared/context/SettingsProvider.js";
+
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
-
+import { useUsersValue } from "../../shared/context/UsersProvider.js";
+import "./Customers.css";
 import { toast } from "sonner";
-
 
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
@@ -60,7 +59,6 @@ const headCells = [
 ];
 
 export default function Customer() {
-
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -69,15 +67,17 @@ export default function Customer() {
 		customersState: { customers },
 		dispatchCustomer,
 	} = useCustomersValue();
-
+	const {
+		usersState: { users, selected_user },
+		dispatchUser,
+	} = useUsersValue();
 	const classes = useStyles();
-	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...customers];
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			console.log("filteritems", items);
+			//console.log("filteritems", items);
 			return items;
 		},
 	});
@@ -95,7 +95,6 @@ export default function Customer() {
 
 	useEffect(() => {
 		async function fetchCustomers() {
-		
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -109,11 +108,10 @@ export default function Customer() {
 					}
 				);
 				const data = await response.json();
-			
+
 				dispatchCustomer({ type: "UPDATE_CUSTOMERS", data });
 				setIsLoading(false);
 			} catch (err) {
-			
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -126,18 +124,39 @@ export default function Customer() {
 		fetchCustomers();
 	}, [location.key]);
 
-	const insertCustomer = (customer) => {
-		console.log("insertdata:", customer),
-			dispatchCustomer({ type: "INSERT_CUSTOMER", customer });
-	};
+	useEffect(() => {
+		async function fetchUsers() {
+			try {
+				setIsLoading(true);
+				const response = await fetch(
+					process.env.REACT_APP_BACKEND_URL + "/users",
+					{
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + auth.token,
+						},
+					}
+				);
+				const data = await response.json();
 
-	const updateCustomer = (customer) => {
-		console.log("updatedata:", customer),
-			dispatchCustomer({ type: "UPDATE_CUSTOMER", customer });
-	};
+				dispatchUser({ type: "UPDATE_USERS", data });
+				setIsLoading(false);
+			} catch (err) {
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
+				setIsLoading(false);
+			}
+		}
+		fetchUsers();
+	}, []);
 
 	const deleteCustomerItem = async (_id) => {
-		console.log("deleteitem:", _id);
+		//console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/customers/delete/${_id}`, {
@@ -151,16 +170,16 @@ export default function Customer() {
 				.then(() => {
 					dispatchCustomer({ type: "DELETE_CUSTOMER", _id });
 					setIsLoading(false);
-					
+
 					toast.success("Customer deleted", {
-											style: {
-												background: "green",
-												color: "white",
-											},
-										});
+						style: {
+							background: "green",
+							color: "white",
+						},
+					});
 				});
 		} catch (err) {
-			console.log("Delete error", err);
+			//console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -191,26 +210,6 @@ export default function Customer() {
 		});
 	};
 
-	// const addOrEdit = (customer, resetForm) => {
-	// 	if (customer._id == 0) insertCustomer(customer);
-	// 	else updateCustomer(customer);
-	// 	resetForm();
-	// 	setRecordForEdit(null);
-	// 	setOpenPopup(false);
-	// 	// setRecords(getAllCustomers());
-	// 	setNotify({
-	// 		isOpen: true,
-	// 		message: "Submitted Successfully",
-	// 		type: "success",
-	// 	});
-	// };
-
-	// const openInPopup = (item) => {
-	// 	// setRecordForEdit(item);
-	// 	dispatchCustomer({ type: "SET_SELECTED_CUSTOMER", _id: item._id });
-	// 	setOpenPopup(true);
-	// };
-
 	const onDelete = (_id) => {
 		setConfirmDialog({
 			...confirmDialog,
@@ -234,12 +233,14 @@ export default function Customer() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none", width: "100%" }}>
+			<Container id='container' sx={{ border: "none", width: "100%" }}>
 				<Paper
 					textalign='center'
 					className={classes.pageContent}
+					//sx={{ width: "fit-content", p: 0 }}
 					sx={{ width: "100%", p: 0 }}
 				>
+					,
 					<Box
 						sx={{
 							mx: "auto",
@@ -252,7 +253,6 @@ export default function Customer() {
 							Customer Manager
 						</Typography>
 					</Box>
-					
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Customers'
@@ -267,9 +267,7 @@ export default function Customer() {
 							onChange={handleSearch}
 						/>
 						<Button
-							
 							variant='contained'
-							
 							className={classes.newButton}
 							sx={{ marginLeft: "auto" }}
 							onClick={() => {
@@ -307,7 +305,6 @@ export default function Customer() {
 														id: item._id,
 													}),
 														setOpenPopup(true);
-													
 												}}
 											>
 												<EditOutlinedIcon
@@ -351,9 +348,7 @@ export default function Customer() {
 				openPopup={openPopup}
 				setOpenPopup={setOpenPopup}
 			>
-				
 				<CustomersForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
-				
 			</Popup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog

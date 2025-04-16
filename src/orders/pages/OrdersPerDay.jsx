@@ -3,45 +3,25 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
 	Container,
 	Paper,
 	Stack,
 	TextField,
 	InputLabel,
 	Button,
-	IconButton,
 	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
-	ListItemText,
-	ListItemButton,
-	ListSubheader,
 	Tabs,
 	Tab,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
 	CircularProgress,
-	Collapse,
 	ToggleButton,
 	ToggleButtonGroup,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import DeleteIcon from "@mui/icons-material/Delete";
+
 import DaysOrder from "./DaysOrder.jsx";
-import OrderPromotion from "./OrderPromotion.jsx";
-// import * as Yup from "yup";
+
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
-import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
+
 import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useNavigate } from "react-router-dom";
@@ -74,24 +54,12 @@ const useStyles = makeStyles({
 		},
 	},
 });
-// const useStyles = makeStyles((theme) => ({
-// 	toggleButtonSelected: {
-// 		"&.MuiToggleButton-root": {
-// 			"background-color": "red",
-// 		},
-// 	},
-// }));
-
-// const validationSchema = Yup.object()
-// 	.shape({})
-// 	.required();
 
 function OrdersPerDay(props) {
 	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
-	const [menuOrders, setMenuOrders] = useState([]);
-
+	
 	const [openMonday, setOpenMonday] = useState(false);
 	const [openTuesday, setOpenTuesday] = useState(false);
 	const [openWednesday, setOpenWednesday] = useState(false);
@@ -99,8 +67,7 @@ function OrdersPerDay(props) {
 	const [openFriday, setOpenFriday] = useState(false);
 	const [openFrozen, setOpenFrozen] = useState(false);
 	const [openPromo, setOpenPromo] = useState(false);
-	const [memo, setMemo] = useState("");
-	const [promoId, setPromoId] = useState("");
+	
 	const [notes, setNotes] = useState([]);
 
 	const [display, setDisplay] = React.useState("customers");
@@ -108,10 +75,9 @@ function OrdersPerDay(props) {
 	let notesArr = [];
 
 	const handleDisplay = (event, newDisplay) => {
-		console.log("display", newDisplay);
+		
 		setDisplay(newDisplay);
 	};
-
 
 	const {
 		menuState: { menus, selected_menu, promotions },
@@ -131,7 +97,7 @@ function OrdersPerDay(props) {
 
 	useEffect(() => {
 		async function fetchMenus() {
-			//console.log("fetching orders");
+			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -145,7 +111,7 @@ function OrdersPerDay(props) {
 					}
 				);
 				const data = await response.json();
-				//	console.log("Menus list :", data.menus);
+				
 				dispatchMenu({
 					type: "UPDATE_MENUS",
 					data,
@@ -155,7 +121,7 @@ function OrdersPerDay(props) {
 				});
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -170,7 +136,7 @@ function OrdersPerDay(props) {
 
 	useEffect(() => {
 		async function fetchOrders() {
-			//console.log("fetching orders");
+			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -184,14 +150,14 @@ function OrdersPerDay(props) {
 					}
 				);
 				const data = await response.json();
-				//	console.log("Orders list :", data.orders);
+				
 				dispatchOrder({
 					type: "UPDATE_ORDERS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -206,15 +172,10 @@ function OrdersPerDay(props) {
 
 	const getOrderNotes = (event) => {
 		let temp = orders;
-		// let noteObj = {
-		// 	customer: "",
-		// 	note: "",
-		// };
+
 		temp = temp.filter((order) => order.menu.id === event.target.value);
-		// console.log("temporders", temp);
 
 		notesArr = temp.map((item, i) => {
-			
 			let noteObj = {
 				customer: "",
 				note: "",
@@ -231,35 +192,14 @@ function OrdersPerDay(props) {
 	const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
 	const handleTabChange = (e, tabIndex) => {
-		//	console.log(tabIndex);
 		setCurrentTabIndex(tabIndex);
 	};
 
-	const handleMondayClick = () => {
-		setOpenMonday(!openMonday);
-	};
-	const handleTuesdayClick = () => {
-		setOpenTuesday(!openTuesday);
-	};
-	const handleWednesdayClick = () => {
-		setOpenWednesday(!openWednesday);
-	};
-	const handleThursdayClick = () => {
-		setOpenThursday(!openThursday);
-	};
-	const handleFridayClick = () => {
-		setOpenFriday(!openFriday);
-	};
-	const handleFrozenClick = () => {
-		setOpenFrozen(!openFrozen);
-	};
 
-	const handlePromoClick = () => {
-		setOpenPromo(!openPromo);
-	};
 
 	const createPDF = async () => {
-		const menuDate = new Date(order.menu.date).toLocaleDateString("en-ZA");
+		
+		const menuDate = new Date(selected_menu[0].date).toLocaleDateString("en-ZA");
 		const input = pdfRef.current;
 		html2canvas(input, { useCORS: true }).then((canvas) => {
 			const imgData = canvas.toDataURL("image/png");
@@ -279,9 +219,7 @@ function OrdersPerDay(props) {
 				imgWidth * ratio,
 				imgHeight * ratio
 			);
-			pdf.save(
-				`Orders_${menuDate}.pdf`
-			);
+			pdf.save(`Orders_${menuDate}.pdf`);
 		});
 	};
 
@@ -299,13 +237,7 @@ function OrdersPerDay(props) {
 
 			<Container sx={{ border: "none", width: "100%" }}>
 				<Paper>
-					{/* {isLoading && <LoadingSpinner asOverlay />} */}
-
 					<Box display='flex' p={2}>
-						{/* <FormProvider {...formProps}> */}
-						{/* <form onSubmit={handleSubmit(onSubmit)}> */}
-						{/* <form> */}
-
 						<div
 							ref={pdfRef}
 							style={{ width: "770px", margin: "0px", border: "1px solid" }}
@@ -314,7 +246,7 @@ function OrdersPerDay(props) {
 								container
 								rowSpacing={1}
 								columnSpacing={0}
-								sx={{ border: "none" }} //1px solid
+								sx={{ border: "none" }}
 							>
 								<Grid item xs={12} lg={12}>
 									<Stack direction='row'>
@@ -336,7 +268,6 @@ function OrdersPerDay(props) {
 											<Stack direction='row' spacing={1}>
 												<Button
 													sx={{ gap: "1rem", p: 1 }}
-													// width='100px'
 													variant='contained'
 													color='error'
 													autoFocus
@@ -351,7 +282,6 @@ function OrdersPerDay(props) {
 												</Button>
 												<Button
 													sx={{ display: "flex", gap: "1rem", p: 1 }}
-													// width='100px'
 													variant='contained'
 													color='success'
 													onClick={() => {
@@ -373,7 +303,6 @@ function OrdersPerDay(props) {
 									>
 										<Grid item xs={4} lg={4}></Grid>
 										<Grid item xs={4} lg={4}>
-			
 											<>
 												<InputLabel
 													sx={{ textAlign: "left" }}
@@ -384,16 +313,22 @@ function OrdersPerDay(props) {
 												<Box bgcolor='primary.light' p={0}>
 													<TextField
 														select
-												
+														//value=""
+														// value={
+														// 	value === undefined ||
+														// 	value === null ||
+														// 	selected_menu.length === 0
+														// 		? ""
+														// 		: selected_menu[0].date
+														// }
+														defaultValue=''
 														onChange={(event) => {
-													
 															dispatchMenu({
 																type: "SET_SELECTED_MENU",
 																id: event.target.value,
 															});
 															getOrderNotes(event);
 														}}
-													
 														name='menu'
 														size='small'
 														sx={{
@@ -407,13 +342,17 @@ function OrdersPerDay(props) {
 															border: "1px solid",
 														}}
 													>
-														{menuOptions.map((item) => (
-															<MenuItem key={item._id} value={item._id}>
-																{new Date(item.date).toLocaleDateString(
-																	"en-ZA"
-																)}
-															</MenuItem>
-														))}
+														{menuOptions
+															.sort((a, b) =>
+																new Date(a.date) > new Date(b.date) ? -1 : 1
+															)
+															.map((item) => (
+																<MenuItem key={item._id} value={item._id}>
+																	{new Date(item.date).toLocaleDateString(
+																		"en-ZA"
+																	)}
+																</MenuItem>
+															))}
 													</TextField>
 												</Box>
 											</>
@@ -453,7 +392,6 @@ function OrdersPerDay(props) {
 																fontWeight='500'
 																variant='h6'
 																sx={{
-																	// mx: "auto",
 																	textAlign: "left",
 																	p: 0,
 																	m: 0,
@@ -467,13 +405,11 @@ function OrdersPerDay(props) {
 															display='flex'
 															color='white'
 															sx={{
-																// mx: "auto",
 																textAlign: "left",
 																p: 1,
 																m: 0,
 															}}
 														>
-															{/* </Grid> */}
 															<Grid container>
 																{notes.map((item, i) => {
 																	{
@@ -511,7 +447,6 @@ function OrdersPerDay(props) {
 												value={currentTabIndex}
 												onChange={handleTabChange}
 												centered
-												// variant='fullWidth'
 												TabIndicatorProps={{
 													style: {
 														backgroundColor: "#497777",

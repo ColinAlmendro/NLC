@@ -26,11 +26,11 @@ import {
 	Tabs,
 	Tab,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
+	// GridItem,
+	// Card,
+	// CardMedia,
 	CircularProgress,
-	Collapse,
+	//Collapse,
 } from "@mui/material";
 // import ExpandLess from "@mui/icons-material/ExpandLess";
 // import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -78,22 +78,14 @@ const validationSchema = Yup.object()
 
 function OrdersForm(props) {
 	const classes = useStyles();
-	//const auth = useContext(AuthContext);
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [disableMenu, setDisableMenu] = useState(true);
 	const { openPopup, setOpenPopup } = props;
 	const [open, setOpen] = useState(false);
 	const [openCartPopup, setOpenCartPopup] = useState(false);
 
-	// const [openMonday, setOpenMonday] = useState(false);
-	// const [openTuesday, setOpenTuesday] = useState(false);
-	// const [openWednesday, setOpenWednesday] = useState(false);
-	// const [openThursday, setOpenThursday] = useState(false);
-	// const [openFriday, setOpenFriday] = useState(false);
-	// const [openFrozen, setOpenFrozen] = useState(false);
-	// const [openPromo,setOpenPromo] = useState(false);
 	const [memo, setMemo] = useState("");
-	//const [promoId,setPromoId] = useState('');
 
 	let {
 		items,
@@ -106,7 +98,6 @@ function OrdersForm(props) {
 	} = useContext(CartContext);
 
 	useEffect(() => {
-		console.log("resetcart");
 		resetCart();
 	}, []);
 
@@ -125,33 +116,24 @@ function OrdersForm(props) {
 
 	const [record, setRecord] = useState(selected_order[0]);
 
-	// const [orderImage, setOrderImage] = useState(null);
-	// const [orderImagePreview, setOrderImagePreview] = useState(null);
-	// const [addItemDisabled, setAddItemDisabled] = useState(true);
 	const history = useNavigate();
 
 	const customerOptions = [...customers].sort((a, b) =>
-		a.name > b.name ? -1 : 1
+		a.name < b.name ? -1 : 1
 	);
 
 	const menuOptions = [...menus].sort((a, b) =>
-		new Date(a.date) < new Date(b.date) ? -1 : 1
+		new Date(a.date) > new Date(b.date) ? -1 : 1
 	);
-
-	//  let { items, isCartShowing } = useContext(CartContext);
 
 	let defaultOrder = {};
 	if (record) {
-		//	console.log("ISrecordY", record);
-		//	console.log("ISrecordYselectedCustomer", selected_customer[0]);
-		//	console.log("ISrecordYselectedMenu", selected_menu);
 		defaultOrder = {
 			...record,
 			customer: selected_customer[0]._id,
 			menu: selected_menu[0]._id,
 		};
 	} else {
-		//	console.log("ISrecordN", record);
 		defaultOrder = {
 			date: new Date(),
 			customer: "",
@@ -202,7 +184,6 @@ function OrdersForm(props) {
 		control,
 		name: `items`,
 	});
-	//console.log("xtra record",record)
 
 	const [orderItem, setOrderItem] = useState({
 		image: "",
@@ -215,32 +196,8 @@ function OrdersForm(props) {
 	const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
 	const handleTabChange = (e, tabIndex) => {
-		//	console.log(tabIndex);
 		setCurrentTabIndex(tabIndex);
 	};
-
-	// const handleMondayClick = () => {
-	// 	setOpenMonday(!openMonday);
-	// };
-	// const handleTuesdayClick = () => {
-	// 	setOpenTuesday(!openTuesday);
-	// };
-	// const handleWednesdayClick = () => {
-	// 	setOpenWednesday(!openWednesday);
-	// };
-	// const handleThursdayClick = () => {
-	// 	setOpenThursday(!openThursday);
-	// };
-	// const handleFridayClick = () => {
-	// 	setOpenFriday(!openFriday);
-	// };
-	// const handleFrozenClick = () => {
-	// 	setOpenFrozen(!openFrozen);
-	// };
-
-	// const handlePromoClick = () => {
-	// 	setOpenPromo(!openPromo);
-	// };
 
 	if (isLoading) {
 		return (
@@ -283,7 +240,6 @@ function OrdersForm(props) {
 												<Stack direction='row' spacing={1}>
 													<Button
 														sx={{ gap: "1rem" }}
-														// width='100px'
 														variant='contained'
 														color='error'
 														autoFocus
@@ -296,7 +252,6 @@ function OrdersForm(props) {
 													</Button>
 													<Button
 														sx={{ display: "flex", gap: "1rem" }}
-														// width='100px'
 														variant='contained'
 														color='success'
 														onClick={() => {
@@ -344,7 +299,6 @@ function OrdersForm(props) {
 																			});
 																			setDisableMenu(false);
 																		}}
-																		// label='Customer'
 																		name='customer'
 																		size='small'
 																		sx={{
@@ -398,7 +352,6 @@ function OrdersForm(props) {
 																				id: event.target.value,
 																			});
 																		}}
-																		//label='Menu'
 																		name='menu'
 																		size='small'
 																		sx={{
@@ -464,9 +417,7 @@ function OrdersForm(props) {
 																}`}
 																error={!!error}
 																fullWidth
-																//sx={{ mb: 1 }}
 																minRows={1}
-																//maxRows={10}
 																multiline='true'
 																sx={{
 																	"& fieldset": { border: "none" },
@@ -484,16 +435,15 @@ function OrdersForm(props) {
 											</Box>
 										</Grid>
 									</Grid>
-									{/* <Divider sx={{ my: 6 }} /> */}
+
 									{/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&&&&&&&&&&&&&&&&              NEW ITEM INPUT */}
-									{console.log("selPromo", selected_menu[0])}
+
 									{selected_menu[0] && (
 										<Grid item xs={12} lg={12}>
 											<Tabs
 												value={currentTabIndex}
 												onChange={handleTabChange}
 												centered
-												// variant='fullWidth'
 												TabIndicatorProps={{
 													style: {
 														backgroundColor: "#497777",

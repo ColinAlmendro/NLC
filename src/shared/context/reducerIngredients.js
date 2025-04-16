@@ -44,7 +44,7 @@ const reducerIngredients = (state, action) => {
 		}
 
 		case "SET_SELECTED_INGREDIENT": {
-			console.log("set selected ingredient", action.id);
+			//console.log("set selected ingredient", action.id);
 			return {
 				...state,
 				selected_ingredient: state.ingredients.filter(

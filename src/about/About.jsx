@@ -17,7 +17,7 @@ function About() {
 	const [isLoading, setIsLoading] = useState(false);
 	const { state, dispatch } = useValue();
 
-	console.log("about state", state);
+//	console.log("about state", state);
 	return (
 		<Container sx={{ border: "none" }}>
 			<Paper>

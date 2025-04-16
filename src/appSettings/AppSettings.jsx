@@ -34,11 +34,13 @@ import {
 import { toast } from "sonner";
 
 function AppSettings() {
-	const [open, setOpen] = useState(true);
+	// const [open, setOpen] = useState(true);
 	const auth = useContext(AuthContext);
 	const { state, dispatch } = useValue();
 	const [setting_id, setSetting_id] = useState(state.id);
+
 	const [appTitle, setAppTitle] = useState(state.app_title);
+	const [appSubTitle, setAppSubTitle] = useState(state.app_subtitle);
 	const [appLogo, setAppLogo] = useState(state.app_logo);
 	const [homeBgImage, setHomeBgImage] = useState(state.home_bg_image);
 	const [homeLogo, setHomeLogo] = useState(state.home_logo);
@@ -69,30 +71,30 @@ function AppSettings() {
 	const [aboutImagePreview, setAboutImagePreview] = useState(state.about_image);
 
 	const [areaList, setAreaList] = useState(state.area_list);
-	const [areaName, setAreaName] = useState(null);
-	const [areaKM, setAreaKM] = useState(null);
+	const [areaName, setAreaName] = useState("");
+	const [areaKM, setAreaKM] = useState("");
 	const [selectedArea, setSelectedArea] = useState("");
-	const [areaRate, setAreaRate] = useState(null);
+	const [areaRate, setAreaRate] = useState("");
 
 	const [recipeTypeList, setRecipeTypeList] = useState(state.recipe_type_list);
-	const [recipeType, setRecipeType] = useState(null);
+	const [recipeType, setRecipeType] = useState("");
 
 	const [selectedRecipeType, setSelectedRecipeType] = useState("");
 
 	const [ingredientCategoryList, setIngredientCategoryList] = useState(
 		state.ingredient_category_list
 	);
-	const [ingredientCategory, setIngredientCategory] = useState(null);
+	const [ingredientCategory, setIngredientCategory] = useState("");
 	const [selectedIngredientCategory, setSelectedIngredientCategory] = useState(
 		""
 	);
 	const [aaRate, setAARate] = useState(state.aa_rate);
 
 	const [priceList, setPriceList] = useState(state.price_list);
-	const [price, setPrice] = useState(null);
+	const [price, setPrice] = useState("");
 	const [selectedPrice, setSelectedPrice] = useState("");
-
 	const [disableAppTitle, setDisableAppTitle] = useState(true);
+	const [disableAppSubTitle, setDisableAppSubTitle] = useState(true);
 	const [disableAppLogo, setDisableAppLogo] = useState(true);
 	const [disableHomeBgImage, setDisableHomeBgImage] = useState(true);
 	const [disableHomeLogo, setDisableHomeLogo] = useState(true);
@@ -122,7 +124,7 @@ function AppSettings() {
 	const history = useNavigate();
 
 	const handleSubmit = async () => {
-		console.log("clicked", state);
+		//console.log("clicked", state);
 		setIsLoading(true);
 
 		try {
@@ -137,6 +139,7 @@ function AppSettings() {
 
 					body: JSON.stringify({
 						app_title: state.app_title,
+						app_subtitle: state.app_subtitle,
 						app_logo: state.app_logo,
 						home_logo: state.home_logo,
 						home_bg_image: state.home_bg_image,
@@ -170,7 +173,7 @@ function AppSettings() {
 			});
 			return data.appSettings;
 		} catch (err) {
-			console.log("updateErr:", err);
+			//console.log("updateErr:", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -185,7 +188,7 @@ function AppSettings() {
 		setIsLoading(true);
 		try {
 			let imageUrl;
-			console.log("file:", file);
+			//	console.log("file:", file);
 			const imgFile = new FormData();
 			imgFile.append("file", file);
 			imgFile.append("cloud_name", process.env.REACT_APP_CLOUDINARY_NAME);
@@ -264,7 +267,7 @@ function AppSettings() {
 			setIsLoading(false);
 			return imageUrl;
 		} catch (error) {
-			console.log("cloudinary upload error:", error);
+			//console.log("cloudinary upload error:", error);
 			toast.error(error, {
 				style: {
 					background: "red",
@@ -379,12 +382,12 @@ function AppSettings() {
 			setAreaName("");
 			setAreaKM(0);
 		} else {
-			console.log("arealist", areaList);
-			console.log("area t", e.target);
+			// console.log("arealist", areaList);
+			// console.log("area t", e.target);
 
 			let filteredArea = areaList;
 			filteredArea = filteredArea.filter((a) => a.id === e.target.value);
-			console.log("filteredArea", filteredArea);
+			//console.log("filteredArea", filteredArea);
 			setAreaName(filteredArea[0].area);
 			setAreaKM(filteredArea[0].delivery_km);
 		}
@@ -442,7 +445,7 @@ function AppSettings() {
 			filteredRecipeType = filteredRecipeType.filter(
 				(a) => a.value === e.target.value
 			);
-			console.log("filteredRecipeType", filteredRecipeType);
+			//console.log("filteredRecipeType", filteredRecipeType);
 			setRecipeType(filteredRecipeType[0].value);
 		}
 	};
@@ -491,19 +494,19 @@ function AppSettings() {
 	// //////////////////////////////////////////////////////////////////////////
 
 	const handleIngredientCategoryEdit = (e) => {
-		console.log("ingredientCategorylist", ingredientCategoryList);
-		console.log("selectedcategory", e.target);
+		//console.log("ingredientCategorylist", ingredientCategoryList);
+		//console.log("selectedcategory", e.target);
 		setSelectedIngredientCategory(e.target.value);
 		if (e.target.value === "") {
 			setIngredientCategory("");
 		} else {
-			console.log("ingredientCategory t", e.target);
+			//console.log("ingredientCategory t", e.target);
 
 			let filteredIngredientCategory = ingredientCategoryList;
 			filteredIngredientCategory = filteredIngredientCategory.filter(
 				(a) => a.value === e.target.value
 			);
-			console.log("filteredIngredientCategory", filteredIngredientCategory);
+			//console.log("filteredIngredientCategory", filteredIngredientCategory);
 			setIngredientCategory(filteredIngredientCategory[0].value);
 		}
 	};
@@ -551,24 +554,24 @@ function AppSettings() {
 	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	const handlePriceEdit = (e) => {
-		console.log("price val", e.target.value);
+		//console.log("price val", e.target.value);
 		setSelectedPrice(e.target.value);
 		if (e.target.value === "") {
 			setPrice("");
 		} else {
-			console.log("pricelist", priceList);
-			console.log("price t", e.target);
+			//console.log("pricelist", priceList);
+			//console.log("price t", e.target);
 
 			let filteredPrice = priceList;
 			filteredPrice = filteredPrice.filter((a) => a.value === e.target.value);
-			console.log("filteredPrice", filteredPrice);
+			//console.log("filteredPrice", filteredPrice);
 			setPrice(filteredPrice[0].value);
 		}
 	};
 
 	const updatePriceList = () => {
 		let arrayCopy = [];
-		console.log("UselectedPrice", selectedPrice);
+		//console.log("UselectedPrice", selectedPrice);
 		if (selectedPrice === "") {
 			const newPrice = {
 				value: price,
@@ -721,7 +724,7 @@ function AppSettings() {
 											disabled={disableAppTitle}
 											color='primary'
 											onClick={() => {
-												setDisableAppTitle(true), setAppTitle(state.aa_rate);
+												setDisableAppTitle(true), setAppTitle(state.app_title);
 											}}
 										>
 											<CloseIcon
@@ -755,6 +758,90 @@ function AppSettings() {
 								</Grid>
 							</Grid>
 
+							<Grid
+								container
+								rowSpacing={1}
+								columnSpacing={0}
+								sx={{ border: "none" }}
+							>
+								<Grid item xs={12} lg={9}>
+									<InputLabel sx={{ textAlign: "left" }}>Sub Title</InputLabel>
+									<Box bgcolor='primary.light' p={0}>
+										<TextField
+											disabled={disableAppSubTitle}
+											sx={{
+												"& fieldset": { border: "none" },
+												"& .MuiInputBase-root": {
+													"& input": {
+														textAlign: "left",
+													},
+												},
+												border: "1px solid",
+											}}
+											name='app_title'
+											value={appSubTitle}
+											onChange={(e) => setAppSubTitle(e.target.value)}
+											fullWidth={true}
+										/>
+									</Box>
+								</Grid>
+
+								<Grid item xs={12} lg={3}>
+									<Stack direction='row' p={2} spacing={2}>
+										<Controls.ActionButton
+											disabled={disableAppSubTitle ? false : true}
+											color='primary'
+											onClick={() => {
+												setDisableAppSubTitle(false);
+											}}
+										>
+											<EditOutlinedIcon
+												fontSize='small'
+												sx={{
+													color: !disableAppSubTitle ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
+											disabled={disableAppSubTitle}
+											color='primary'
+											onClick={() => {
+												setDisableAppSubTitle(true),
+													setAppSubTitle(state.app_subtitle);
+											}}
+										>
+											<CloseIcon
+												fontSize='small'
+												sx={{
+													color: disableAppSubTitle ? "primary.light" : "blue",
+												}}
+											/>
+										</Controls.ActionButton>
+
+										<Controls.ActionButton
+											disabled={disableAppSubTitle}
+											color='primary'
+											onClick={() => {
+												dispatch({
+													type: "UPDATE_APP_SUBTITLE",
+													payload: { app_subtitle: appSubTitle },
+												}),
+													setDisableAppSubTitle(true),
+													setIsLoading(false);
+											}}
+										>
+											<SaveIcon
+												fontSize='small'
+												sx={{
+													color: disableAppSubTitle ? "primary.light" : "green",
+												}}
+											/>
+										</Controls.ActionButton>
+									</Stack>
+								</Grid>
+							</Grid>
+							{/* 88888888888888888888888888888888888888888888888888 */}
 							<Grid
 								container
 								// my={4}
@@ -799,6 +886,8 @@ function AppSettings() {
 												},
 											},
 											border: "none",
+											width: "120px",
+											overFlow: "hidden",
 										}}
 										onChange={(event) => {
 											handelImageChange(event);
@@ -827,7 +916,7 @@ function AppSettings() {
 											disabled={disableAppLogo}
 											color='primary'
 											onClick={() => {
-												setDisableAppLogo(true), setAppLogo(state.aa_rate);
+												setDisableAppLogo(true), setAppLogo(state.app_logo);
 											}}
 										>
 											<CloseIcon
@@ -917,7 +1006,7 @@ function AppSettings() {
 											color='primary'
 											onClick={() => {
 												setDisableContactLocation(true),
-													setContactLocation(state.aa_rate);
+													setContactLocation(state.contact_location);
 											}}
 										>
 											<CloseIcon
@@ -1005,7 +1094,7 @@ function AppSettings() {
 											color='primary'
 											onClick={() => {
 												setDisableContactName(true),
-													setContactName(state.aa_rate);
+													setContactName(state.contact_name);
 											}}
 										>
 											<CloseIcon
@@ -1091,7 +1180,7 @@ function AppSettings() {
 											color='primary'
 											onClick={() => {
 												setDisableContactEmail(true),
-													setContactEmail(state.aa_rate);
+													setContactEmail(state.contact_email);
 											}}
 										>
 											<CloseIcon
@@ -1179,7 +1268,7 @@ function AppSettings() {
 											color='primary'
 											onClick={() => {
 												setDisableContactCellphone(true),
-													setContactCellphone(state.aa_rate);
+													setContactCellphone(state.contact_cellphone);
 											}}
 										>
 											<CloseIcon
@@ -1270,6 +1359,8 @@ function AppSettings() {
 												},
 											},
 											border: "none",
+											width: "120px",
+											overFlow: "hidden",
 										}}
 										onChange={(event) => {
 											handelImageChange(event);
@@ -1299,7 +1390,7 @@ function AppSettings() {
 											color='primary'
 											onClick={() => {
 												setDisableHomeBgImage(true),
-													setHomeBgImage(state.aa_rate);
+													setHomeBgImage(state.home_bg_image);
 											}}
 										>
 											<CloseIcon
@@ -1373,6 +1464,8 @@ function AppSettings() {
 												},
 											},
 											border: "none",
+											width: "120px",
+											overFlow: "hidden",
 										}}
 										onChange={(event) => {
 											handelImageChange(event);
@@ -1401,7 +1494,7 @@ function AppSettings() {
 											disabled={disableHomeLogo}
 											color='primary'
 											onClick={() => {
-												setDisableHomeLogo(true), setHomeLogo(state.aa_rate);
+												setDisableHomeLogo(true), setHomeLogo(state.home_logo);
 											}}
 										>
 											<CloseIcon
@@ -1483,6 +1576,8 @@ function AppSettings() {
 												},
 											},
 											border: "none",
+											width: "120px",
+											overFlow: "hidden",
 										}}
 										onChange={(event) => {
 											handelImageChange(event);
@@ -1598,7 +1693,7 @@ function AppSettings() {
 											color='primary'
 											onClick={() => {
 												setDisableAboutIntro(true),
-													setAboutIntro(state.aa_rate);
+													setAboutIntro(state.about_intro);
 											}}
 										>
 											<CloseIcon
@@ -1683,7 +1778,8 @@ function AppSettings() {
 											disabled={disableAboutText}
 											color='primary'
 											onClick={() => {
-												setDisableAboutText(true), setAboutText(state.aa_rate);
+												setDisableAboutText(true),
+													setAboutText(state.about_text);
 											}}
 										>
 											<CloseIcon
@@ -1767,6 +1863,8 @@ function AppSettings() {
 												},
 											},
 											border: "none",
+											width: "120px",
+											overFlow: "hidden",
 										}}
 										onChange={(event) => {
 											handelImageChange(event);
@@ -1795,7 +1893,8 @@ function AppSettings() {
 											disabled={disableMenuImage}
 											color='primary'
 											onClick={() => {
-												setDisableMenuImage(true), setMenuImage(state.aa_rate);
+												setDisableMenuImage(true),
+													setMenuImage(state.menu_image);
 											}}
 										>
 											<CloseIcon
@@ -1869,6 +1968,8 @@ function AppSettings() {
 												},
 											},
 											border: "none",
+											width: "120px",
+											overFlow: "hidden",
 										}}
 										onChange={(event) => {
 											handelImageChange(event);
@@ -1897,7 +1998,7 @@ function AppSettings() {
 											disabled={disableMenuLogo}
 											color='primary'
 											onClick={() => {
-												setDisableMenuLogo(true), setMenuLogo(state.aa_rate);
+												setDisableMenuLogo(true), setMenuLogo(state.menu_logo);
 											}}
 										>
 											<CloseIcon
@@ -1987,7 +2088,7 @@ function AppSettings() {
 											color='primary'
 											onClick={() => {
 												setDisableFooterAbout(true),
-													setFooterAbout(state.aa_rate);
+													setFooterAbout(state.footer_about);
 											}}
 										>
 											<CloseIcon
@@ -2078,7 +2179,7 @@ function AppSettings() {
 											disabled={disableFacebook}
 											color='primary'
 											onClick={() => {
-												setDisableFacebook(true), setFacebook(state.aa_rate);
+												setDisableFacebook(true), setFacebook(state.facebook);
 											}}
 										>
 											<CloseIcon
@@ -2161,7 +2262,8 @@ function AppSettings() {
 											disabled={disableInstagram}
 											color='primary'
 											onClick={() => {
-												setDisableInstagram(true), setInstagram(state.aa_rate);
+												setDisableInstagram(true),
+													setInstagram(state.instagram);
 											}}
 										>
 											<CloseIcon
@@ -2329,11 +2431,13 @@ function AppSettings() {
 											<MenuItem value=''>
 												<em>Add New</em>
 											</MenuItem>
-											{areaList.map((option, id) => (
-												<MenuItem key={id} value={option.id}>
-													{option.area} - {option.delivery_km}
-												</MenuItem>
-											))}
+											{areaList
+												.sort((a, b) => a.area.localeCompare(b.area))
+												.map((option, id) => (
+													<MenuItem key={id} value={option.id}>
+														{option.area} - {option.delivery_km}
+													</MenuItem>
+												))}
 										</TextField>
 									</Box>
 								</Grid>
@@ -2537,11 +2641,13 @@ function AppSettings() {
 											<MenuItem value=''>
 												<em>Add New</em>
 											</MenuItem>
-											{recipeTypeList.map((option, id) => (
-												<MenuItem key={id} value={option.value}>
-													{option.value}
-												</MenuItem>
-											))}
+											{recipeTypeList
+												.sort((a, b) => a.value.localeCompare(b.value))
+												.map((option, id) => (
+													<MenuItem key={id} value={option.value}>
+														{option.value}
+													</MenuItem>
+												))}
 										</TextField>
 									</Box>
 								</Grid>
@@ -2707,11 +2813,13 @@ function AppSettings() {
 											<MenuItem value=''>
 												<em>Add New</em>
 											</MenuItem>
-											{ingredientCategoryList.map((option, id) => (
-												<MenuItem key={id} value={option.value}>
-													{option.value}
-												</MenuItem>
-											))}
+											{ingredientCategoryList
+												.sort((a, b) => a.value.localeCompare(b.value))
+												.map((option, id) => (
+													<MenuItem key={id} value={option.value}>
+														{option.value}
+													</MenuItem>
+												))}
 										</TextField>
 									</Box>
 								</Grid>

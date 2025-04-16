@@ -3,7 +3,7 @@ import { AuthContext } from "../../../context/auth-context";
 import { useValue } from "../../../context/SettingsProvider";
 import { NavLink } from "react-router-dom";
 import DropdownAdmin from "../Dropdown/DropdownAdmin";
-import MenuIcon from "@mui/icons-material/Menu";
+//import MenuIcon from "@mui/icons-material/Menu";
 ;
 import "./Navbar.css";
 
@@ -36,14 +36,24 @@ function Navbar() {
 	return (
 		<>
 			<nav className='navbar'>
+				
+					{/* <NavLink to='/' className='navbar-logo'>
+						<img
+							src={state.app_logo}
+							width='80px'
+							height='60px'
+							//alt='App Logo'
+						/>
+					</NavLink> */}
+				
 
-				<NavLink to='/' className='navbar-logo'>
+				<NavLink to='/' className='navbar-title'>
 					{state.app_title}
 					{/* Next Level Cuisine */}
 				</NavLink>
 
 				<div className='menu-icon' onClick={handleClick}>
-					<MenuIcon />
+					{/* <MenuIcon /> */}
 					<i className={click ? "fas fa-times" : "fas fa-bars"} />
 				</div>
 
@@ -55,11 +65,7 @@ function Navbar() {
 							onMouseEnter={onMouseEnterAdmin}
 							onMouseLeave={onMouseLeaveAdmin}
 						>
-							<NavLink
-								to='/admin'
-								className='nav-links'
-								
-							>
+							<NavLink to='/admin' className='nav-links'>
 								Admin <i className='fas fa-caret-down'></i>
 							</NavLink>
 							{dropdownAdmin && (

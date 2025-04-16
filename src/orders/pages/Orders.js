@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import OrdersForm from "./OrdersForm.jsx";
 import ViewOrder from "./ViewOrder.jsx";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import {
 	Container,
 	Box,
@@ -12,21 +12,21 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	//Divider,
+
 	CircularProgress,
 	InputAdornment,
-	//Snackbar,
+	
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
-//import AddIcon from "@mui/icons-material/Add";
+
 import Popup from "../../components/Popup.js";
 import ViewPopup from "./ViewPopup.js";
-//import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+
 import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
-//import CloseIcon from "@mui/icons-material/Close";
+
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
@@ -34,8 +34,6 @@ import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 import { toast } from "sonner";
-
-// import "./OrderTable.css";
 
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
@@ -64,7 +62,7 @@ const headCells = [
 ];
 
 export default function Order() {
-	//console.log("loading order");
+	
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -83,14 +81,14 @@ export default function Order() {
 	} = useCustomersValue();
 
 	const classes = useStyles();
-	const [recordForEdit, setRecordForEdit] = useState(null);
+	// const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...orders];
-	//console.log("records", records);
+	
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-		//	console.log("filteritems", items);
+		
 			return items;
 		},
 	});
@@ -109,7 +107,7 @@ export default function Order() {
 
 	useEffect(() => {
 		async function fetchOrders() {
-			//console.log("fetching orders");
+			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -123,14 +121,14 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-				//	console.log("Orders list :", data.orders);
+				
 				dispatchOrder({
 					type: "UPDATE_ORDERS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+			//	console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -145,7 +143,7 @@ export default function Order() {
 
 	useEffect(() => {
 		async function fetchMenus() {
-			//console.log("fetching orders");
+			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -159,14 +157,14 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-					console.log("Menus list :", data.menus);
+			
 				dispatchMenu({
 					type: "UPDATE_MENUS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -181,7 +179,7 @@ export default function Order() {
 
 	useEffect(() => {
 		async function fetchCustomers() {
-			//console.log("fetching orders");
+			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -195,14 +193,14 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-				//		console.log("customers list :", data.customers);
+				
 				dispatchCustomer({
 					type: "UPDATE_CUSTOMERS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -237,7 +235,7 @@ export default function Order() {
 				});
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -250,60 +248,8 @@ export default function Order() {
 		fetchPromotions();
 	}, []);
 
-	const insertOrder = (order) => {
-		//		console.log("insertdata:", order),
-		dispatchOrder({
-			type: "INSERT_ORDER",
-			order,
-		});
-	};
 
-	const updateOrder = (order) => {
-		//		console.log("updatedata:", order),
-		dispatchOrder({
-			type: "UPDATE_ORDER",
-			order,
-		});
-	};
-
-	const deleteOrderItem = async (_id) => {
-		//		console.log("deleteitem:", _id);
-		try {
-			setIsLoading(true);
-			fetch(process.env.REACT_APP_BACKEND_URL + `/orders/delete/${_id}`, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: "Bearer " + auth.token,
-				},
-			})
-				.then((response) => response.json())
-				.then(() => {
-					dispatchOrder({
-						type: "DELETE_ORDER",
-						_id,
-					});
-					setIsLoading(false);
-					// alert("Order deleted !");
-					toast.success("Order deleted", {
-						style: {
-							background: "green",
-							color: "white",
-						},
-					});
-
-				});
-		} catch (err) {
-			console.log("Delete error", err);
-			toast.error(err, {
-				style: {
-					background: "red",
-					color: "white",
-				},
-			});
-			setIsLoading(false);
-		}
-	};
+	
 
 	const {
 		TblContainer,
@@ -328,49 +274,7 @@ export default function Order() {
 		});
 	};
 
-	// const addOrEdit = (order, resetForm) => {
-	// 	if (order._id == 0) insertOrder(order);
-	// 	else updateOrder(order);
-	// 	resetForm();
-	// 	setRecordForEdit(null);
-	// 	setOpenPopup(false);
-	// 	// setRecords(getAllOrders());
-	// 	setNotify({
-	// 		isOpen: true,
-	// 		message: "Submitted Successfully",
-	// 		type: "success",
-	// 	});
-	// };
-
-	// const openInPopup = (item) => {
-	// 	// setRecordForEdit(item);
-	// 	dispatchOrder({
-	// 		type: "SET_SELECTED_ORDER",
-	// 		_id: item._id,
-	// 	});
-	// 	dispatchMenu({
-	// 		type: "SET_SELECTED_MENU",
-	// 		id: item.menu.id,
-	// 	});
-	// 	dispatchCustomer({
-	// 		type: "SET_SELECTED_CUSTOMER",
-	// 		id: item.customer.id,
-	// 	});
-	// 	setOpenPopup(true);
-	// };
-
-	// const onDelete = (_id) => {
-	// 	setConfirmDialog({
-	// 		...confirmDialog,
-	// 		isOpen: false,
-	// 	});
-	// 	deleteOrderItem(_id);
-	// 	setNotify({
-	// 		isOpen: true,
-	// 		message: "Deleted Successfully",
-	// 		type: "error",
-	// 	});
-	// };
+	
 	let orderDate = Date();
 	let menuDate = Date();
 
@@ -421,9 +325,9 @@ export default function Order() {
 							onChange={handleSearch}
 						/>
 						<Button
-							//	text='Add New'
+							
 							variant='contained'
-							//startIcon={<AddIcon />}
+							
 							className={classes.newButton}
 							onClick={() => {
 								dispatchOrder({
@@ -436,7 +340,7 @@ export default function Order() {
 										type: "RESET_SELECTED_CUSTOMER",
 									}),
 									setOpenPopup(true);
-								// setRecordForEdit(null);
+								
 							}}
 						>
 							{" "}
@@ -447,10 +351,11 @@ export default function Order() {
 						<TblHead />
 						<TableBody>
 							{recordsAfterPagingAndSorting().map((item) => {
+								//console.log("orderitem",item);
 								orderDate = new Date(item.date).toLocaleDateString("en-ZA");
 								menuDate = new Date(item.menu.date).toLocaleDateString("en-ZA");
 								return (
-									<TableRow key={item._id}>
+									<TableRow key={item.date}>
 										<TableCell width='15%'>{orderDate}</TableCell>
 										<TableCell width='20%'>{item.customer.name}</TableCell>
 										<TableCell width='20%'>{item.customer.surname}</TableCell>
@@ -489,21 +394,7 @@ export default function Order() {
 													}}
 												/>
 											</Controls.ActionButton>
-											{/* <Controls.ActionButton
-												color='secondary'
-												onClick={() => {
-													setConfirmDialog({
-														isOpen: true,
-														title: "Are you sure to delete this record?",
-														subTitle: "You can't undo this operation",
-														onConfirm: () => {
-															onDelete(item._id);
-														},
-													});
-												}}
-											>
-												<CloseIcon fontSize='small' />
-											</Controls.ActionButton> */}
+											
 										</TableCell>
 									</TableRow>
 								);

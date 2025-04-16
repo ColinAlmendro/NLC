@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import IngredientsForm from "./IngredientsForm.jsx";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import {
 	Container,
 	Box,
@@ -11,7 +11,7 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	Divider,
+	
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
@@ -66,14 +66,14 @@ export default function Ingredients() {
 	} = useIngredientsValue();
 
 	const classes = useStyles();
-	const [recordForEdit, setRecordForEdit] = useState(null);
+	// const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...ingredients];
-	console.log("record ingredient",records);
+	//console.log("record ingredient",records);
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			console.log("filteritems", items);
+			//console.log("filteritems", items);
 			return items;
 		},
 	});
@@ -109,31 +109,21 @@ export default function Ingredients() {
 				dispatchIngredient({ type: "UPDATE_INGREDIENTS", data });
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
-									style: {
-										background: "red",
-										color: "white",
-									},
-								});
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
 			}
 		}
 		fetchIngredients();
 	}, [location.key]);
 
-	// const insertIngredient = (ingredient) => {
-	// 	console.log("insertdata:", ingredient),
-	// 		dispatchIngredient({ type: "INSERT_INGREDIENT", ingredient });
-	// };
-
-	// const updateIngredient = (ingredient) => {
-	// 	console.log("updatedata:", ingredient),
-	// 		dispatchIngredient({ type: "UPDATE_INGREDIENT", ingredient });
-	// };
-
 	const deleteIngredientItem = async (_id) => {
-		console.log("deleteitem:", _id);
+		//console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/ingredients/delete/${_id}`, {
@@ -147,22 +137,22 @@ export default function Ingredients() {
 				.then(() => {
 					dispatchIngredient({ type: "DELETE_INGREDIENT", _id });
 					setIsLoading(false);
-					// alert("Ingredient deleted !");
+
 					toast.success("Ingredient deleted", {
-											style: {
-												background: "green",
-												color: "white",
-											},
-										});
+						style: {
+							background: "green",
+							color: "white",
+						},
+					});
 				});
 		} catch (err) {
-			console.log("Delete error", err);
+			//console.log("Delete error", err);
 			toast.error(err, {
-								style: {
-									background: "red",
-									color: "white",
-								},
-							});
+				style: {
+					background: "red",
+					color: "white",
+				},
+			});
 			setIsLoading(false);
 		}
 	};
@@ -186,26 +176,6 @@ export default function Ingredients() {
 			},
 		});
 	};
-
-	// const addOrEdit = (ingredient, resetForm) => {
-	// 	if (ingredient._id == 0) insertIngredient(ingredient);
-	// 	else updateIngredient(ingredient);
-	// 	resetForm();
-	// 	setRecordForEdit(null);
-	// 	setOpenPopup(false);
-	// 	// setRecords(getAllIngredients());
-	// 	setNotify({
-	// 		isOpen: true,
-	// 		message: "Submitted Successfully",
-	// 		type: "success",
-	// 	});
-	// };
-
-	// const openInPopup = (item) => {
-	// 	// setRecordForEdit(item);
-	// 	dispatchIngredient({ type: "SET_SELECTED_INGREDIENT", _id: item._id });
-	// 	setOpenPopup(true);
-	// };
 
 	const onDelete = (_id) => {
 		setConfirmDialog({
@@ -313,7 +283,7 @@ export default function Ingredients() {
 											{item.description}
 										</TableCell>
 										<TableCell
-											numeric
+											numeric='true'
 											sx={{
 												borderBottom: "none",
 												paddingTop: 0.8,

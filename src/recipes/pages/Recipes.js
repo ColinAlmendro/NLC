@@ -12,17 +12,15 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	Divider,
 	CircularProgress,
 	InputAdornment,
-	Snackbar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
-// import * as menuController from "../controllers/menuController";
+
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
+
 import Popup from "../../components/Popup.js";
 import ViewPopup from "./ViewPopup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -30,15 +28,13 @@ import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
-//import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
-//import { useHttpClient } from "../../shared/hooks/http-hook";
-import { AuthContext } from "../../shared/context/auth-context.js";
-import { useLocation } from "react-router";
-import { useRecipeValue } from "../../shared/context/RecipeProvider.js";
- import "./Recipe.css";
- import "./RecipeTable.css";
-import { toast } from "sonner";
 
+import { AuthContext } from "../../shared/context/auth-context.js";
+import { useLocation } from "react-router-dom";
+import { useRecipeValue } from "../../shared/context/RecipeProvider.js";
+import "./Recipe.css";
+import "./RecipeTable.css";
+import { toast } from "sonner";
 
 const useStyles = makeStyles((theme) => ({
 	pageContent: {
@@ -61,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-	// { id: "_id", label: "Id" },
 	{ id: "image", label: "Image", disableSorting: true },
 	{ id: "category", label: "Type" },
 	{ id: "freezable", label: "Freeze" },
@@ -75,7 +70,6 @@ const headCells = [
 ];
 
 export default function Recipes() {
-	//console.log("loading recipe");
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -88,11 +82,9 @@ export default function Recipes() {
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...recipes];
-	console.log("reciperecords", records);
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			console.log("filteritems", items);
 			return items;
 		},
 	});
@@ -111,7 +103,6 @@ export default function Recipes() {
 	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&   Recipes
 	useEffect(() => {
 		async function fetchRecipes() {
-			//console.log("fetching recipes");
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -125,11 +116,11 @@ export default function Recipes() {
 					}
 				);
 				const data = await response.json();
-				console.log("Recipes list :", data.recipes);
+
 				dispatchRecipe({ type: "UPDATE_RECIPES", data });
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -143,18 +134,9 @@ export default function Recipes() {
 	}, [location.key]);
 	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Recipes
 
-	const insertRecipe = (recipe) => {
-		console.log("insertdata:", recipe),
-			dispatchRecipe({ type: "INSERT_RECIPE", recipe });
-	};
-
-	const updateRecipe = (recipe) => {
-		console.log("updatedata:", recipe),
-			dispatchRecipe({ type: "UPDATE_RECIPE", recipe });
-	};
-
+	
 	const deleteRecipeItem = async (_id) => {
-		console.log("deleteitem:", _id);
+	//	console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/recipes/delete/${_id}`, {
@@ -168,17 +150,16 @@ export default function Recipes() {
 				.then(() => {
 					dispatchRecipe({ type: "DELETE_RECIPE", _id });
 					setIsLoading(false);
-					//alert("Recipe deleted !");
+
 					toast.success("Recipe deleted", {
 						style: {
 							background: "green",
 							color: "white",
 						},
 					});
-
 				});
 		} catch (err) {
-			console.log("Delete error", err);
+		//	console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -209,26 +190,7 @@ export default function Recipes() {
 		});
 	};
 
-	const addOrEdit = (menu, resetForm) => {
-		if (menu._id == 0) insertMenu(menu);
-		else updateMenu(menu);
-		resetForm();
-		setRecordForEdit(null);
-		setOpenPopup(false);
-		// setRecords(getAllMenus());
-		setNotify({
-			isOpen: true,
-			message: "Submitted Successfully",
-			type: "success",
-		});
-	};
-
-	const openInPopup = (item) => {
-		// setRecordForEdit(item);
-		dispatchRecipe({ type: "SET_SELECTED_RECIPE", _id: item._id });
-		setOpenPopup(true);
-	};
-
+	
 	const onDelete = (_id) => {
 		setConfirmDialog({
 			...confirmDialog,
@@ -242,6 +204,7 @@ export default function Recipes() {
 		});
 	};
 	let orderCount = 0;
+	let ingredientsPrice = 0;
 
 	if (isLoading) {
 		return (
@@ -256,8 +219,7 @@ export default function Recipes() {
 				<Paper
 					textalign='center'
 					className={classes.pageContent}
-					sx={{ width:"100%", p: 1 }}
-				
+					sx={{ width: "100%", p: 1 }}
 				>
 					<Box
 						sx={{
@@ -271,8 +233,8 @@ export default function Recipes() {
 							Recipe Manager
 						</Typography>
 					</Box>
-					{/* <Divider /> */}
-					<Toolbar style={{ width:"100%" }}>
+
+					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Recipes'
 							className={classes.searchInput}
@@ -287,14 +249,12 @@ export default function Recipes() {
 						/>
 						<Button
 							variant='contained'
-							// startIcon={<AddIcon />}
 							className={classes.newButton}
 							onClick={() => {
 								dispatchRecipe({
 									type: "RESET_SELECTED_RECIPE",
 								}),
 									setOpenPopup(true);
-								// setRecordForEdit(null);
 							}}
 						>
 							{" "}
@@ -306,7 +266,13 @@ export default function Recipes() {
 						<TableBody>
 							{recordsAfterPagingAndSorting().map((item) => {
 								{
-									/* console.log("recipe item", item); */
+									
+									ingredientsPrice = item.ingredients.reduce(
+										(accumulator, item) => {
+											return (accumulator += item.ingredient.price * item.qty);
+										},
+										0
+									);
 								}
 								item.orders ? (orderCount = item.orders) : (orderCount = 0);
 								return (
@@ -324,10 +290,10 @@ export default function Recipes() {
 										<TableCell width='10%'>{item.name}</TableCell>
 										<TableCell width='15%'>{item.description}</TableCell>
 										<TableCell width='10%'>
-											{Number(item.cost).toFixed(2)}
+											{Number(ingredientsPrice / item.feeds).toFixed(2)}
 										</TableCell>
 										<TableCell width='10%'>
-											{Number(item.cost * item.feeds).toFixed(2)}
+											{Number(ingredientsPrice).toFixed(2)}
 										</TableCell>
 										<TableCell width='10%'>
 											{Number(item.price).toFixed(2)}
@@ -344,7 +310,6 @@ export default function Recipes() {
 													});
 
 													setOpenViewPopup(true);
-													// openInPopup(item);
 												}}
 											>
 												<PageviewOutlinedIcon
@@ -362,7 +327,6 @@ export default function Recipes() {
 														id: item._id,
 													}),
 														setOpenPopup(true);
-													// openInPopup(item);
 												}}
 											>
 												<EditOutlinedIcon
@@ -404,7 +368,6 @@ export default function Recipes() {
 			<Popup title='Recipe' openPopup={openPopup} setOpenPopup={setOpenPopup}>
 				{/* <RecipeForm /> */}
 				<RecipeForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
-				{/* <RecipeForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
 			</Popup>
 			<ViewPopup
 				title='Loading...'

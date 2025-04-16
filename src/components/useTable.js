@@ -96,6 +96,7 @@ export default function useTable(records, headCells, filterFn) {
 	};
 
 	const handleChangeRowsPerPage = (event) => {
+		//console.log("handleChangeRowsPerPage", event.target.value);
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(0);
 	};
@@ -108,7 +109,8 @@ export default function useTable(records, headCells, filterFn) {
 			rowsPerPage={rowsPerPage}
 			count={records.length}
 			onPageChange={handleChangePage}
-			onChangeRowsPerPage={handleChangeRowsPerPage}
+			//onChangeRowsPerPage={handleChangeRowsPerPage}
+			onRowsPerPageChange={handleChangeRowsPerPage}
 		/>
 	);
 

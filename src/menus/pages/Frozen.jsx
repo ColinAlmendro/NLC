@@ -9,7 +9,6 @@ import {
 	List,
 	ListItem,
 	Grid,
-	GridItem,
 	Card,
 	CardMedia,
 	IconButton,
@@ -28,8 +27,6 @@ import {
 // import { DevTool } from "@hookform/devtools";
 
 import "./Listitem.css";
-
-
 
 const Frozen = ({ weekday }) => {
 	const { control } = useFormContext();
@@ -53,27 +50,23 @@ const Frozen = ({ weekday }) => {
 		dispatch,
 	} = useMenuValue();
 
-console.log("frozen_recipes", frozen_recipes);
+	const { fields, append, remove } = useFieldArray({
+		control,
+		name: `${weekday}`,
+	});
 
-
-const { fields, append, remove } = useFieldArray({
-	control,
-	name: `${weekday}`,
-});
-
-const [meal, setMeal] = useState({
-	
-	image: "",
-	main: "",
-	mainname: "",
-	maindescription: "",
-	side: "",
-	sidename: "",
-	sidedescription: "",
-	count:1,
-	cost:0,
-	price:0,
-});
+	const [meal, setMeal] = useState({
+		image: "",
+		main: "",
+		mainname: "",
+		maindescription: "",
+		side: "",
+		sidename: "",
+		sidedescription: "",
+		count: 1,
+		cost: 0,
+		price: 0,
+	});
 
 	const dayMainChange = (e) => {
 		let obj = frozen_recipes.find((o) => o._id === e.target.value);
@@ -93,7 +86,6 @@ const [meal, setMeal] = useState({
 		}));
 
 		document.getElementById("dayMainDescInput").value = obj.description;
-//		console.log("GETMealmain", meal);
 	};
 	const daySideChange = (e) => {
 		let obj = side_recipes.find((o) => o._id === e.target.value);
@@ -109,10 +101,7 @@ const [meal, setMeal] = useState({
 		}));
 
 		document.getElementById("daySideDescInput").value = obj.description;
-//		console.log("GETMealside", meal);
 	};
-
-	// const onSubmit = (data) => console.log(data);
 
 	return (
 		<Grid item xs={12} lg={12}>
@@ -127,7 +116,6 @@ const [meal, setMeal] = useState({
 						}}
 					>
 						<Typography fontWeight='700' variant='h6'>
-							
 							Frozen Meals
 						</Typography>
 					</Box>
@@ -298,7 +286,7 @@ const [meal, setMeal] = useState({
 				name={weekday}
 				control={control}
 				render={({ fieldState: { error } }) => (
-					<List dense='true'>
+					<List dense={true}>
 						{fields.map(
 							(
 								{
@@ -316,7 +304,7 @@ const [meal, setMeal] = useState({
 									/* console.log("List", fields[0]); */
 								}
 								return (
-									<ListItem>
+									<ListItem key={index}>
 										<Grid width='95%'>
 											<Stack direction='row' width='100%'>
 												<Grid item xs={9} lg={9}>

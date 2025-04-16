@@ -44,7 +44,7 @@ const reducerCustomers = (state, action) => {
 		}
 
 		case "SET_SELECTED_CUSTOMER": {
-			console.log("set selected customer", action.id);
+			//console.log("set selected customer", action.id);
 			return {
 				...state,
 				selected_customer: state.customers.filter(

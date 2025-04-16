@@ -4,9 +4,10 @@ import reducerSettings from "./reducerSettings";
 
 //// appSettingId : "66b5f09f69754eb8fc08c421"  mongodb _id  ////
 const initialState = {
-	id : "66b5f09f69754eb8fc08c421",
+	id: "66b5f09f69754eb8fc08c421",
 	//Navbar
 	app_title: "Next Level Cuisine",
+	app_subtitle: "Delicious Home Cooked Dinners",
 	app_logo: "",
 	//Home page
 	home_bg_image:
@@ -35,7 +36,6 @@ const initialState = {
 	recipe_type_list: [],
 	ingredient_category_list: [],
 	price_list: [],
-	//selected_area: {},
 };
 
 const Context = createContext(initialState);

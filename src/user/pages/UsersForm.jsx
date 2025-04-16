@@ -3,27 +3,12 @@ import {
 	Typography,
 	Box,
 	Divider,
-	Dialog,
-	DialogTitle,
-	DialogContent,
-	DialogContentText,
-	DialogActions,
 	Container,
 	Paper,
 	Stack,
-	TextField,
 	InputLabel,
 	Button,
-	IconButton,
-	MenuItem,
-	FormLabel,
-	FormControl,
-	List,
-	ListItem,
 	Grid,
-	GridItem,
-	Card,
-	CardMedia,
 	CircularProgress,
 	Checkbox,
 } from "@mui/material";
@@ -92,20 +77,19 @@ function UsersForm(props) {
 		usersState: { users, selected_user },
 		dispatchUser,
 	} = useUsersValue();
-	//const [areaList, setAreaList] = useState(state.area_list);
+
 	const [record, setRecord] = useState(selected_user[0]);
 
 	const history = useNavigate();
 
 	let defaultUser = {};
 	if (record) {
-		console.log("ISrecordY", record);
-		// setAdministrator(record.admin);
+	
 		defaultUser = {
 			...record,
 		};
 	} else {
-		console.log("ISrecordN", record);
+	
 		defaultUser = {
 			name: "",
 			email: "",
@@ -115,7 +99,6 @@ function UsersForm(props) {
 	}
 
 	useEffect(() => {
-		
 		if (record) {
 			setAdministrator(record.admin);
 		}
@@ -152,12 +135,12 @@ function UsersForm(props) {
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	const onSubmit = async (data) => {
-		console.log("clicked", data);
+		//console.log("clicked", data);
 
 		if (record) {
 			try {
 				setIsLoading(true);
-				console.log("in edit submit");
+				//console.log("in edit submit");
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/users/edit/${record._id}`,
 					{
@@ -177,7 +160,7 @@ function UsersForm(props) {
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-					console.log("response error", dataEdit.message);
+					//console.log("response error", dataEdit.message);
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -186,14 +169,14 @@ function UsersForm(props) {
 					});
 					return data;
 				}
-				console.log("UpDateUser", data);
+				//console.log("UpDateUser", data);
 
 				setIsLoading(false);
 
 				setOpen(false);
 				setOpenPopup(false);
 				history("/users");
-				//alert("User updated");
+	
 				toast.success("User updated", {
 					style: {
 						background: "green",
@@ -202,13 +185,13 @@ function UsersForm(props) {
 				});
 				return data.users;
 			} catch (err) {
-				console.log("Update err:", err);
+				//console.log("Update err:", err);
 				setIsLoading(false);
 			}
 		} else {
 			try {
 				setIsLoading(true);
-				console.log("in new submit");
+			//	console.log("in new submit");
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/users/signup",
@@ -228,11 +211,11 @@ function UsersForm(props) {
 					}
 				);
 				const dataNew = await responseNew.json();
-				console.log("ret data", dataNew);
+				//console.log("ret data", dataNew);
 
 				setIsLoading(false);
 				history("/users");
-				//alert("New user added");
+				
 				toast.success("New user added", {
 					style: {
 						background: "green",
@@ -243,7 +226,7 @@ function UsersForm(props) {
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
-				console.log("SubmitNew err:", err);
+			//	console.log("SubmitNew err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -268,7 +251,7 @@ function UsersForm(props) {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper>
-					{/* {isLoading && <LoadingSpinner asOverlay />} */}
+					
 
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
@@ -277,7 +260,7 @@ function UsersForm(props) {
 									container
 									rowSpacing={1}
 									columnSpacing={0}
-									sx={{ border: "none" }} //1px solid
+									sx={{ border: "none" }} 
 								>
 									<Grid item xs={12} lg={12}>
 										<Stack direction='row'>
@@ -298,7 +281,7 @@ function UsersForm(props) {
 											<Grid item xs={12} lg={2}>
 												<Stack direction='row'>
 													<Button
-														sx={{ gap: "1rem"}}
+														sx={{ gap: "1rem" }}
 														variant='contained'
 														color='error'
 														autoFocus
@@ -361,7 +344,7 @@ function UsersForm(props) {
 													<FieldInputText
 														name='password'
 														control={control}
-														// label='Address'
+														
 													/>
 												</Box>
 											</Stack>
@@ -385,14 +368,12 @@ function UsersForm(props) {
 																	<Box bgcolor='primary.light' p={0}>
 																		<Checkbox
 																			checked={administrator}
-																			// onChange={handleAdminChange}
+																			
 																			onChange={(event) => {
 																				onChange(event.target.checked);
 																				setAdministrator(event.target.checked);
 																			}}
-																			// inputProps={{
-																			// 	"aria-label": "controlled",
-																			// }}
+																			
 																			onError={error}
 																		/>
 																	</Box>

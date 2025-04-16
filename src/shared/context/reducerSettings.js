@@ -5,6 +5,8 @@ const reducerSettings = (state, action) => {
 			return { ...state, ...action.data.settings[0] };
 		case "UPDATE_APP_TITLE":
 			return { ...state, app_title: action.payload.app_title };
+		case "UPDATE_APP_SUBTITLE":
+			return { ...state, app_subtitle: action.payload.app_subtitle };
 		case "UPDATE_APP_LOGO":
 			// Home
 			return { ...state, app_logo: action.payload.app_logo };
@@ -45,7 +47,7 @@ const reducerSettings = (state, action) => {
 			return { ...state, aa_rate: action.payload.aa_rate };
 		// Areas
 		case "UPDATE_AREA_LIST":
-			console.log("reducer update", action.payload.area_list);
+		//	console.log("reducer update", action.payload.area_list);
 			return { ...state, area_list: action.payload.area_list };
 		case "DELETE_AREA": {
 			//	console.log("deletearea", action._id)
@@ -87,7 +89,7 @@ const reducerSettings = (state, action) => {
 
 		// Recipe Types
 		case "UPDATE_RECIPE_TYPE_LIST":
-			console.log("reducer update", action.payload.recipe_type_list);
+			//console.log("reducer update", action.payload.recipe_type_list);
 			return { ...state, recipe_type_list: action.payload.recipe_type_list };
 
 		case "DELETE_RECIPE_TYPE": {
@@ -114,7 +116,7 @@ const reducerSettings = (state, action) => {
 		}
 		// Ingredient Categories
 		case "UPDATE_INGREDIENT_CATEGORY_LIST":
-			console.log("reducer update", action.payload.ingredient_category_list);
+			//console.log("reducer update", action.payload.ingredient_category_list);
 			return {
 				...state,
 				ingredient_category_list: action.payload.ingredient_category_list,
@@ -144,7 +146,7 @@ const reducerSettings = (state, action) => {
 
 		// Prices
 		case "UPDATE_PRICE_LIST":
-			console.log("reducer update", action.payload.price_list);
+			//console.log("reducer update", action.payload.price_list);
 			return { ...state, price_list: action.payload.price_list };
 		case "DELETE_PRICE": {
 			//	console.log("deleteprice", action._id)

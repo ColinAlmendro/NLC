@@ -3,41 +3,18 @@ import {
 	Typography,
 	Box,
 	Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
 	Container,
 	Paper,
 	Stack,
-	//TextField,
-	//InputLabel,
 	Button,
-	// IconButton,
-	// MenuItem,
-	// FormLabel,
-	// FormControl,
-	// List,
-	// ListItem,
-	// ListItemText,
-	// ListItemButton,
-	// ListSubheader,
-	// Tabs,
-	// Tab,
 	Grid,
-	// GridItem,
-	// Card,
-	// CardMedia,
 	CircularProgress,
-	//Collapse,
 } from "@mui/material";
 
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
-//import { AuthContext } from "../../shared/context/auth-context.js";
-//import { useNavigate } from "react-router-dom";
+
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./ViewOrder.css";
@@ -74,19 +51,13 @@ function ViewOrder(props) {
 
 	let order = {};
 	if (record) {
-		//	console.log("ISrecordY", record);
-		//	console.log("ISrecordYselectedCustomer", selected_customer[0]);
-		//	console.log("ISrecordYselectedMenu", selected_menu);
 		order = {
 			...record,
 			customer: selected_customer[0],
 			menu: selected_menu[0],
-			// customer: selected_customer[0]._id,
-			// menu: selected_menu[0]._id,
 		};
-		console.log("order", order);
+		//console.log("order", order);
 	} else {
-		//	console.log("ISrecordN", record);
 		order = {
 			date: new Date(),
 			customer: "",
@@ -127,7 +98,7 @@ function ViewOrder(props) {
 
 	useEffect(() => {
 		const week = selectedDate;
-		console.log("getValues_date", week);
+		// console.log("getValues_date", week);
 		let endDate = new Date(week);
 		// Add 5 days to the start date
 		endDate.setDate(week.getDate() + 5);
@@ -183,7 +154,7 @@ function ViewOrder(props) {
 							container
 							rowSpacing={0}
 							columnSpacing={0}
-							sx={{ border: "none" }} //1px solid
+							sx={{ border: "none" }}
 						>
 							{/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */}
 							<Grid item xs={12} lg={12}>
@@ -193,7 +164,6 @@ function ViewOrder(props) {
 										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
-												// width='100px'
 												variant='contained'
 												color='error'
 												autoFocus
@@ -206,7 +176,6 @@ function ViewOrder(props) {
 											</Button>
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
-												// width='100px'
 												variant='contained'
 												color='success'
 												type='button'
@@ -227,13 +196,13 @@ function ViewOrder(props) {
 						{/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                         INVOICE  */}
 						<div
 							ref={pdfRef}
-							style={{ width: "770px", margin: "0px", border: "1px solid" }}
+							style={{ width: "760px", margin: "0px",padding:"25px", border: "0px solid" }}
 						>
 							<Grid
 								container
 								rowSpacing={0}
 								columnSpacing={0}
-								sx={{ border: "none" }} //1px solid
+								sx={{ border: "none" }}
 							>
 								<Grid item xs={1} lg={1}></Grid>
 								<Grid item xs={11} lg={11}>
@@ -252,15 +221,12 @@ function ViewOrder(props) {
 										</Box>
 									</Grid>
 									<br />
-									{/* <Divider sx={{ my: 6 }} /> */}
+
 									<Stack direction='row' sx={{ width: 1 }}>
 										<Grid item xs={1} lg={1}></Grid>
 										<Grid item xs={8} lg={8}>
 											<Typography fontWeight='600'>Menu</Typography>
-											<p>
-												&nbsp;{period}
-												{/* {new Date(order.menu.date).toLocaleDateString("en-ZA")} */}
-											</p>
+											<p>&nbsp;{period}</p>
 										</Grid>
 										<Grid item xs={3} lg={3}>
 											<Typography fontWeight='600'>Customer</Typography>
@@ -289,7 +255,7 @@ function ViewOrder(props) {
 												<Typography fontWeight='600'>Monday</Typography>
 												<ul>
 													{order.monday.map((item, i) => {
-														console.log("item", item);
+														//console.log("item", item);
 														return (
 															<li key={i} className='cartlist_item'>
 																<Grid item xs={12} lg={12}>
@@ -511,7 +477,7 @@ function ViewOrder(props) {
 															item.count * item.price
 														).toFixed(2);
 														let id = item.id;
-														console.log("item".item);
+													//	console.log("item".item);
 														return (
 															<li key={i} className='cartlist_item'>
 																<Grid item xs={12} lg={12}>

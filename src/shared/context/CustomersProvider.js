@@ -12,6 +12,7 @@ const initialState = {
 			address1: "",
 			area: "",
 			note: "",
+			user:"",
 		},
 	],
 	selected_customer: {},

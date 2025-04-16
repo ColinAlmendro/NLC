@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField } from "@mui/material";
-// import TextareaAutosize from "@mui/material/TextareaAutosize";
+
 import { Controller } from "react-hook-form";
 
 function FieldInputTextarea({ type = "text", name, label, control }) {
@@ -22,7 +22,7 @@ function FieldInputTextarea({ type = "text", name, label, control }) {
 						//sx={{ mb: 1 }}
 						minRows={5}
 						//maxRows={10}
-						multiline='true'
+						multiline={true}
 						sx={{
 							"& fieldset": { border: "none" },
 							"& .MuiInputBase-root": {

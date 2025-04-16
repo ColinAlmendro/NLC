@@ -6,8 +6,7 @@ import {
 	Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-// import Controls from "./controls/Controls";
-// import CloseIcon from "@mui/icons-material/Close";
+
 
 const useStyles = makeStyles(theme => ({
     dialogWrapper: {

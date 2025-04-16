@@ -32,21 +32,7 @@ export default function Popup(props) {
 				maxWidth='lg'
 				classes={{ paper: classes.dialogWrapper }}
 			>
-				{/* <DialogTitle className={classes.dialogTitle}>
-					<div style={{ display: "flex" }}>
-						<Typography variant='h4' component='div' style={{ flexGrow: 1 }}>
-							{title}
-						</Typography>
-						<Controls.ActionButton
-							color='secondary'
-							onClick={() => {
-								setOpenPopup(false);
-							}}
-						>
-							<CloseIcon />
-						</Controls.ActionButton>
-					</div>
-				</DialogTitle> */}
+				
 				<DialogContent>{children}</DialogContent>
 			</Dialog>
 		);

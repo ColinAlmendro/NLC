@@ -18,8 +18,7 @@ import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable";
 
 import Controls from "../../components/controls/Controls";
-// import { Search } from "@mui/icons-material";
-// import AddIcon from "@mui/icons-material/Add";
+
 import Popup from "../../components/Popup";
 import ViewPopup from "./ViewPopup.js";
 import PageviewOutlinedIcon from "@mui/icons-material/PageviewOutlined";
@@ -29,7 +28,7 @@ import Notification from "../../components/Notification";
 import ConfirmDialog from "../../components/ConfirmDialog";
 
 import { AuthContext } from "../../shared/context/auth-context";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import "./MenuTable.css";
 import "./Menu.css";
@@ -94,7 +93,7 @@ export default function Menu() {
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			console.log("filteritems", items);
+		//	console.log("filteritems", items);
 			return items;
 		},
 	});
@@ -127,11 +126,11 @@ export default function Menu() {
 					}
 				);
 				const data = await response.json();
-				console.log("Menus list :", data.menus);
+			//	console.log("Menus list :", data.menus);
 				dispatchMenu({ type: "UPDATE_MENUS", data });
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -214,46 +213,46 @@ export default function Menu() {
 		fetchPromotions();
 	}, []);
 	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  Prices
-	useEffect(() => {
-		async function fetchPrices() {
-			try {
-				setIsLoading(true);
-				const response = await fetch(
-					process.env.REACT_APP_BACKEND_URL + "/pricelist/list",
-					{
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: "Bearer " + auth.token,
-						},
-					}
-				);
-				const data = await response.json();
-				dispatchMenu({ type: "UPDATE_PRICES", data });
-				setIsLoading(false);
-			} catch (err) {
-				console.log(err);
-				toast.error(err, {
-					style: {
-						background: "red",
-						color: "white",
-					},
-				});
-				setIsLoading(false);
-			}
-		}
-		fetchPrices();
-	}, []);
+	// useEffect(() => {
+	// 	async function fetchPrices() {
+	// 		try {
+	// 			setIsLoading(true);
+	// 			const response = await fetch(
+	// 				process.env.REACT_APP_BACKEND_URL + "/pricelist/list",
+	// 				{
+	// 					method: "GET",
+	// 					headers: {
+	// 						"Content-Type": "application/json",
+	// 						Authorization: "Bearer " + auth.token,
+	// 					},
+	// 				}
+	// 			);
+	// 			const data = await response.json();
+	// 			dispatchMenu({ type: "UPDATE_PRICES", data });
+	// 			setIsLoading(false);
+	// 		} catch (err) {
+	// 			console.log(err);
+	// 			toast.error(err, {
+	// 				style: {
+	// 					background: "red",
+	// 					color: "white",
+	// 				},
+	// 			});
+	// 			setIsLoading(false);
+	// 		}
+	// 	}
+	// 	fetchPrices();
+	// }, []);
 
-	const insertMenu = (menu) => {
-		console.log("insertdata:", menu),
-			dispatchMenu({ type: "INSERT_MENU", menu });
-	};
+	// const insertMenu = (menu) => {
+	// 	console.log("insertdata:", menu),
+	// 		dispatchMenu({ type: "INSERT_MENU", menu });
+	// };
 
-	const updateMenu = (menu) => {
-		console.log("updatedata:", menu),
-			dispatchMenu({ type: "UPDATE_MENU", menu });
-	};
+	// const updateMenu = (menu) => {
+	// 	console.log("updatedata:", menu),
+	// 		dispatchMenu({ type: "UPDATE_MENU", menu });
+	// };
 
 	const deleteMenuItem = async (_id) => {
 		console.log("deleteitem:", _id);

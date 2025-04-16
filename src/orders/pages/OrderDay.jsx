@@ -36,21 +36,21 @@ const OrderDay = ({ weekday }) => {
 	const { control } = useFormContext();
 	const {
 		menuState: {
-			menus,
-			prices,
+			// menus,
+			// prices,
 			selected_menu,
-			main_recipes,
-			side_recipes,
-			vegie_recipes,
-			salad_recipes,
-			soup_recipes,
-			frozen_recipes,
-			monday,
-			tuesday,
-			wednesday,
-			thursday,
-			friday,
-			frozen,
+			// main_recipes,
+			// side_recipes,
+			// vegie_recipes,
+			// salad_recipes,
+			// soup_recipes,
+			// frozen_recipes,
+			// monday,
+			// tuesday,
+			// wednesday,
+			// thursday,
+			// friday,
+			// frozen,
 		},
 		dispatch,
 	} = useMenuValue();
@@ -64,7 +64,7 @@ const OrderDay = ({ weekday }) => {
 	// const [openPromo, setOpenPromo] = React.useState(false);
 
 	// const [dayMenu, setDayMenu] = useState([null]);
-	console.log("selectedmenu", record);
+	//console.log("selectedmenu", record);
 
 	let menuOptions = [];
 	switch (weekday) {

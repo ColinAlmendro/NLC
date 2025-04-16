@@ -13,30 +13,13 @@ import "swiper/css/scrollbar";
 import {
 	Typography,
 	Box,
-	// Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
-	// Container,
-	// Paper,
-	// Stack,
-	// TextField,
-	// Grid,
-	// InputLabel,
-	// Button,
-	// MenuItem,
-	// List,
-	// ListItem,
-	// Card,
-	// CardMedia,
+	
 	CircularProgress,
 } from "@mui/material";
 import "./Home.css";
 import { toast } from "sonner";
 
-// SwiperCore.use([EffectCoverflow, Pagination]);
+
 
 const Home = () => {
 	const [isLoading, setIsLoading] = useState(true);
@@ -46,7 +29,7 @@ const Home = () => {
 
 	useEffect(() => {
 		async function fetchRecipes() {
-			//console.log("fetching recipes");
+			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -60,7 +43,7 @@ const Home = () => {
 					}
 				);
 				const data = await response.json();
-				//console.log("Recipes list :", data.recipes);
+				
 				let mainRecipes = data.recipes;
 				mainRecipes = mainRecipes.filter(
 					(recipe) => recipe.category === "main"
@@ -69,7 +52,7 @@ const Home = () => {
 
 				setIsLoading(false);
 			} catch (err) {
-				console.log(err);
+				
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -82,7 +65,7 @@ const Home = () => {
 		fetchRecipes();
 	}, []);
 
-	// return (
+	
 	if (isLoading) {
 		return (
 			<Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -93,8 +76,15 @@ const Home = () => {
 
 	return (
 		<React.Fragment>
-			<div >
-				<div>
+			<div>
+				<Box sx={{ display: "flex", justifyContent: "center", p: 2 }}>
+					<Typography variant='h5' fontWeight='700' >{state.app_subtitle}</Typography>
+					
+				</Box>
+				<div
+					className='swiper-div'
+
+				>
 					<Swiper
 						className='swiper'
 						modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -111,58 +101,54 @@ const Home = () => {
 								slidesPerView: 1,
 							},
 							639: {
-								slidesPerView: 3,
+								slidesPerView: 4,
 							},
 							865: {
-								slidesPerView: 3,
+								slidesPerView: 4,
 							},
 							1000: {
-								slidesPerView: 3,
+								slidesPerView: 4,
 							},
 							1500: {
-								slidesPerView: 3,
+								slidesPerView: 4,
 							},
 							1700: {
-								slidesPerView: 3,
+								slidesPerView: 4,
 							},
 						}}
 						navigation
 						pagination={{ clickable: true }}
 						scrollbar={{ draggable: true }}
-						onSwiper={(swiper) => console.log(swiper)}
-						onSlideChange={() => console.log("slide change")}
+					
 					>
 						{recipeList.map((recipe, i) => {
 							return (
 								<SwiperSlide key={i} className='swiper_slide'>
 									<div>
-										<img
-											// style={{ width: "50%", height: "80%" }}
-											//className="img"
-											src={recipe.image}
-											alt={recipe.name}
-										/>
-										<div>
+										<Box sx={{ display: "flex", justifyContent: "center" }}>
+											<img
+												style={{ border: "1px solid" }}
+												
+												src={recipe.image}
+												alt={recipe.name}
+											/>
+										</Box>
+										<Box sx={{ display: "flex", justifyContent: "center" }}>
 											<Typography variant='h6'>{recipe.name}</Typography>
-										</div>
-										<div>
+										</Box>
+										<Box sx={{ display: "flex", justifyContent: "center" }}>
 											<Typography variant='caption'>
 												{recipe.description}
 											</Typography>
-										</div>
+										</Box>
 									</div>
 								</SwiperSlide>
 							);
 						})}
 					</Swiper>
-					{/* <div
-					className='banner-container'
-					style={{ backgroundImage: `url(${state.home_bg_image})` }}
-				>
-					{/* <img src={state.home_logo} className='logo' alt='logo' /> */}
-					<div className='banner-footer' />
+					
 				</div>{" "}
-				{/* */}
+				
 				<Footer classname='footer' />
 			</div>
 		</React.Fragment>
