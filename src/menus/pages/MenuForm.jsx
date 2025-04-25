@@ -36,7 +36,7 @@ import {
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
-import "./Menu.css";
+
 import "./Listitem.css";
 
 import { toast } from "sonner";
@@ -166,12 +166,12 @@ function MenuForm(props) {
 	};
 
 	const onSubmit = async (data) => {
-		//console.log("clicked", data);
+		
 
 		if (record) {
 			try {
 				setIsLoading(true);
-				//console.log("in edit submit");
+				
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/menus/edit/${record._id}`,
 					{
@@ -200,7 +200,7 @@ function MenuForm(props) {
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-				//	console.log("response error", dataEdit.message);
+				
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -209,7 +209,7 @@ function MenuForm(props) {
 					});
 					return data;
 				}
-				//console.log("UpDate", data);
+			
 
 				setIsLoading(false);
 
@@ -225,7 +225,7 @@ function MenuForm(props) {
 				});
 				return data.menus;
 			} catch (err) {
-				//console.log("Update err:", err);
+				
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -237,7 +237,7 @@ function MenuForm(props) {
 		} else {
 			try {
 				setIsLoading(true);
-				//console.log("in new submit");
+				
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/menus/new",
@@ -265,7 +265,7 @@ function MenuForm(props) {
 					}
 				);
 				const dataNew = await responseNew.json();
-				//console.log("ret data", dataNew);
+				
 
 				setIsLoading(false);
 				history("/menus");
@@ -280,7 +280,7 @@ function MenuForm(props) {
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
-				//console.log("SubmitNew err:", err);
+				
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -301,7 +301,7 @@ function MenuForm(props) {
 
 	return (
 		<>
-			<Container sx={{ border: "none" }} id='container'>
+			<Container sx={{ border: "none" }} >
 				<Paper>
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>

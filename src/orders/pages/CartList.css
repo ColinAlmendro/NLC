@@ -1,11 +1,9 @@
-/* .items_wrapper {
+.items_wrapper {
 	max-height: 435px;
-	overflow: scroll;
+	/* overflow: scroll; */
 	padding: 20px 20px 0;
 
-	
-}
-ul {
+	ul {
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -13,9 +11,7 @@ ul {
 		flex-direction: column;
 		margin-bottom: 15px;
 
-		
-	}
-.cartlist_item {
+		.cartlist_item {
 			border-bottom: 1px solid lightgray;
 			padding-bottom: 20px;
 			display: flex;
@@ -28,9 +24,9 @@ ul {
 
 			span {
 				display: inline-block;
-			}			
-		}
-.cartlist_img {
+			}
+
+			.cartlist_img {
 				max-width: calc(80 / 16 * 1rem);
 				width: 100%;
 				height: 75px;
@@ -47,7 +43,8 @@ ul {
 					border-radius: inherit;
 				}
 			}
-.cartlist_content {
+
+			.cartlist_content {
 				flex: 3;
 
 				span:first-of-type {
@@ -60,7 +57,8 @@ ul {
 					color: gray;
 				}
 			}
-.cartlist_action {
+
+			.cartlist_action {
 				text-align: center;
 
 				& > span {
@@ -69,6 +67,10 @@ ul {
 					margin-bottom: 20px;
 				}
 			}
+		}
+	}
+}
+
 .total_wrapper {
 	display: flex;
 	justify-content: space-between;
@@ -79,88 +81,4 @@ ul {
 		font-weight: 600;
 		letter-spacing: 0.05rem;
 	}
-} */
-.items_wrapper {
-  max-height: 435px;
-  /* overflow: scroll; */
-  padding: 20px 20px 0;
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-
-    .cartlist_item {
-      border-bottom: 1px solid lightgray;
-      padding-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-
-      &:not(:first-of-type) {
-        margin-top: 10px;
-      }
-
-      span {
-        display: inline-block;
-      }
-
-      .cartlist_img {
-        max-width: calc(80 / 16 * 1rem);
-        width: 100%;
-        height: 75px;
-        border-radius: 50%;
-        border: 1px solid lightgray;
-
-        @media (max-width: 320px) {
-          display: none !important;
-        }
-
-        img {
-          width: 100%;
-          height: 100%;
-          border-radius: inherit;
-        }
-      }
-
-      .cartlist_content {
-        flex: 3;
-
-        span:first-of-type {
-          font-weight: 600;
-          font-size: 1.2rem;
-          margin-bottom: 10px;
-        }
-
-        span:not(:first-of-type) {
-          color: gray;
-        }
-      }
-
-      .cartlist_action {
-        text-align: center;
-
-        & > span {
-          font-weight: 600;
-          font-size: 1.4rem;
-          margin-bottom: 20px;
-        }
-      }
-    }
-  }
-}
-
-.total_wrapper {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 20px 20px;
-
-  span {
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: 0.05rem;
-  }
 }

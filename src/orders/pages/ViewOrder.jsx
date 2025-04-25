@@ -56,7 +56,6 @@ function ViewOrder(props) {
 			customer: selected_customer[0],
 			menu: selected_menu[0],
 		};
-		//console.log("order", order);
 	} else {
 		order = {
 			date: new Date(),
@@ -98,7 +97,7 @@ function ViewOrder(props) {
 
 	useEffect(() => {
 		const week = selectedDate;
-		// console.log("getValues_date", week);
+
 		let endDate = new Date(week);
 		// Add 5 days to the start date
 		endDate.setDate(week.getDate() + 5);
@@ -196,7 +195,12 @@ function ViewOrder(props) {
 						{/* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                         INVOICE  */}
 						<div
 							ref={pdfRef}
-							style={{ width: "760px", margin: "0px",padding:"25px", border: "0px solid" }}
+							style={{
+								width: "760px",
+								margin: "0px",
+								padding: "25px",
+								border: "0px solid",
+							}}
 						>
 							<Grid
 								container
@@ -255,7 +259,6 @@ function ViewOrder(props) {
 												<Typography fontWeight='600'>Monday</Typography>
 												<ul>
 													{order.monday.map((item, i) => {
-														//console.log("item", item);
 														return (
 															<li key={i} className='cartlist_item'>
 																<Grid item xs={12} lg={12}>
@@ -477,7 +480,7 @@ function ViewOrder(props) {
 															item.count * item.price
 														).toFixed(2);
 														let id = item.id;
-													//	console.log("item".item);
+
 														return (
 															<li key={i} className='cartlist_item'>
 																<Grid item xs={12} lg={12}>

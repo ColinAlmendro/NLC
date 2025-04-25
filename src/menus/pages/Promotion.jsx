@@ -10,27 +10,10 @@ import {
 	ImageListItem,
 	ImageListItemBar,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		display: "flex",
-		flexWrap: "wrap",
-		justifyContent: "space-around",
-		overflow: "hidden",
-		backgroundColor: theme.palette.background.paper,
-	},
-	imageList: {
-		height: 300,
-	},
-	icon: {
-		color: "rgba(255, 255, 255, 0.54)",
-	},
-}));
-
 const Promotion = () => {
-	const classes = useStyles();
 	const { control } = useFormContext();
 	const {
 		menuState: { selected_menu, promotions },
@@ -89,7 +72,6 @@ const Promotion = () => {
 											value={value}
 											label='Promotion'
 											onChange={(value) => {
-												console.log("promo", value);
 												onChange(value), handelPromotionChange(value);
 											}}
 											size='small'
@@ -120,13 +102,21 @@ const Promotion = () => {
 						{selectedPromotion.length > 0 ? (
 							<Grid item xs={12} lg={12} mt={2}>
 								{/* Promotion Items */}
-								<Box className={classes.root}>
+								<Box
+									sx={{
+										display: "flex",
+										flexWrap: "wrap",
+										justifyContent: "space-around",
+										overflow: "hidden",
+										backgroundColor: theme.palette.background.paper,
+									}}
+								>
 									<ImageList
-										className={classes.imageList}
+										sx={{ width: 200, height: 200 }}
 										cols={6}
 										rowHeight={100}
 										gap={10}
-										fullwidth="true"
+										fullwidth='true'
 									>
 										{selectedPromotion.map((item) => (
 											<ImageListItem key={item.id}>

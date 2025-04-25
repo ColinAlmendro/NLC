@@ -61,7 +61,7 @@ const Intro = (isEdit) => {
 
 	useEffect(() => {
 		const week = selectedDate;
-		//console.log("getValues_date", week);
+
 		let endDate = new Date(week);
 		// Add 5 days to the start date
 		endDate.setDate(week.getDate() + 5);
@@ -116,7 +116,6 @@ const Intro = (isEdit) => {
 									field: { onChange, value },
 									fieldState: { error },
 								}) => {
-									// console.log("datevalue", value);
 									return (
 										<LocalizationProvider dateAdapter={AdapterDateFns}>
 											<Box bgcolor='primary.light' p={0}>
@@ -237,15 +236,11 @@ const Intro = (isEdit) => {
 										type='text'
 										onChange={onChange}
 										value={value}
-										//defaultValue={value ? value : ""}
 										label='Introduction'
 										size='small'
-										// helperText={`${error?.message ? error?.message : ""}`}
-										// error={!!error}
 										fullwidth='true'
 										minRows={9}
 										multiline={true}
-										//required
 										sx={{
 											"& fieldset": { border: "none" },
 											"& .MuiInputBase-root": {
@@ -253,7 +248,7 @@ const Intro = (isEdit) => {
 													textAlign: "left",
 												},
 											},
-											//width: "200px",
+
 											border: "1px solid",
 										}}
 									/>

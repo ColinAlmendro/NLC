@@ -11,40 +11,22 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-	
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
 import Popup from "../../components/Popup.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
-//import CloseIcon from "@mui/icons-material/Close";
 import Notification from "../../components/Notification.js";
 import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { toast } from "sonner";
 import { useIngredientsValue } from "../../shared/context/IngredientsProvider.js";
-import "./Ingredients.css";
 import "./IngredientsTable.css";
-
-const useStyles = makeStyles((theme) => ({
-	pageContent: {
-		align: "center",
-		margin: theme.spacing(5),
-		padding: theme.spacing(3),
-	},
-	searchInput: {
-		width: "75%",
-	},
-	newButton: {
-		position: "absolute",
-		right: "10px",
-	},
-}));
 
 const headCells = [
 	{ id: "category", label: "Category" },
@@ -55,7 +37,6 @@ const headCells = [
 ];
 
 export default function Ingredients() {
-	//console.log("loading ingredient");
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -65,15 +46,10 @@ export default function Ingredients() {
 		dispatchIngredient,
 	} = useIngredientsValue();
 
-	const classes = useStyles();
-	// const [recordForEdit, setRecordForEdit] = useState(null);
-
 	const records = [...ingredients];
-	//console.log("record ingredient",records);
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			//console.log("filteritems", items);
 			return items;
 		},
 	});
@@ -91,7 +67,6 @@ export default function Ingredients() {
 
 	useEffect(() => {
 		async function fetchIngredients() {
-			//console.log("fetching ingredients");
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -105,11 +80,10 @@ export default function Ingredients() {
 					}
 				);
 				const data = await response.json();
-				//	console.log("Ingredients list :", data.ingredients);
+
 				dispatchIngredient({ type: "UPDATE_INGREDIENTS", data });
 				setIsLoading(false);
 			} catch (err) {
-				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -123,7 +97,6 @@ export default function Ingredients() {
 	}, [location.key]);
 
 	const deleteIngredientItem = async (_id) => {
-		//console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/ingredients/delete/${_id}`, {
@@ -146,7 +119,6 @@ export default function Ingredients() {
 					});
 				});
 		} catch (err) {
-			//console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -200,12 +172,10 @@ export default function Ingredients() {
 	}
 	return (
 		<>
-			<Container id='container' sx={{ border: "none" }}>
-				<Paper
-					textalign='center'
-					className={classes.pageContent}
-					sx={{ width: "100%", p: 1 }}
-				>
+			<Container
+				sx={{ border: "none", display: "flex", justifyContent: "center" }}
+			>
+				<Paper sx={{ width: "100%", p: 0 }}>
 					<Box
 						sx={{
 							mx: "auto",
@@ -218,11 +188,10 @@ export default function Ingredients() {
 							Ingredient Manager
 						</Typography>
 					</Box>
-					{/* <Divider /> */}
+
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Ingredients'
-							className={classes.searchInput}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -232,11 +201,10 @@ export default function Ingredients() {
 							}}
 							onChange={handleSearch}
 						/>
+
 						<Button
-							//	text='Add New'
+							sx={{ marginLeft: "auto" }}
 							variant='contained'
-							// startIcon={<AddIcon />}
-							className={classes.newButton}
 							onClick={() => {
 								dispatchIngredient({
 									type: "RESET_SELECTED_INGREDIENT",
@@ -307,7 +275,6 @@ export default function Ingredients() {
 														id: item._id,
 													}),
 														setOpenPopup(true);
-													// openInPopup(item);
 												}}
 											>
 												<EditOutlinedIcon
@@ -353,7 +320,6 @@ export default function Ingredients() {
 			>
 				{/* <IngredientForm /> */}
 				<IngredientsForm openPopup={openPopup} setOpenPopup={setOpenPopup} />
-				{/* <IngredientForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
 			</Popup>
 			<Notification notify={notify} setNotify={setNotify} />
 			<ConfirmDialog

@@ -15,7 +15,7 @@ import {
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
 
 import Controls from "../../components/controls/Controls.js";
@@ -32,29 +32,29 @@ import ConfirmDialog from "../../components/ConfirmDialog.js";
 import { AuthContext } from "../../shared/context/auth-context.js";
 import { useLocation } from "react-router-dom";
 import { useRecipeValue } from "../../shared/context/RecipeProvider.js";
-import "./Recipe.css";
+//import "./Recipe.css";
 import "./RecipeTable.css";
 import { toast } from "sonner";
 
-const useStyles = makeStyles((theme) => ({
-	pageContent: {
-		align: "center",
-		margin: theme.spacing(5),
-		padding: theme.spacing(1),
-	},
-	searchInput: {
-		width: "75%",
-	},
-	newButton: {
-		position: "absolute",
-		right: "10px",
-	},
-	img: {
-		height: "50px",
-		width: "50px",
-		borderRadius: "50%",
-	},
-}));
+// const useStyles = makeStyles((theme) => ({
+// 	pageContent: {
+// 		align: "center",
+// 		margin: theme.spacing(5),
+// 		padding: theme.spacing(1),
+// 	},
+// 	searchInput: {
+// 		width: "75%",
+// 	},
+// 	newButton: {
+// 		position: "absolute",
+// 		right: "10px",
+// 	},
+// 	img: {
+// 		height: "50px",
+// 		width: "50px",
+// 		borderRadius: "50%",
+// 	},
+// }));
 
 const headCells = [
 	{ id: "image", label: "Image", disableSorting: true },
@@ -78,7 +78,7 @@ export default function Recipes() {
 		dispatchRecipe,
 	} = useRecipeValue();
 
-	const classes = useStyles();
+	// const classes = useStyles();
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...recipes];
@@ -134,9 +134,8 @@ export default function Recipes() {
 	}, [location.key]);
 	// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& Recipes
 
-	
 	const deleteRecipeItem = async (_id) => {
-	//	console.log("deleteitem:", _id);
+		//	console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/recipes/delete/${_id}`, {
@@ -159,7 +158,7 @@ export default function Recipes() {
 					});
 				});
 		} catch (err) {
-		//	console.log("Delete error", err);
+			//	console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -190,7 +189,6 @@ export default function Recipes() {
 		});
 	};
 
-	
 	const onDelete = (_id) => {
 		setConfirmDialog({
 			...confirmDialog,
@@ -215,12 +213,11 @@ export default function Recipes() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }} fullwidth='true'>
-				<Paper
-					textalign='center'
-					className={classes.pageContent}
-					sx={{ width: "100%", p: 1 }}
-				>
+			<Container
+				id='container'
+				sx={{ border: "none", display: "flex", justifyContent: "center" }}
+			>
+				<Paper sx={{ width: "100%", p: 0 }}>
 					<Box
 						sx={{
 							mx: "auto",
@@ -229,7 +226,7 @@ export default function Recipes() {
 							m: 0,
 						}}
 					>
-						<Typography fontWeight='900' variant='h5'>
+						<Typography fontWeight='700' variant='h6'>
 							Recipe Manager
 						</Typography>
 					</Box>
@@ -237,7 +234,7 @@ export default function Recipes() {
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Recipes'
-							className={classes.searchInput}
+							//className='searchInput'
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -249,7 +246,7 @@ export default function Recipes() {
 						/>
 						<Button
 							variant='contained'
-							className={classes.newButton}
+							sx={{ marginLeft: "auto" }}
 							onClick={() => {
 								dispatchRecipe({
 									type: "RESET_SELECTED_RECIPE",
@@ -266,7 +263,6 @@ export default function Recipes() {
 						<TableBody>
 							{recordsAfterPagingAndSorting().map((item) => {
 								{
-									
 									ingredientsPrice = item.ingredients.reduce(
 										(accumulator, item) => {
 											return (accumulator += item.ingredient.price * item.qty);
@@ -282,7 +278,10 @@ export default function Recipes() {
 												src={`${item.image}?w=164&fit=crop&auto=format`}
 												alt={item.name}
 												loading='lazy'
-												className={classes.img}
+												className='img'
+												height='50px'
+		                                        width= '50px'
+		                                        style={{borderRadius:'50%'}}
 											/>
 										</TableCell>
 										<TableCell width='5%'>{item.category}</TableCell>

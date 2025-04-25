@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from "react";
 
-// import Modal from "./Modal";
 import CartContext from "../../shared/context/cart-context";
 import CartCount from "./CartCount";
 import { toast } from "sonner";
@@ -9,41 +8,17 @@ import {
 	Typography,
 	Box,
 	Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
 	Container,
 	Paper,
 	Stack,
-	// TextField,
-	// InputLabel,
 	Button,
-	// MenuItem,
-	// FormLabel,
-	// FormControl,
-	// List,
-	// ListItem,
 	Grid,
-	// GridItem,
-	// Card,
-	// CardMedia,
 	CircularProgress,
 } from "@mui/material";
 
 import { AuthContext } from "../../shared/context/auth-context";
 import { useValue } from "../../shared/context/SettingsProvider.js";
 import { useNavigate } from "react-router-dom";
-// import {
-// 	FormProvider,
-// 	useFormContext,
-// 	useForm,
-// 	useFieldArray,
-// 	Controller,
-// } from "react-hook-form";
-
-// import { DevTool } from "@hookform/devtools";
 
 import "./Listitem.css";
 
@@ -81,14 +56,6 @@ const CartList = (props) => {
 	const [customerArea, setCustomerArea] = useState(customer.area);
 	const [areaList, setAreaList] = useState(state.area_list);
 
-	//console.log("AreaList", areaList);
-	//console.log("customerArea", customerArea);
-
-	// let filteredArea = areaList;
-	// filteredArea = filteredArea.filter((a) => a.area === customerArea);
-	// console.log("filteredArea", filteredArea);
-	// setAreaKM(filteredArea[0].delivery_km);
-
 	const order = {
 		date: new Date(),
 		customer: customer._id,
@@ -118,12 +85,10 @@ const CartList = (props) => {
 	};
 
 	useEffect(() => {
-		//console.log("resetcart");
 		const calcDeliveryCost = () => {
-			//  console.log("AADeliveryCost", AArate,areaKM);
 			let filteredArea = areaList;
 			filteredArea = filteredArea.filter((a) => a.area === customerArea);
-			//console.log("filteredArea", filteredArea);
+
 			setAreaKM(filteredArea[0].delivery_km);
 			let singleDeliveryCost = AArate * filteredArea[0].delivery_km;
 			console.log("AADeliveryCost", AArate, filteredArea[0].delivery_km);
@@ -131,36 +96,28 @@ const CartList = (props) => {
 			let deliveryCount = 0;
 			if (monday.length > 0) {
 				deliveryCount++;
-				//console.log("monday", deliveryCount);
 			}
 			if (tuesday.length > 0) {
 				deliveryCount++;
-				//console.log("tuesday", deliveryCount);
 			}
 			if (wednesday.length > 0) {
 				deliveryCount++;
-				//console.log("wednesday", deliveryCount);
 			}
 			if (thursday.length > 0) {
 				deliveryCount++;
-				//console.log("thursday", deliveryCount);
 			}
 			if (friday.length > 0) {
 				deliveryCount++;
-				//console.log("friday", deliveryCount);
 			}
 			if (deliveryCount === 0 && (frozen.length > 0 || promotion.length > 0)) {
 				deliveryCount = 1;
 			}
 			setTotalDelivery(singleDeliveryCost * deliveryCount);
-			//console.log("totaldelivery", singleDeliveryCost * deliveryCount);
 		};
 		calcDeliveryCost();
 	}, [monday, tuesday, wednesday, thursday, friday, frozen, promotion]);
 
 	const onSubmit = async () => {
-		
-
 		if (monday.length > 0) {
 			monday.map((item) => {
 				const new_monday = {
@@ -173,7 +130,7 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-				//	console.log("new_monday", new_monday);
+
 				order.monday.push(new_monday);
 			});
 		}
@@ -189,7 +146,7 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-				//	console.log("new_tuesday", new_tuesday);
+
 				order.tuesday.push(new_tuesday);
 			});
 		}
@@ -205,7 +162,7 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-				//	console.log("new_wednesday", new_wednesday);
+
 				order.wednesday.push(new_wednesday);
 			});
 		}
@@ -221,7 +178,7 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-				//	console.log("new_thursday", new_thursday);
+
 				order.thursday.push(new_thursday);
 			});
 		}
@@ -237,7 +194,7 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-				//	console.log("new_friday", new_friday);
+
 				order.friday.push(new_friday);
 			});
 		}
@@ -253,7 +210,7 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-				//	console.log("new_frozen", new_frozen);
+
 				order.frozen.push(new_frozen);
 			});
 		}
@@ -269,11 +226,11 @@ const CartList = (props) => {
 					cost: item.cost,
 					price: item.price,
 				};
-			//	console.log("new_promotion", new_promotion);
+
 				order.promotion.push(new_promotion);
 			});
 		}
-	//	console.log("order", order);
+
 		try {
 			setIsLoading(true);
 
@@ -289,11 +246,10 @@ const CartList = (props) => {
 				}
 			);
 			const dataNew = await responseNew.json();
-			
 
 			setIsLoading(false);
 			history("/orders");
-			
+
 			toast.success("New order added", {
 				style: {
 					background: "green",
@@ -301,10 +257,9 @@ const CartList = (props) => {
 				},
 			});
 			setOpen(false);
-			
+
 			return dataNew;
 		} catch (err) {
-		//	console.log("SubmitNew err:", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -355,7 +310,6 @@ const CartList = (props) => {
 										<Stack direction='row' spacing={1}>
 											<Button
 												sx={{ gap: "1rem" }}
-												
 												variant='contained'
 												color='error'
 												autoFocus
@@ -368,7 +322,6 @@ const CartList = (props) => {
 											</Button>
 											<Button
 												sx={{ display: "flex", gap: "1rem" }}
-												
 												variant='contained'
 												color='success'
 												type='submit'
@@ -432,7 +385,7 @@ const CartList = (props) => {
 														</span>
 														<span className='cartlist_content'>
 															<span>{item.mainname}</span>
-															
+
 															<span>&nbsp;&nbsp;{item.maindescription}</span>
 															<br />
 															<span>
@@ -758,7 +711,6 @@ const CartList = (props) => {
 							</Grid>
 							{/* 77777777777777777777777777777777777777777777777777777777777777777777777777777777777777 */}
 							<Grid item xs={12} lg={12}>
-								
 								<div className='total_wrapper'>
 									<span>Sub Total</span>
 									<span>R{parseFloat(totalAmount).toFixed(2)}</span>

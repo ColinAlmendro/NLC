@@ -26,21 +26,21 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./ViewRecipe.css";
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		fontSize: 12,
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-});
+// const useStyles = makeStyles({
+// 	label: {
+// 		color: "#212121",
+// 		fontSize: 12,
+// 		"&.Mui-focused": {
+// 			color: "darkred",
+// 		},
+// 	},
+// });
 
 function ViewRecipe(props) {
 	const [isLoading, setIsLoading] = useState(false);
-	const classes = useStyles();
+	//const classes = useStyles();
 	const pdfRef = useRef();
 
 	const {
@@ -253,7 +253,7 @@ function ViewRecipe(props) {
 										<div>
 											<InputLabel
 												sx={{ textAlign: "left", fontWeight: "bold" }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Servings
 											</InputLabel>
@@ -273,7 +273,7 @@ function ViewRecipe(props) {
 										<div>
 											<InputLabel
 												sx={{ textAlign: "center", fontWeight: "bold" }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Freezable
 											</InputLabel>
@@ -286,7 +286,7 @@ function ViewRecipe(props) {
 									<div>
 										<InputLabel
 											sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-											className={classes.label}
+											//className={classes.label}
 										>
 											Description
 										</InputLabel>
@@ -312,7 +312,7 @@ function ViewRecipe(props) {
 									<div>
 										<InputLabel
 											sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-											className={classes.label}
+											//className={classes.label}
 										>
 											Ingredients
 										</InputLabel>
@@ -359,7 +359,7 @@ function ViewRecipe(props) {
 										<div style={{ width: "100%" }}>
 											<InputLabel
 												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Instructions
 											</InputLabel>
@@ -374,7 +374,7 @@ function ViewRecipe(props) {
 										<div>
 											<InputLabel
 												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Original Servings
 											</InputLabel>
@@ -385,7 +385,7 @@ function ViewRecipe(props) {
 										<div>
 											<InputLabel
 												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Unit Cost
 											</InputLabel>
@@ -401,7 +401,7 @@ function ViewRecipe(props) {
 										<div>
 											<InputLabel
 												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Total Cost
 											</InputLabel>
@@ -417,7 +417,7 @@ function ViewRecipe(props) {
 										<div>
 											<InputLabel
 												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Premium
 											</InputLabel>
@@ -433,16 +433,11 @@ function ViewRecipe(props) {
 										<div>
 											<InputLabel
 												sx={{ textAlign: "left", fontWeight: "bold", mx: 1 }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Unit Price
 											</InputLabel>
 											<Box bgcolor='primary.light' p={0} m={1}>
-												{/* <TextField
-													value={Number(recipe.price).toFixed(2)}
-													name='price'
-													size='small'
-												/> */}
 												<p>{Number(recipe.price).toFixed(2)}</p>
 											</Box>
 										</div>

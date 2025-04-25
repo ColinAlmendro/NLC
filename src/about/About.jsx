@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import LoadingSpinner from "../../src/shared/components/UIElements/LoadingSpinner.js";
+
 import { useValue } from "../shared/context/SettingsProvider";
 import {
 	Container,
@@ -9,6 +9,7 @@ import {
 	Grid,
 	Paper,
 	Typography,
+	CircularProgress,
 } from "@mui/material";
 
 import Footer from "./AboutFooter.jsx";
@@ -17,11 +18,17 @@ function About() {
 	const [isLoading, setIsLoading] = useState(false);
 	const { state, dispatch } = useValue();
 
-//	console.log("about state", state);
+	if (isLoading) {
+			return (
+				<Box sx={{ display: "flex", justifyContent: "center" }}>
+					<CircularProgress />
+				</Box>
+			);
+		}
 	return (
 		<Container sx={{ border: "none" }}>
 			<Paper>
-				{isLoading && <LoadingSpinner asOverlay />}
+				
 				<Box display='flex' p={2}>
 					<Grid
 						container

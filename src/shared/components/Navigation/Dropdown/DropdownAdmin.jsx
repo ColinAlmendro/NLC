@@ -12,7 +12,7 @@ export default function Dropdown(props) {
 									return (
 										<>
 											<ul
-												//	onClick={handleClick}
+												
 												className={
 													click ? "dropdown-menu clicked" : "dropdown-menu"
 												}

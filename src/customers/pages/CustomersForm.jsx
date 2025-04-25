@@ -35,18 +35,8 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
 
 import { toast } from "sonner";
-
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "black",
-		},
-	},
-});
 
 const validationSchema = Yup.object()
 	.shape({
@@ -86,7 +76,6 @@ const validationSchema = Yup.object()
 	.required();
 
 function CustomersForm(props) {
-	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
@@ -110,12 +99,10 @@ function CustomersForm(props) {
 
 	let defaultCustomer = {};
 	if (record) {
-		
 		defaultCustomer = {
 			...record,
 		};
 	} else {
-		
 		defaultCustomer = {
 			name: "",
 			surname: "",
@@ -127,7 +114,6 @@ function CustomersForm(props) {
 			note: "",
 		};
 	}
-	
 
 	const formProps = useForm({
 		defaultValues: defaultCustomer,
@@ -160,15 +146,12 @@ function CustomersForm(props) {
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	const checkRegistered = () => {
-		
 		const regUser = users.filter((user) => user.email === customerEmail);
-		
+
 		if (regUser[0]) {
-			
 			setRegistered(regUser[0].name);
 			console.log("click usr", regUser[0].name);
 		} else {
-			
 			setRegistered("Not Registered");
 		}
 	};
@@ -184,7 +167,7 @@ function CustomersForm(props) {
 		if (record) {
 			try {
 				setIsLoading(true);
-				
+
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/customers/edit/${record._id}`,
 					{
@@ -208,7 +191,6 @@ function CustomersForm(props) {
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-					
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -217,7 +199,6 @@ function CustomersForm(props) {
 					});
 					return data;
 				}
-				
 
 				setIsLoading(false);
 
@@ -245,7 +226,6 @@ function CustomersForm(props) {
 		} else {
 			try {
 				setIsLoading(true);
-				
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/customers/new",
@@ -269,7 +249,6 @@ function CustomersForm(props) {
 					}
 				);
 				const dataNew = await responseNew.json();
-				
 
 				setIsLoading(false);
 				history("/customers");
@@ -366,10 +345,7 @@ function CustomersForm(props) {
 										<Stack spacing={2}>
 											<Stack direction='row' spacing={2}>
 												<Stack>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Name
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -377,10 +353,7 @@ function CustomersForm(props) {
 													</Box>
 												</Stack>
 												<Stack style={{ width: "100%" }}>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Surname
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -390,10 +363,7 @@ function CustomersForm(props) {
 											</Stack>
 											<Stack direction='row' spacing={2}>
 												<Stack>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Cell
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -401,10 +371,7 @@ function CustomersForm(props) {
 													</Box>
 												</Stack>
 												<Stack style={{ width: "100%" }}>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Email
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -447,10 +414,7 @@ function CustomersForm(props) {
 												</Stack>
 											</Stack>
 											<Stack style={{ width: "100%" }}>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Address
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -468,10 +432,7 @@ function CustomersForm(props) {
 														}) => {
 															return (
 																<>
-																	<InputLabel
-																		sx={{ textAlign: "left" }}
-																		className={classes.label}
-																	>
+																	<InputLabel sx={{ textAlign: "left" }}>
 																		Area
 																	</InputLabel>
 																	<Box bgcolor='primary.light' p={0}>
@@ -515,10 +476,7 @@ function CustomersForm(props) {
 												</Stack>
 
 												<Stack>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Birthday
 													</InputLabel>
 													<Box
@@ -571,10 +529,7 @@ function CustomersForm(props) {
 													</Box>
 												</Stack>
 												<Stack>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Login Username
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -598,12 +553,7 @@ function CustomersForm(props) {
 												</Stack>
 											</Stack>
 											<Stack>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
-													Note
-												</InputLabel>
+												<InputLabel sx={{ textAlign: "left" }}>Note</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
 													<FieldInputTextarea name='note' control={control} />
 												</Box>

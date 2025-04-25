@@ -14,7 +14,7 @@ import {
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
@@ -29,21 +29,6 @@ import { AuthContext } from "../../shared/context/auth-context.js";
 import { usePromotionsValue } from "../../shared/context/PromotionsProvider.js";
 
 import { toast } from "sonner";
-
-const useStyles = makeStyles((theme) => ({
-	pageContent: {
-		align: "center",
-		margin: theme.spacing(5),
-		padding: theme.spacing(3),
-	},
-	searchInput: {
-		width: "50%",
-	},
-	newButton: {
-		position: "absolute",
-		right: "10px",
-	},
-}));
 
 const headCells = [
 	{ id: "promotion", label: "Promotion" },
@@ -60,7 +45,6 @@ export default function Promotion() {
 		dispatch,
 	} = usePromotionsValue();
 
-	const classes = useStyles();
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...promotions];
@@ -101,7 +85,6 @@ export default function Promotion() {
 				dispatch({ type: "UPDATE_PROMOTIONS", data });
 				setIsLoading(false);
 			} catch (err) {
-				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -134,7 +117,6 @@ export default function Promotion() {
 				}
 				setIsLoading(false);
 			} catch (err) {
-				//console.log("Fetch recipes error:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -148,7 +130,6 @@ export default function Promotion() {
 	}, []);
 
 	const deletePromotionItem = async (_id) => {
-		//console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/promotions/delete/${_id}`, {
@@ -171,7 +152,6 @@ export default function Promotion() {
 					});
 				});
 		} catch (err) {
-			//console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -224,12 +204,10 @@ export default function Promotion() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }}>
-				<Paper
-					textalign='center'
-					className={classes.pageContent}
-					sx={{ width: "100%", p: 1 }}
-				>
+			<Container
+				sx={{ border: "none", display: "flex", justifyContent: "center" }}
+			>
+				<Paper sx={{ width: "100%", p: 0 }}>
 					<Box
 						sx={{
 							mx: "auto",
@@ -246,7 +224,6 @@ export default function Promotion() {
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Promotions'
-							className={classes.searchInput}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -258,7 +235,7 @@ export default function Promotion() {
 						/>
 						<Button
 							variant='contained'
-							className={classes.newButton}
+							sx={{ marginLeft: "auto" }}
 							onClick={() => {
 								dispatch({
 									type: "RESET_SELECTED_PROMOTION",

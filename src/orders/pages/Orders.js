@@ -12,12 +12,10 @@ import {
 	TableCell,
 	Toolbar,
 	Typography,
-
 	CircularProgress,
 	InputAdornment,
-	
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+//import { makeStyles } from "@mui/styles";
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
@@ -33,22 +31,8 @@ import { AuthContext } from "../../shared/context/auth-context.js";
 import { useOrdersValue } from "../../shared/context/OrdersProvider.js";
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
-import { toast } from "sonner";
 
-const useStyles = makeStyles((theme) => ({
-	pageContent: {
-		align: "center",
-		margin: theme.spacing(5),
-		padding: theme.spacing(3),
-	},
-	searchInput: {
-		width: "75%",
-	},
-	newButton: {
-		position: "absolute",
-		right: "10px",
-	},
-}));
+import { toast } from "sonner";
 
 const headCells = [
 	{ id: "date", label: "Order" },
@@ -62,7 +46,6 @@ const headCells = [
 ];
 
 export default function Order() {
-	
 	const [isLoading, setIsLoading] = useState(true);
 	const auth = useContext(AuthContext);
 	const location = useLocation();
@@ -80,15 +63,10 @@ export default function Order() {
 		dispatchCustomer,
 	} = useCustomersValue();
 
-	const classes = useStyles();
-	// const [recordForEdit, setRecordForEdit] = useState(null);
-
 	const records = [...orders];
-	
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-		
 			return items;
 		},
 	});
@@ -107,7 +85,6 @@ export default function Order() {
 
 	useEffect(() => {
 		async function fetchOrders() {
-			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -121,14 +98,13 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-				
+
 				dispatchOrder({
 					type: "UPDATE_ORDERS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-			//	console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -143,7 +119,6 @@ export default function Order() {
 
 	useEffect(() => {
 		async function fetchMenus() {
-			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -157,14 +132,13 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-			
+
 				dispatchMenu({
 					type: "UPDATE_MENUS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -179,7 +153,6 @@ export default function Order() {
 
 	useEffect(() => {
 		async function fetchCustomers() {
-			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -193,14 +166,13 @@ export default function Order() {
 					}
 				);
 				const data = await response.json();
-				
+
 				dispatchCustomer({
 					type: "UPDATE_CUSTOMERS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -235,7 +207,6 @@ export default function Order() {
 				});
 				setIsLoading(false);
 			} catch (err) {
-				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -247,9 +218,6 @@ export default function Order() {
 		}
 		fetchPromotions();
 	}, []);
-
-
-	
 
 	const {
 		TblContainer,
@@ -266,7 +234,6 @@ export default function Order() {
 				else
 					return items.filter(
 						(x) =>
-							//console.log(x)
 							x.customer.name.toLowerCase().includes(target.value) ||
 							x.customer.surname.toLowerCase().includes(target.value)
 					);
@@ -274,7 +241,6 @@ export default function Order() {
 		});
 	};
 
-	
 	let orderDate = Date();
 	let menuDate = Date();
 
@@ -292,15 +258,13 @@ export default function Order() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }}>
-				<Paper
-					textalign='center'
-					className={classes.pageContent}
-					sx={{ width: "100%", p: 1 }}
-				>
+			<Container
+				sx={{ border: "none", display: "flex", justifyContent: "center" }}
+			>
+				<Paper sx={{ width: "fit-content", p: 0 }}>
 					<Box
 						sx={{
-							mx: "auto",
+							mx: "auo",
 							textAlign: "center",
 							p: 2,
 							m: 0,
@@ -310,11 +274,10 @@ export default function Order() {
 							Order Manager
 						</Typography>
 					</Box>
-					{/* <Divider /> */}
+
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Orders'
-							className={classes.searchInput}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -325,10 +288,8 @@ export default function Order() {
 							onChange={handleSearch}
 						/>
 						<Button
-							
 							variant='contained'
-							
-							className={classes.newButton}
+							sx={{ marginLeft: "auto" }}
 							onClick={() => {
 								dispatchOrder({
 									type: "RESET_SELECTED_ORDER",
@@ -340,7 +301,6 @@ export default function Order() {
 										type: "RESET_SELECTED_CUSTOMER",
 									}),
 									setOpenPopup(true);
-								
 							}}
 						>
 							{" "}
@@ -351,7 +311,6 @@ export default function Order() {
 						<TblHead />
 						<TableBody>
 							{recordsAfterPagingAndSorting().map((item) => {
-								//console.log("orderitem",item);
 								orderDate = new Date(item.date).toLocaleDateString("en-ZA");
 								menuDate = new Date(item.menu.date).toLocaleDateString("en-ZA");
 								return (
@@ -384,7 +343,6 @@ export default function Order() {
 															id: item.customer.id,
 														});
 													setOpenViewPopup(true);
-													// openInPopup(item);
 												}}
 											>
 												<PageviewOutlinedIcon
@@ -394,7 +352,6 @@ export default function Order() {
 													}}
 												/>
 											</Controls.ActionButton>
-											
 										</TableCell>
 									</TableRow>
 								);

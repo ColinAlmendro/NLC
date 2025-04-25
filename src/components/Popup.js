@@ -5,32 +5,32 @@ import {
 	DialogContent,
 	Typography,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+//import { makeStyles } from "@mui/styles";
 
 
-const useStyles = makeStyles(theme => ({
-    dialogWrapper: {
-        padding: theme.spacing(2),
-        position: 'absolute',
-        top: theme.spacing(5)
-    },
-    dialogTitle: {
-        paddingRight: '0px'
-    }
-}))
+// const useStyles = makeStyles(theme => ({
+//     dialogWrapper: {
+//         padding: theme.spacing(2),
+//         position: 'absolute',
+//         top: theme.spacing(5)
+//     },
+//     dialogTitle: {
+//         paddingRight: '0px'
+//     }
+// }))
 
 export default function Popup(props) {
 
     const { title, children, openPopup, setOpenPopup } = props;
-    const classes = useStyles();
+   // const classes = useStyles();
 
     return (
 			<Dialog
 				open={openPopup}
-				 maxWidth='lg'
+				maxWidth='lg'
 				//fullWidth
-				classes={{ paper: classes.dialogWrapper }}
-				
+				// classes={{ paper: classes.dialogWrapper }}
+				sx={{ padding: "2px", position: "absolute", top: "5px" }}
 			>
 				{/* <DialogTitle className={classes.dialogTitle}>
 					<div style={{ display: "flex" }}>
@@ -47,7 +47,7 @@ export default function Popup(props) {
 						</Controls.ActionButton>
 					</div>
 				</DialogTitle> */}
-				<DialogContent >{children}</DialogContent>
+				<DialogContent>{children}</DialogContent>
 			</Dialog>
 		);
 }

@@ -33,33 +33,13 @@ import { jsPDF } from "jspdf";
 import "./ViewOrder.css";
 
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
+
 import { toast } from "sonner";
 
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-	toggle: {
-		width: 50,
-		"& .Mui-checked": {
-			color: "#109125",
-			transform: "translateX(25px) !important",
-		},
-		"& .MuiSwitch-track": {
-			backgroundColor: "#008000e0",
-		},
-	},
-});
-
 function OrdersPerDay(props) {
-	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
-	
+
 	const [openMonday, setOpenMonday] = useState(false);
 	const [openTuesday, setOpenTuesday] = useState(false);
 	const [openWednesday, setOpenWednesday] = useState(false);
@@ -67,7 +47,7 @@ function OrdersPerDay(props) {
 	const [openFriday, setOpenFriday] = useState(false);
 	const [openFrozen, setOpenFrozen] = useState(false);
 	const [openPromo, setOpenPromo] = useState(false);
-	
+
 	const [notes, setNotes] = useState([]);
 
 	const [display, setDisplay] = React.useState("customers");
@@ -75,7 +55,6 @@ function OrdersPerDay(props) {
 	let notesArr = [];
 
 	const handleDisplay = (event, newDisplay) => {
-		
 		setDisplay(newDisplay);
 	};
 
@@ -97,7 +76,6 @@ function OrdersPerDay(props) {
 
 	useEffect(() => {
 		async function fetchMenus() {
-			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -111,7 +89,7 @@ function OrdersPerDay(props) {
 					}
 				);
 				const data = await response.json();
-				
+
 				dispatchMenu({
 					type: "UPDATE_MENUS",
 					data,
@@ -121,7 +99,6 @@ function OrdersPerDay(props) {
 				});
 				setIsLoading(false);
 			} catch (err) {
-				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -136,7 +113,6 @@ function OrdersPerDay(props) {
 
 	useEffect(() => {
 		async function fetchOrders() {
-			
 			try {
 				setIsLoading(true);
 				const response = await fetch(
@@ -150,14 +126,13 @@ function OrdersPerDay(props) {
 					}
 				);
 				const data = await response.json();
-				
+
 				dispatchOrder({
 					type: "UPDATE_ORDERS",
 					data,
 				});
 				setIsLoading(false);
 			} catch (err) {
-				//console.log(err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -195,11 +170,10 @@ function OrdersPerDay(props) {
 		setCurrentTabIndex(tabIndex);
 	};
 
-
-
 	const createPDF = async () => {
-		
-		const menuDate = new Date(selected_menu[0].date).toLocaleDateString("en-ZA");
+		const menuDate = new Date(selected_menu[0].date).toLocaleDateString(
+			"en-ZA"
+		);
 		const input = pdfRef.current;
 		html2canvas(input, { useCORS: true }).then((canvas) => {
 			const imgData = canvas.toDataURL("image/png");
@@ -235,8 +209,10 @@ function OrdersPerDay(props) {
 		<>
 			{/* // 55555555555555555555555555555555555555555555555555555555555555555555555555555555555 */}
 
-			<Container sx={{ border: "none", width: "100%" }}>
-				<Paper>
+			<Container
+				sx={{ border: "none", display: "flex", justifyContent: "center" }}
+			>
+				<Paper sx={{ width: "fit-content", p: 1 }}>
 					<Box display='flex' p={2}>
 						<div
 							ref={pdfRef}
@@ -267,7 +243,7 @@ function OrdersPerDay(props) {
 										<Grid item xs={12} lg={3}>
 											<Stack direction='row' spacing={1}>
 												<Button
-													sx={{ gap: "1rem", p: 1 }}
+													sx={{ gap: "1rem", p: 0, m: 1 }}
 													variant='contained'
 													color='error'
 													autoFocus
@@ -281,7 +257,7 @@ function OrdersPerDay(props) {
 													Close
 												</Button>
 												<Button
-													sx={{ display: "flex", gap: "1rem", p: 1 }}
+													sx={{ display: "flex", gap: "1rem", p: 0, m: 1 }}
 													variant='contained'
 													color='success'
 													onClick={() => {
@@ -304,23 +280,10 @@ function OrdersPerDay(props) {
 										<Grid item xs={4} lg={4}></Grid>
 										<Grid item xs={4} lg={4}>
 											<>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
-													Menu
-												</InputLabel>
+												<InputLabel sx={{ textAlign: "left" }}>Menu</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
 													<TextField
 														select
-														//value=""
-														// value={
-														// 	value === undefined ||
-														// 	value === null ||
-														// 	selected_menu.length === 0
-														// 		? ""
-														// 		: selected_menu[0].date
-														// }
 														defaultValue=''
 														onChange={(event) => {
 															dispatchMenu({
@@ -496,14 +459,14 @@ function OrdersPerDay(props) {
 												</Box>
 											)}
 											{/* FROZEN Contents */}
-											{currentTabIndex === 4 && (
+											{currentTabIndex === 5 && (
 												<Box sx={{ p: 3 }}>
 													<DaysOrder weekday='frozen' display={display} />
 												</Box>
 											)}
 											{/* PROMO Contents */}
 
-											{currentTabIndex === 5 && (
+											{currentTabIndex === 6 && (
 												<Box sx={{ p: 3 }}>
 													<DaysOrder weekday='promotion' display={display} />
 												</Box>

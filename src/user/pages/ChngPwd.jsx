@@ -7,16 +7,12 @@ import {
 	Paper,
 	Stack,
 	TextField,
-
 	Button,
 	IconButton,
 	InputAdornment,
-
 	FormControl,
 	FormControlLabel,
-
 	Grid,
-
 	CircularProgress,
 	Radio,
 	RadioGroup,
@@ -26,14 +22,9 @@ import { AuthContext } from "../../shared/context/auth-context.js";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-import { makeStyles } from "@mui/styles";
-
 import { toast } from "sonner";
 
-
-
 function ChngPwd(props) {
-	
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
@@ -52,8 +43,6 @@ function ChngPwd(props) {
 	const [showOldPassword, setShowOldPassword] = useState(false);
 	const [showNewPassword, setShowNewPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-
 
 	const [error, setError] = useState({
 		oldEmail: "",
@@ -192,25 +181,13 @@ function ChngPwd(props) {
 
 			return stateObj;
 		});
-	
 	};
 
 	const onSubmit = async () => {
-		// console.log(
-		// 	"clicked",
-		// 	oldEmail,
-		// 	newEmail,
-		// 	confirmEmail,
-		// 	oldPassword,
-		// 	 newPassword,
-		// 	confirmPassword,
-		// 	 pwdEmail
-		// );
-
 		if (choice === "email") {
 			try {
 				setIsLoading(true);
-		
+
 				const responseChangeEmail = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/users/changeEmail`,
 					{
@@ -230,7 +207,6 @@ function ChngPwd(props) {
 				);
 				const dataChangeEmail = await responseChangeEmail.json();
 				if (!responseChangeEmail.ok) {
-			
 					toast.error(dataChangeEmail.message, {
 						style: {
 							background: "red",
@@ -239,7 +215,6 @@ function ChngPwd(props) {
 					});
 					return data;
 				}
-			
 
 				setIsLoading(false);
 
@@ -254,20 +229,17 @@ function ChngPwd(props) {
 				setOpenPopup(false);
 				return dataChangeEmail;
 			} catch (err) {
-		
-			toast.error(err, {
-				style: {
-					background: "red",
-					color: "white",
-				},
-			});
+				toast.error(err, {
+					style: {
+						background: "red",
+						color: "white",
+					},
+				});
 				setIsLoading(false);
-
 			}
 		} else {
 			try {
 				setIsLoading(true);
-		
 
 				const responseChangePwd = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/users/changePwd",
@@ -286,7 +258,6 @@ function ChngPwd(props) {
 					}
 				);
 				const dataChangePwd = await responseChangePwd.json();
-				
 
 				setIsLoading(false);
 
@@ -300,7 +271,6 @@ function ChngPwd(props) {
 				setOpenPopup(false);
 				return dataChangePwd;
 			} catch (err) {
-				//console.log("Password err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -330,7 +300,7 @@ function ChngPwd(props) {
 							container
 							rowSpacing={1}
 							columnSpacing={0}
-							sx={{ border: "none" }} 
+							sx={{ border: "none" }}
 						>
 							<Grid item xs={12} lg={12}>
 								<Stack direction='row'>
@@ -390,7 +360,6 @@ function ChngPwd(props) {
 												type='button'
 												onClick={() => {
 													onSubmit();
-													
 												}}
 												disabled={
 													error.oldEmail !== "" ||
@@ -415,7 +384,6 @@ function ChngPwd(props) {
 									</Grid>
 								</Stack>
 							</Grid>
-							
 
 							<Divider sx={{ my: 1 }} />
 

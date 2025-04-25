@@ -33,19 +33,8 @@ import {
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
-import { makeStyles } from "@mui/styles";
-import "./Ingredients.css";
 
 import { toast } from "sonner";
-
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-});
 
 const validationSchema = Yup.object()
 	.shape({
@@ -71,7 +60,6 @@ const validationSchema = Yup.object()
 	.required();
 
 function IngredientsForm(props) {
-	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const { state, dispatch } = useValue();
 	const [isLoading, setIsLoading] = useState(false);
@@ -233,7 +221,6 @@ function IngredientsForm(props) {
 					history("/ingredients");
 					return data;
 				}
-				//console.log("ret data", dataNew);
 
 				setIsLoading(false);
 				history("/ingredients");
@@ -270,7 +257,7 @@ function IngredientsForm(props) {
 
 	return (
 		<>
-			<Container sx={{ border: "none" }} id='container'>
+			<Container sx={{ border: "none" }} >
 				<Paper>
 					{isLoading && <LoadingSpinner asOverlay />}
 
@@ -331,10 +318,7 @@ function IngredientsForm(props) {
 										<Stack spacing={2}>
 											<Stack direction='row' spacing={2}>
 												<Stack spacing={0}>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Category
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -346,10 +330,7 @@ function IngredientsForm(props) {
 													</Box>
 												</Stack>
 												<Stack spacing={0} style={{ width: "100%" }}>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Name
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -359,10 +340,7 @@ function IngredientsForm(props) {
 											</Stack>
 											<Stack direction='row' spacing={2}>
 												<Stack spacing={0} style={{ width: "100%" }}>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Description
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -382,10 +360,7 @@ function IngredientsForm(props) {
 														}) => {
 															return (
 																<div>
-																	<InputLabel
-																		sx={{ textAlign: "left" }}
-																		className={classes.label}
-																	>
+																	<InputLabel sx={{ textAlign: "left" }}>
 																		Price Kg/L
 																	</InputLabel>
 																	<Box bgcolor='primary.light' p={0}>

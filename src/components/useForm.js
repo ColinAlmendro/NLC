@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { makeStyles } from "@mui/styles";
+//import { makeStyles } from "@mui/styles";
 
 export function useForm(initialFValues, validateOnChange = false, validate) {
 
@@ -35,21 +35,21 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
 }
 
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        '& .MuiFormControl-root': {
-            width: '80%',
-            margin: theme.spacing(1)
-        }
-    }
-}))
+// const useStyles = makeStyles(theme => ({
+//     root: {
+//         '& .MuiFormControl-root': {
+//             width: '80%',
+//             margin: theme.spacing(1)
+//         }
+//     }
+// }))
 
 export function Form(props) {
 
-    const classes = useStyles();
+   // const classes = useStyles();
     const { children, ...other } = props;
     return (
-        <form className={classes.root} autoComplete="off" {...other}>
+        <form width="80%" margin="1px" autoComplete="off" {...other}>
             {props.children}
         </form>
     )

@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import { IconButton ,Button } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import "./CartCount.css";
 
 const CartCount = ({ count, onAddToCart, onRemoveFromCart, showCount }) => {
-	
 	return (
 		<div>
 			{showCount === "true" && (
@@ -18,7 +16,6 @@ const CartCount = ({ count, onAddToCart, onRemoveFromCart, showCount }) => {
 			)}
 			{showCount === "true" ? (
 				<IconButton onClick={onAddToCart}>
-					
 					<AddCircleOutlineIcon />
 				</IconButton>
 			) : (

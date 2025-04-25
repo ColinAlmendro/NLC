@@ -14,7 +14,7 @@ import {
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
@@ -28,23 +28,8 @@ import { AuthContext } from "../../shared/context/auth-context.js";
 
 import { useCustomersValue } from "../../shared/context/CustomersProvider.js";
 import { useUsersValue } from "../../shared/context/UsersProvider.js";
-import "./Customers.css";
-import { toast } from "sonner";
 
-const useStyles = makeStyles((theme) => ({
-	pageContent: {
-		align: "center",
-		margin: theme.spacing(5),
-		padding: theme.spacing(3),
-	},
-	searchInput: {
-		width: "50%",
-	},
-	newButton: {
-		position: "absolute",
-		right: "10px",
-	},
-}));
+import { toast } from "sonner";
 
 const headCells = [
 	{ id: "name", label: "Name" },
@@ -71,13 +56,11 @@ export default function Customer() {
 		usersState: { users, selected_user },
 		dispatchUser,
 	} = useUsersValue();
-	const classes = useStyles();
 
 	const records = [...customers];
 
 	const [filterFn, setFilterFn] = useState({
 		fn: (items) => {
-			//console.log("filteritems", items);
 			return items;
 		},
 	});
@@ -156,7 +139,6 @@ export default function Customer() {
 	}, []);
 
 	const deleteCustomerItem = async (_id) => {
-		//console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/customers/delete/${_id}`, {
@@ -179,7 +161,6 @@ export default function Customer() {
 					});
 				});
 		} catch (err) {
-			//console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -203,8 +184,10 @@ export default function Customer() {
 			fn: (items) => {
 				if (target.value == "") return items;
 				else
-					return items.filter((x) =>
-						x.name.toLowerCase().includes(target.value)
+					return items.filter(
+						(x) =>
+							x.name.toLowerCase().includes(target.value) ||
+							x.surname.toLowerCase().includes(target.value)
 					);
 			},
 		});
@@ -233,13 +216,11 @@ export default function Customer() {
 	}
 	return (
 		<>
-			<Container id='container' sx={{ border: "none", width: "100%" }}>
-				<Paper
-					textalign='center'
-					className={classes.pageContent}
-					//sx={{ width: "fit-content", p: 0 }}
-					sx={{ width: "100%", p: 0 }}
-				>
+			<Container
+				id='container'
+				sx={{ border: "none", display: "flex", justifyContent: "center" }}
+			>
+				<Paper sx={{ width: "100%", p: 0 }}>
 					,
 					<Box
 						sx={{
@@ -256,7 +237,6 @@ export default function Customer() {
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Customers'
-							className={classes.searchInput}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -268,7 +248,6 @@ export default function Customer() {
 						/>
 						<Button
 							variant='contained'
-							className={classes.newButton}
 							sx={{ marginLeft: "auto" }}
 							onClick={() => {
 								dispatchCustomer({

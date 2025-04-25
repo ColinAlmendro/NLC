@@ -23,8 +23,6 @@ import {
 	useFieldArray,
 	Controller,
 } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { DevTool } from "@hookform/devtools";
 
 import "./Listitem.css";
 
@@ -285,9 +283,6 @@ const Day = ({ weekday }) => {
 								},
 								index
 							) => {
-								{
-									/* console.log("List", fields[0]); */
-								}
 								return (
 									<ListItem key={index}>
 										<Grid width='95%'>
@@ -333,7 +328,6 @@ const Day = ({ weekday }) => {
 															color='error'
 															type='button'
 															onClick={() => {
-																// console.log("index", id),
 																remove(main),
 																	setMeal({
 																		image: "",
@@ -344,7 +338,6 @@ const Day = ({ weekday }) => {
 																		sidename: "",
 																		sidedescription: "",
 																	}),
-																	//	console.log("appendedmeal", meal),
 																	(document.getElementById(
 																		"dayMainDescInput"
 																	).value = ""),

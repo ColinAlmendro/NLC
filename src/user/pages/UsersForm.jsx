@@ -30,18 +30,8 @@ import {
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
 
 import { toast } from "sonner";
-
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "black",
-		},
-	},
-});
 
 const validationSchema = Yup.object()
 	.shape({
@@ -66,7 +56,6 @@ const validationSchema = Yup.object()
 	.required();
 
 function UsersForm(props) {
-	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
@@ -84,12 +73,10 @@ function UsersForm(props) {
 
 	let defaultUser = {};
 	if (record) {
-	
 		defaultUser = {
 			...record,
 		};
 	} else {
-	
 		defaultUser = {
 			name: "",
 			email: "",
@@ -135,12 +122,10 @@ function UsersForm(props) {
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	const onSubmit = async (data) => {
-		//console.log("clicked", data);
-
 		if (record) {
 			try {
 				setIsLoading(true);
-				//console.log("in edit submit");
+
 				const responseEdit = await fetch(
 					process.env.REACT_APP_BACKEND_URL + `/users/edit/${record._id}`,
 					{
@@ -160,7 +145,6 @@ function UsersForm(props) {
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-					//console.log("response error", dataEdit.message);
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -169,14 +153,13 @@ function UsersForm(props) {
 					});
 					return data;
 				}
-				//console.log("UpDateUser", data);
 
 				setIsLoading(false);
 
 				setOpen(false);
 				setOpenPopup(false);
 				history("/users");
-	
+
 				toast.success("User updated", {
 					style: {
 						background: "green",
@@ -185,13 +168,11 @@ function UsersForm(props) {
 				});
 				return data.users;
 			} catch (err) {
-				//console.log("Update err:", err);
 				setIsLoading(false);
 			}
 		} else {
 			try {
 				setIsLoading(true);
-			//	console.log("in new submit");
 
 				const responseNew = await fetch(
 					process.env.REACT_APP_BACKEND_URL + "/users/signup",
@@ -211,11 +192,10 @@ function UsersForm(props) {
 					}
 				);
 				const dataNew = await responseNew.json();
-				//console.log("ret data", dataNew);
 
 				setIsLoading(false);
 				history("/users");
-				
+
 				toast.success("New user added", {
 					style: {
 						background: "green",
@@ -226,7 +206,6 @@ function UsersForm(props) {
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
-			//	console.log("SubmitNew err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -251,8 +230,6 @@ function UsersForm(props) {
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper>
-					
-
 					<Box display='flex' p={2}>
 						<FormProvider {...formProps}>
 							<form onSubmit={handleSubmit(onSubmit)}>
@@ -260,7 +237,7 @@ function UsersForm(props) {
 									container
 									rowSpacing={1}
 									columnSpacing={0}
-									sx={{ border: "none" }} 
+									sx={{ border: "none" }}
 								>
 									<Grid item xs={12} lg={12}>
 										<Stack direction='row'>
@@ -310,10 +287,7 @@ function UsersForm(props) {
 										<Stack spacing={2}>
 											<Stack direction='row' spacing={2}>
 												<Stack>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Username
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -322,10 +296,7 @@ function UsersForm(props) {
 												</Stack>
 
 												<Stack style={{ width: "100%" }}>
-													<InputLabel
-														sx={{ textAlign: "left" }}
-														className={classes.label}
-													>
+													<InputLabel sx={{ textAlign: "left" }}>
 														Email
 													</InputLabel>
 													<Box bgcolor='primary.light' p={0}>
@@ -334,18 +305,11 @@ function UsersForm(props) {
 												</Stack>
 											</Stack>
 											<Stack style={{ width: "50%" }}>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Password
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
-													<FieldInputText
-														name='password'
-														control={control}
-														
-													/>
+													<FieldInputText name='password' control={control} />
 												</Box>
 											</Stack>
 											<Stack direction='row' spacing={2}>
@@ -359,21 +323,16 @@ function UsersForm(props) {
 														}) => {
 															return (
 																<>
-																	<InputLabel
-																		sx={{ textAlign: "left" }}
-																		className={classes.label}
-																	>
+																	<InputLabel sx={{ textAlign: "left" }}>
 																		Administrator
 																	</InputLabel>
 																	<Box bgcolor='primary.light' p={0}>
 																		<Checkbox
 																			checked={administrator}
-																			
 																			onChange={(event) => {
 																				onChange(event.target.checked);
 																				setAdministrator(event.target.checked);
 																			}}
-																			
 																			onError={error}
 																		/>
 																	</Box>

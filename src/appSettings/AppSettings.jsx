@@ -1,15 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "../../src/shared/components/UIElements/LoadingSpinner.js";
-
 import { AuthContext } from "../shared/context/auth-context";
 import { useValue } from "../shared/context/SettingsProvider.js";
 import Controls from "../components/controls/Controls.js";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-
 import CloseIcon from "@mui/icons-material/Close";
-//import Notification from "../components/Notification.js";
-//import ConfirmDialog from "../components/ConfirmDialog.js";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 
@@ -28,7 +23,7 @@ import {
 	Grid,
 	Card,
 	CardMedia,
-	IconButton,
+	CircularProgress,
 } from "@mui/material";
 
 import { toast } from "sonner";
@@ -609,12 +604,18 @@ function AppSettings() {
 		});
 	};
 	// //////////////////////////////////////////////////////////////////////////
-
+if (isLoading) {
+		return (
+			<Box sx={{ display: "flex", justifyContent: "center" }}>
+				<CircularProgress />
+			</Box>
+		);
+	}
 	return (
 		<>
 			<Container sx={{ border: "none" }}>
 				<Paper>
-					{isLoading && <LoadingSpinner asOverlay />}
+					
 					<Box display='flex' p={2}>
 						<Grid
 							container

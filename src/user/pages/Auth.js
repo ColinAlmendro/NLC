@@ -3,8 +3,8 @@ import React, { useState, useContext } from "react";
 import Card from "../../shared/components/UIElements/Card";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
-import { Button as Btn, Box, Stack } from "@mui/material";
-import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { Button as Btn, Box, Stack, CircularProgress } from "@mui/material";
+
 import Popup from "../../components/Popup.js";
 import ChngPwd from "./ChngPwd.jsx";
 import {
@@ -153,11 +153,16 @@ const Auth = () => {
 			}
 		}
 	};
-
+	if (isLoading) {
+		return (
+			<Box sx={{ display: "flex", justifyContent: "center" }}>
+				<CircularProgress />
+			</Box>
+		);
+	}
 	return (
 		<React.Fragment>
 			<Card className='authentication'>
-				{isLoading && <LoadingSpinner asOverlay />}
 				<h2>Login Required</h2>
 				<hr />
 				<form onSubmit={authSubmitHandler}>

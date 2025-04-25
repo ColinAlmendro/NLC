@@ -1,14 +1,11 @@
 import React, { Suspense, useRef, useEffect, useContext } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-
+import { Box, CircularProgress } from "@mui/material";
 import Navbar from "./shared/components/Navigation/Navbar/Navbar.jsx";
 
-import LoadingSpinner from "./shared/components/UIElements/LoadingSpinner";
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import { useValue } from "./shared/context/SettingsProvider.js";
-
-import { makeStyles } from "@mui/styles";
 import { CssBaseline, createTheme, ThemeProvider } from "@mui/material";
 
 const Home = React.lazy(() => import("./shared/home/pages/Home"));
@@ -172,7 +169,9 @@ const App = () => {
 							<Suspense
 								fallback={
 									<div className='center'>
-										<LoadingSpinner />
+										<Box sx={{ display: "flex", justifyContent: "center" }}>
+											<CircularProgress />
+										</Box>
 									</div>
 								}
 							>

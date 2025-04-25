@@ -7,34 +7,34 @@ import {
 	TablePagination,
 	TableSortLabel,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+//import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
-	table: {
-		marginTop: theme.spacing(3),
-		"& thead th": {
-			fontWeight: "600",
-			color: theme.palette.primary.main,
-			backgroundColor: theme.palette.primary.light,
-		},
-		"& tbody td": {
-			fontWeight: "300",
-		},
-		"& tbody tr:hover": {
-			backgroundColor: "#fffbf2",
-			cursor: "pointer",
-		},
-	},
+// const useStyles = makeStyles((theme) => ({
+// 	table: {
+// 		marginTop: theme.spacing(3),
+// 		"& thead th": {
+// 			fontWeight: "600",
+// 			color: theme.palette.primary.main,
+// 			backgroundColor: theme.palette.primary.light,
+// 		},
+// 		"& tbody td": {
+// 			fontWeight: "300",
+// 		},
+// 		"& tbody tr:hover": {
+// 			backgroundColor: "#fffbf2",
+// 			cursor: "pointer",
+// 		},
+// 	},
 	// cell: {
 	// 	height:"5px",
 	// 		padding: "none",
 	// 	},
 
-}));
+//}));
 
 export default function useTable(records, headCells, filterFn) {
 		//console.log("tablerecords",records)
-	const classes = useStyles();
+	//const classes = useStyles();
 
 	const pages = [5, 10, 25];
 	const [page, setPage] = useState(0);
@@ -43,7 +43,26 @@ export default function useTable(records, headCells, filterFn) {
 	const [orderBy, setOrderBy] = useState();
 
 	const TblContainer = (props) => (
-		<Table sx={{ mx: "auto", width: "100%" }} className={classes.table}>
+		<Table
+			sx={{
+				//mx: "auto",
+				width: "100%",
+				mt: "3px",
+				"& thead th": {
+					fontWeight: "600",
+					color: "#3f50b5",
+					backgroundColor: "#e3f2fd",
+				},
+				"& tbody td": {
+					fontWeight: "300",
+				},
+				"& tbody tr:hover": {
+					backgroundColor: "#fffbf2",
+					cursor: "pointer",
+				},
+			}}
+			//	className={classes.table}
+		>
 			{props.children}
 		</Table>
 	);
@@ -65,9 +84,10 @@ export default function useTable(records, headCells, filterFn) {
 				>
 					{headCells.map((headCell) => (
 						<TableCell
+						height="5px"
 							key={headCell.id}
 							sortDirection={orderBy === headCell.id ? order : false}
-							className={classes.cell}
+							//className={classes.cell}
 							// padding="none"
 							
 						>

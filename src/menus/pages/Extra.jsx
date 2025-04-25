@@ -210,7 +210,6 @@ const Extra = ({ extra }) => {
 												mainname: "",
 												maindescription: "",
 											}),
-										//	console.log("appendedmeal", meal),
 											(document.getElementById("extraMainDescInput").value =
 												"");
 									}}
@@ -263,7 +262,6 @@ const Extra = ({ extra }) => {
 														color='error'
 														type='button'
 														onClick={() => {
-															// console.log("index", id),
 															remove(main),
 																setMeal({
 																	image: "",

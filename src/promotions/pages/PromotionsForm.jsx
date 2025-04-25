@@ -36,24 +36,13 @@ import { DevTool } from "@hookform/devtools";
 
 import "./Listitem.css";
 
-import { makeStyles } from "@mui/styles";
 import { toast } from "sonner";
-
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-});
 
 const validationSchema = Yup.object()
 	.shape({})
 	.required();
 
 function PromotionsForm(props) {
-	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const { openPopup, setOpenPopup } = props;
@@ -169,7 +158,6 @@ function PromotionsForm(props) {
 			setIsLoading(false);
 			return imageUrl;
 		} catch (error) {
-			//console.log("cloudinary upload error:", error);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -202,7 +190,6 @@ function PromotionsForm(props) {
 				);
 				const dataEdit = await responseEdit.json();
 				if (!responseEdit.ok) {
-					//console.log("response error", dataEdit.message);
 					toast.error(dataEdit.message, {
 						style: {
 							background: "red",
@@ -226,7 +213,6 @@ function PromotionsForm(props) {
 				});
 				return data.promotions;
 			} catch (err) {
-				//console.log("Update err:", err);
 				setIsLoading(false);
 			}
 		} else {
@@ -249,7 +235,6 @@ function PromotionsForm(props) {
 					}
 				);
 				const dataNew = await responseNew.json();
-				//console.log("ret data", dataNew);
 
 				setIsLoading(false);
 				history("/promotions");
@@ -264,7 +249,6 @@ function PromotionsForm(props) {
 				setOpenPopup(false);
 				return dataNew;
 			} catch (err) {
-				//console.log("SubmitNew err:", err);
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -354,10 +338,7 @@ function PromotionsForm(props) {
 													}) => {
 														return (
 															<>
-																<InputLabel
-																	sx={{ textAlign: "left" }}
-																	className={classes.label}
-																>
+																<InputLabel sx={{ textAlign: "left" }}>
 																	Promotion Name
 																</InputLabel>
 																<Box bgcolor='primary.light' p={0}>
@@ -366,8 +347,6 @@ function PromotionsForm(props) {
 																		onChange={onChange}
 																		value={value}
 																		size='small'
-																		// helperText={`${error?.message ? error?.message : ""}`}
-																		// error={!!error}
 																		fullWidth
 																		sx={{
 																			"& fieldset": { border: "none" },
@@ -419,10 +398,7 @@ function PromotionsForm(props) {
 											<Grid item xs={12} lg={8}>
 												<Stack>
 													<>
-														<InputLabel
-															sx={{ textAlign: "left" }}
-															className={classes.label}
-														>
+														<InputLabel sx={{ textAlign: "left" }}>
 															Recipe
 														</InputLabel>
 
@@ -442,7 +418,6 @@ function PromotionsForm(props) {
 																	width: "100%",
 																	border: "1px solid",
 																}}
-																// error={!!error}
 																onChange={(event) => {
 																	handelRecipeChange(event);
 																}}
@@ -461,10 +436,7 @@ function PromotionsForm(props) {
 															</TextField>
 														</Box>
 
-														<InputLabel
-															sx={{ textAlign: "left" }}
-															className={classes.label}
-														>
+														<InputLabel sx={{ textAlign: "left" }}>
 															Description
 														</InputLabel>
 														<Box bgcolor='primary.light' p={0}>
@@ -495,10 +467,7 @@ function PromotionsForm(props) {
 														</Box>
 														<Stack direction='row' spacing={4}>
 															<Stack>
-																<InputLabel
-																	sx={{ textAlign: "left" }}
-																	className={classes.label}
-																>
+																<InputLabel sx={{ textAlign: "left" }}>
 																	Volume
 																</InputLabel>
 																<Box bgcolor='primary.light' p={0}>
@@ -527,10 +496,7 @@ function PromotionsForm(props) {
 																</Box>
 															</Stack>
 															<Stack>
-																<InputLabel
-																	sx={{ textAlign: "left" }}
-																	className={classes.label}
-																>
+																<InputLabel sx={{ textAlign: "left" }}>
 																	Price
 																</InputLabel>
 																<Box bgcolor='primary.light' p={0}>
@@ -583,7 +549,6 @@ function PromotionsForm(props) {
 															append({
 																...promoItem,
 															}),
-																//  uploadFile(promoItem.image),
 																setPromoImage(null),
 																setPromoItem({
 																	image: "",
@@ -614,10 +579,7 @@ function PromotionsForm(props) {
 										<Divider sx={{ my: 2 }} />
 
 										<Grid item xs={12} lg={12}>
-											<InputLabel
-												sx={{ textAlign: "left" }}
-												className={classes.label}
-											>
+											<InputLabel sx={{ textAlign: "left" }}>
 												Promotion Items
 											</InputLabel>
 										</Grid>
@@ -633,7 +595,6 @@ function PromotionsForm(props) {
 																{ image, name, description, volume, price },
 																index
 															) => {
-																
 																return (
 																	<ListItem key={index}>
 																		<Grid width='95%'>

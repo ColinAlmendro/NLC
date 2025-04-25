@@ -14,7 +14,7 @@ import {
 	CircularProgress,
 	InputAdornment,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+
 import useTable from "../../components/useTable.js";
 import Controls from "../../components/controls/Controls.js";
 import { Search } from "@mui/icons-material";
@@ -30,25 +30,9 @@ import { useUsersValue } from "../../shared/context/UsersProvider.js";
 
 import { toast } from "sonner";
 
-const useStyles = makeStyles((theme) => ({
-	pageContent: {
-		align: "center",
-		margin: theme.spacing(5),
-		padding: theme.spacing(3),
-	},
-	searchInput: {
-		width: "50%",
-	},
-	newButton: {
-		position: "absolute",
-		right: "10px",
-	},
-}));
-
 const headCells = [
 	{ id: "name", label: "Username" },
 	{ id: "email", label: "Email" },
-
 	{ id: "admin", label: "Administrator" },
 	{ id: "actions", label: "Actions", disableSorting: true },
 ];
@@ -63,7 +47,6 @@ export default function User() {
 		dispatchUser,
 	} = useUsersValue();
 
-	const classes = useStyles();
 	const [recordForEdit, setRecordForEdit] = useState(null);
 
 	const records = [...users];
@@ -117,7 +100,6 @@ export default function User() {
 	}, [location.key]);
 
 	const deleteUserItem = async (_id) => {
-		//console.log("deleteitem:", _id);
 		try {
 			setIsLoading(true);
 			fetch(process.env.REACT_APP_BACKEND_URL + `/users/delete/${_id}`, {
@@ -131,7 +113,7 @@ export default function User() {
 				.then(() => {
 					dispatchUser({ type: "DELETE_USER", _id });
 					setIsLoading(false);
-					// alert("User deleted !");
+
 					toast.success("User deleted", {
 						style: {
 							background: "green",
@@ -140,7 +122,6 @@ export default function User() {
 					});
 				});
 		} catch (err) {
-			//console.log("Delete error", err);
 			toast.error(err, {
 				style: {
 					background: "red",
@@ -194,12 +175,10 @@ export default function User() {
 	}
 	return (
 		<>
-			<Container sx={{ border: "none" }}>
-				<Paper
-					textalign='center'
-					className={classes.pageContent}
-					sx={{ width: "100%", p: 1 }}
-				>
+			<Container
+				sx={{ border: "none", display: "flex", justifyContent: "center" }}
+			>
+				<Paper sx={{ width: "100%", p: 0 }}>
 					<Box
 						sx={{
 							mx: "auto",
@@ -216,7 +195,7 @@ export default function User() {
 					<Toolbar style={{ width: "100%" }}>
 						<Controls.Input
 							label='Search Users'
-							className={classes.searchInput}
+							className='searchInput'
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -228,7 +207,6 @@ export default function User() {
 						/>
 						<Button
 							variant='contained'
-							className={classes.newButton}
 							sx={{ marginLeft: "auto" }}
 							onClick={() => {
 								dispatchUser({

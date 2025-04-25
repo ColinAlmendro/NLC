@@ -27,21 +27,21 @@ import { NumericFormat } from "react-number-format";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useValue } from "../../shared/context/SettingsProvider.js";
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 import { toast } from "sonner";
 
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		fontSize: 12,
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-});
+// const useStyles = makeStyles({
+// 	label: {
+// 		color: "#212121",
+// 		fontSize: 12,
+// 		"&.Mui-focused": {
+// 			color: "darkred",
+// 		},
+// 	},
+// });
 
 const RecipeIngredients = (params) => {
-	const classes = useStyles();
+	// const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const { state, dispatch } = useValue();
 	const [isLoading, setIsLoading] = useState(false);
@@ -80,7 +80,6 @@ const RecipeIngredients = (params) => {
 	//&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	useEffect(() => {
-		
 		async function fetchIngredients() {
 			try {
 				setIsLoading(true);
@@ -96,10 +95,9 @@ const RecipeIngredients = (params) => {
 				);
 				const data = await response.json();
 				setIngredientsList(data.ingredients);
-				
+
 				setIsLoading(false);
 			} catch (err) {
-			
 				toast.error(err, {
 					style: {
 						background: "red",
@@ -150,9 +148,7 @@ const RecipeIngredients = (params) => {
 		<Grid item xs={12} lg={12}>
 			<Stack direction='row' spacing={2}>
 				<Grid item xs={2} lg={2}>
-					<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-						Category
-					</InputLabel>
+					<InputLabel sx={{ textAlign: "left" }}>Category</InputLabel>
 					<Box bgcolor='primary.light' p={0}>
 						<TextField
 							select
@@ -182,9 +178,7 @@ const RecipeIngredients = (params) => {
 					</Box>
 				</Grid>
 				<Grid item xs={5} lg={5}>
-					<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-						Ingredient
-					</InputLabel>
+					<InputLabel sx={{ textAlign: "left" }}>Ingredient</InputLabel>
 					<Box bgcolor='primary.light' p={0}>
 						<TextField
 							select
@@ -220,9 +214,7 @@ const RecipeIngredients = (params) => {
 					</Box>
 				</Grid>
 				<Grid item xs={2} lg={2}>
-					<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-						Amount
-					</InputLabel>
+					<InputLabel sx={{ textAlign: "left" }}>Amount</InputLabel>
 					<Box bgcolor='primary.light' p={0}>
 						<TextField
 							value={ingredientItem.amount}
@@ -249,9 +241,7 @@ const RecipeIngredients = (params) => {
 					</Box>
 				</Grid>
 				<Grid item xs={1} lg={1}>
-					<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-						Qty / Kg
-					</InputLabel>
+					<InputLabel sx={{ textAlign: "left" }}>Qty / Kg</InputLabel>
 					<Box bgcolor='primary.light' p={0}>
 						<NumericFormat
 							customInput={TextField}
@@ -279,9 +269,7 @@ const RecipeIngredients = (params) => {
 					</Box>
 				</Grid>
 				<Grid item xs={1} lg={1}>
-					<InputLabel sx={{ textAlign: "left" }} className={classes.label}>
-						Cost Kg/L
-					</InputLabel>
+					<InputLabel sx={{ textAlign: "left" }}>Cost Kg/L</InputLabel>
 					<Box bgcolor='primary.light' p={0}>
 						<TextField
 							value={ingredientItem.cost}
@@ -338,37 +326,21 @@ const RecipeIngredients = (params) => {
 					<Grid width='100%'>
 						<Stack direction='row' width='100%'>
 							<Grid item xs={1} lg={1}>
-								<InputLabel
-									sx={{ textAlign: "left", pl: 2 }}
-									className={classes.label}
-								>
+								<InputLabel sx={{ textAlign: "left", pl: 2 }}>
 									Amount
 								</InputLabel>
 							</Grid>
 							<Grid item xs={7} lg={7}>
-								<InputLabel
-									sx={{ textAlign: "left", pl: 2 }}
-									className={classes.label}
-								>
+								<InputLabel sx={{ textAlign: "left", pl: 2 }}>
 									Ingredient
 								</InputLabel>
 							</Grid>
 
 							<Grid item xs={1} lg={1}>
-								<InputLabel
-									sx={{ textAlign: "left" }}
-									className={classes.label}
-								>
-									Quantity
-								</InputLabel>
+								<InputLabel sx={{ textAlign: "left" }}>Quantity</InputLabel>
 							</Grid>
 							<Grid item xs={1} lg={1}>
-								<InputLabel
-									sx={{ textAlign: "left" }}
-									className={classes.label}
-								>
-									Cost
-								</InputLabel>
+								<InputLabel sx={{ textAlign: "left" }}>Cost</InputLabel>
 							</Grid>
 							<Grid item xs={2} lg={2}></Grid>
 						</Stack>
@@ -382,13 +354,10 @@ const RecipeIngredients = (params) => {
 								{fields.map(
 									({ category, ingredient, amount, qty, cost }, index) => {
 										{
-											
-
 											if (ingredient.name === undefined) {
 												let currIngredient = ingredientsList.find(
 													(item) => item._id === ingredient
 												);
-												
 
 												if (currIngredient !== undefined) {
 													ingredientName = currIngredient.name;
@@ -455,15 +424,10 @@ const RecipeIngredients = (params) => {
 																color='error'
 																type='button'
 																onClick={() => {
-																	// console.log(
-																	// 	"removecost",
-																	// 	params.totalCost,
-																	// 	ingredientItem.cost
-																	// ),
-																		params.setTotalCost(
-																			params.totalCost -
-																				Number(ingredientItem.cost)
-																		),
+																	params.setTotalCost(
+																		params.totalCost -
+																			Number(ingredientItem.cost)
+																	),
 																		remove(index),
 																		setIngredientItem({
 																			category: "",

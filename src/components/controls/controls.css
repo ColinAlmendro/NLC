@@ -1,0 +1,24 @@
+.root {
+	/* margin: 0.5px; */
+	min-width:0px;
+}
+.secondary {
+	background-color: "#ff7961";
+	color: "#f44336";
+}
+.primary {
+	background-color: "#757ce8";
+	color: "#3f50b5";
+}
+.error {
+	background-color: "#757ce8";
+	color: "#ba000d";
+}
+.warning {
+	background-color: "#757ce8";
+	color: "#ff5722";
+}
+.success {
+	background-color: "#757ce8";
+	color: "#4caf50";
+}

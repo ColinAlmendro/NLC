@@ -1,21 +1,21 @@
 import React from 'react'
 import { Button as MuiButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+// import { makeStyles } from "@mui/styles";
 
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        margin: theme.spacing(0.5)
-    },
-    label: {
-        textTransform: 'none'
-    }
-}))
+// const useStyles = makeStyles(theme => ({
+//     root: {
+//         margin: theme.spacing(0.5)
+//     },
+//     label: {
+//         textTransform: 'none'
+//     }
+// }))
 
 export default function Button(props) {
 
     const { text, size, color, variant, onClick, ...other } = props
-    const classes = useStyles();
+    // const classes = useStyles();
 
     return (
         <MuiButton
@@ -24,7 +24,8 @@ export default function Button(props) {
             color={color || "primary"}
             onClick={onClick}
             {...other}
-            classes={{ root: classes.root, label: classes.label }}>
+            // classes={{ root: classes.root, label: classes.label }}
+            >
             {text}
         </MuiButton>
     )

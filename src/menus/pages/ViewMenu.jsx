@@ -16,7 +16,7 @@ import {
 	ImageListItem,
 	ImageListItemBar,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+
 import { useMenuValue } from "../../shared/context/MenuProvider.js";
 import { useValue } from "../../shared/context/SettingsProvider.js";
 
@@ -26,25 +26,7 @@ import "./ViewMenu.css";
 import "./CartList.css";
 import "./MenuItem.css";
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		display: "flex",
-		flexWrap: "wrap",
-		justifyContent: "space-around",
-		overflow: "hidden",
-		backgroundColor: theme.palette.background.paper,
-	},
-	imageList: {
-		// width: 500,
-		height: 200,
-	},
-	icon: {
-		color: "rgba(255, 255, 255, 0.54)",
-	},
-}));
-
 function ViewMenu(props) {
-	const classes = useStyles();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const pdfRef = useRef();
@@ -141,7 +123,7 @@ function ViewMenu(props) {
 
 	useEffect(() => {
 		const week = selectedDate;
-		//console.log("getValues_date", week);
+
 		let endDate = new Date(week);
 		// Add 5 days to the start date
 		endDate.setDate(week.getDate() + 5);
@@ -162,7 +144,6 @@ function ViewMenu(props) {
 	}, [selectedDate]);
 
 	const createPDF = async () => {
-		//const menuDate = new Date(order.menu.date).toLocaleDateString("en-ZA");
 		const input = pdfRef.current;
 		html2canvas(input, { useCORS: true }).then((canvas) => {
 			const imgData = canvas.toDataURL("image/png");
@@ -173,7 +154,7 @@ function ViewMenu(props) {
 			const imgHeight = canvas.height + 800;
 
 			const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-			//console.log("kkk", pdfWidth, imgWidth, pdfHeight, imgHeight, ratio);
+
 			const imgX = (pdfWidth - imgWidth * ratio) / 2;
 			const imgY = 0;
 			pdf.addImage(
@@ -260,7 +241,6 @@ function ViewMenu(props) {
 								columnSpacing={0}
 								sx={{ border: "none" }}
 							>
-								
 								{/* 7777777777777777777777777777777777777777777777777777777777777777777777777777777777 */}
 								<Grid item xs={4} lg={4}></Grid>
 								<Grid item xs={4} lg={4}>
@@ -360,9 +340,17 @@ function ViewMenu(props) {
 
 											<Grid item xs={12} lg={12} mt={2}>
 												{/* Promotion Items */}
-												<Box className={classes.root}>
+												<Box
+													sx={{
+														display: "flex",
+														flexWrap: "wrap",
+														justifyContent: "space-around",
+														overflow: "hidden",
+														backgroundColor: theme.palette.background.paper,
+													}}
+												>
 													<ImageList
-														className={classes.imageList}
+														sx={{ width: 200, height: 200 }}
 														cols={6}
 														rowHeight={50}
 														gap={5}
@@ -444,7 +432,7 @@ function ViewMenu(props) {
 										))}
 									</List>
 								</Grid>
-								{/* ############################################################################################################################################################ */}
+								{/* ########################################
 								{/* <Day weekday='monday' /> */}
 								<Grid item xs={12} lg={12}>
 									{defaultMenu.monday && (
@@ -496,9 +484,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Tuesday</Typography>
 											<ul>
 												{defaultMenu.tuesday.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -537,9 +522,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Wednesday</Typography>
 											<ul>
 												{defaultMenu.wednesday.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -578,9 +560,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Thursday</Typography>
 											<ul>
 												{defaultMenu.thursday.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -619,9 +598,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Friday</Typography>
 											<ul>
 												{defaultMenu.friday.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -661,9 +637,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Vegies</Typography>
 											<ul>
 												{defaultMenu.vegies.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -702,9 +675,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Salads</Typography>
 											<ul>
 												{defaultMenu.salads.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -743,9 +713,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Soups</Typography>
 											<ul>
 												{defaultMenu.soups.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -784,9 +751,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Sides</Typography>
 											<ul>
 												{defaultMenu.sides.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -825,9 +789,6 @@ function ViewMenu(props) {
 											<Typography fontWeight='600'>Frozen Meals</Typography>
 											<ul>
 												{defaultMenu.frozen.map((item, i) => {
-													{
-														/* console.log("item", item); */
-													}
 													return (
 														<li key={i} className='cartlist_item'>
 															<Stack direction='row' spacing={2}>
@@ -861,7 +822,6 @@ function ViewMenu(props) {
 								</Grid>
 							</Grid>
 
-							{/* ################################################################################################# */}
 							{/* ################################################################################################# */}
 						</div>
 					</Stack>

@@ -1,20 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-	// Typography,
-	// Box,
 	Stack,
-	// TextField,
-	// Button,
 	List,
-	//ListItem,
 	ListItemText,
 	ListItemButton,
-	//ListSubheader,
 	Grid,
-	// GridItem,
-	// Card,
-	// CardMedia,
-	// CircularProgress,
 	Collapse,
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
@@ -27,31 +17,14 @@ import {
 	useFieldArray,
 	Controller,
 } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { DevTool } from "@hookform/devtools";
+
 import MenuItem from "./MenuItem";
 import "./Listitem.css";
 
 const OrderDay = ({ weekday }) => {
 	const { control } = useFormContext();
 	const {
-		menuState: {
-			// menus,
-			// prices,
-			selected_menu,
-			// main_recipes,
-			// side_recipes,
-			// vegie_recipes,
-			// salad_recipes,
-			// soup_recipes,
-			// frozen_recipes,
-			// monday,
-			// tuesday,
-			// wednesday,
-			// thursday,
-			// friday,
-			// frozen,
-		},
+		menuState: { selected_menu },
 		dispatch,
 	} = useMenuValue();
 
@@ -60,36 +33,25 @@ const OrderDay = ({ weekday }) => {
 	const [openSalads, setOpenSalads] = React.useState(false);
 	const [openSoups, setOpenSoups] = React.useState(false);
 	const [openSides, setOpenSides] = React.useState(false);
-	// const [openFrozen, setOpenFrozen] = React.useState(false);
-	// const [openPromo, setOpenPromo] = React.useState(false);
-
-	// const [dayMenu, setDayMenu] = useState([null]);
-	//console.log("selectedmenu", record);
 
 	let menuOptions = [];
 	switch (weekday) {
 		case "monday":
-			
 			menuOptions = [...selected_menu[0].monday];
 			break;
 		case "tuesday":
-			
 			menuOptions = [...selected_menu[0].tuesday];
 			break;
 		case "wednesday":
-			
 			menuOptions = [...selected_menu[0].wednesday];
 			break;
 		case "thursday":
-			
 			menuOptions = [...selected_menu[0].thursday];
 			break;
 		case "friday":
-			
 			menuOptions = [...selected_menu[0].friday];
 			break;
 		case "frozen":
-			
 			menuOptions = [...selected_menu[0].frozen];
 			break;
 		default:
@@ -100,8 +62,6 @@ const OrderDay = ({ weekday }) => {
 	const saladsOptions = [...selected_menu[0].salads];
 	const soupsOptions = [...selected_menu[0].soups];
 	const sidesOptions = [...selected_menu[0].sides];
-
-	
 
 	const handleVegiesClick = () => {
 		setOpenVegies(!openVegies);
@@ -115,7 +75,6 @@ const OrderDay = ({ weekday }) => {
 	const handleSidesClick = () => {
 		setOpenSides(!openSides);
 	};
-		
 
 	return (
 		<Grid item xs={12} lg={12}>
@@ -189,8 +148,6 @@ const OrderDay = ({ weekday }) => {
 										})}
 									</List>
 								</Collapse>
-
-								
 							</>
 						)}
 					/>

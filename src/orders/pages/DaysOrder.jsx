@@ -48,7 +48,6 @@ const DaysOrder = ({ weekday, display }) => {
 	};
 
 	function getCount(total, item) {
-		//console.log("getitem in counter", item);
 		return total + item.count;
 	}
 
@@ -101,13 +100,13 @@ const DaysOrder = ({ weekday, display }) => {
 		case "wednesday":
 			dayMeals = menuOrders.flatMap((order) =>
 				order.wednesday.map((item) => ({
-					description: item.description,
 					count: item.count,
 					name: order.customer.name,
 					surname: order.customer.surname,
 				}))
 			);
 			dayMeals.sort(sort_by("description", false, (a) => a.toUpperCase()));
+
 			dayItems = menuOrders.flatMap((order) =>
 				order.wednesday.map((item) => ({
 					name: order.customer.name,
@@ -258,7 +257,6 @@ const DaysOrder = ({ weekday, display }) => {
 														<Typography
 															fontWeight='700'
 															sx={{
-																// mx: "auto",
 																textAlign: "left",
 																p: 0,
 																m: 0,
@@ -271,7 +269,6 @@ const DaysOrder = ({ weekday, display }) => {
 														<Typography
 															fontWeight='500'
 															sx={{
-																// mx: "auto",
 																textAlign: "left",
 																p: 0,
 																m: 0,
@@ -298,7 +295,7 @@ const DaysOrder = ({ weekday, display }) => {
 											filteredItems = filteredItems.filter(
 												(mealItem) => mealItem.description === item.description
 											);
-											//	console.log("Filtered", filteredItems);
+
 											mealCount = filteredItems.reduce(getCount, 0);
 											lastMeal = `${mealCount} * ${item.description}`;
 
@@ -316,7 +313,6 @@ const DaysOrder = ({ weekday, display }) => {
 														<Typography
 															fontWeight='600'
 															sx={{
-																// mx: "auto",
 																textAlign: "left",
 																p: 0,
 																m: 0,
@@ -329,7 +325,6 @@ const DaysOrder = ({ weekday, display }) => {
 														<Typography
 															fontWeight='500'
 															sx={{
-																// mx: "auto",
 																textAlign: "left",
 																p: 0,
 																m: 0,

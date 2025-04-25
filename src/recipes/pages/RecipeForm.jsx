@@ -37,17 +37,8 @@ import FieldInputText from "../../components/controls/FieldInputText";
 import FieldInputTextarea from "../../components/controls/FieldInputTextarea.jsx";
 
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
-import { toast } from "sonner";
 
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-});
+import { toast } from "sonner";
 
 const validationSchema = Yup.object()
 	.shape({
@@ -95,7 +86,6 @@ const validationSchema = Yup.object()
 	.required();
 
 function FormRecipe(props) {
-	const classes = useStyles();
 	const auth = useContext(AuthContext);
 	const [isLoading, setIsLoading] = useState(false);
 	const history = useNavigate();
@@ -187,12 +177,10 @@ function FormRecipe(props) {
 		if (record) {
 			const ingredientsPrice = record.ingredients.reduce(
 				(accumulator, item) => {
-				//	console.log("accumulator", item);
 					return (accumulator += item.ingredient.price * item.qty);
 				},
 				0
 			);
-		//	console.log("ingredientsPrice", ingredientsPrice);
 
 			setRecipeImagePreview(record.image);
 			setUnitCost(ingredientsPrice / record.feeds);
@@ -462,12 +450,7 @@ function FormRecipe(props) {
 									<Stack gap={2}>
 										<Stack direction='row' gap={2}>
 											<div>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
-													Type
-												</InputLabel>
+												<InputLabel sx={{ textAlign: "left" }}>Type</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
 													<FieldInputSelect
 														name='category'
@@ -485,22 +468,18 @@ function FormRecipe(props) {
 												}) => {
 													return (
 														<div>
-															<InputLabel
-																sx={{ textAlign: "left" }}
-																className={classes.label}
-															>
+															<InputLabel sx={{ textAlign: "left" }}>
 																Image
 															</InputLabel>
-															<Box bgcolor='primary.light' p={0}  border= "1px solid">
+															<Box
+																bgcolor='primary.light'
+																p={0}
+																border='1px solid'
+															>
 																<TextField
 																	onChange={(event) => {
 																		onChange(event.target.files[0]);
 																		handelImageChange(event);
-
-																		// console.log(
-																		// 	"onChange",
-																		// 	event.target.files[0]
-																		// );
 																	}}
 																	type='file'
 																	id='image'
@@ -514,7 +493,6 @@ function FormRecipe(props) {
 																		},
 																		width: "120px",
 																		overFlow: "hidden",
-																		// border: "1px solid",
 																	}}
 																/>
 
@@ -543,10 +521,7 @@ function FormRecipe(props) {
 											/>
 
 											<div>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Freezable
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -572,10 +547,7 @@ function FormRecipe(props) {
 										{/* &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& */}
 
 										<div>
-											<InputLabel
-												sx={{ textAlign: "left" }}
-												className={classes.label}
-											>
+											<InputLabel sx={{ textAlign: "left" }}>
 												Recipe Name
 											</InputLabel>
 											<Box bgcolor='primary.light' p={0}>
@@ -583,10 +555,7 @@ function FormRecipe(props) {
 											</Box>
 										</div>
 										<div>
-											<InputLabel
-												sx={{ textAlign: "left" }}
-												className={classes.label}
-											>
+											<InputLabel sx={{ textAlign: "left" }}>
 												Description
 											</InputLabel>
 											<Box bgcolor='primary.light' p={0}>
@@ -596,10 +565,7 @@ function FormRecipe(props) {
 
 										{/* 77777777777777777777777777777777777777777777777777777777777777777777777777777777777     INGREDIENTS */}
 										<div>
-											<InputLabel
-												sx={{ textAlign: "left" }}
-												className={classes.label}
-											>
+											<InputLabel sx={{ textAlign: "left" }}>
 												Ingredients
 											</InputLabel>
 											<RecipeIngredients
@@ -611,10 +577,7 @@ function FormRecipe(props) {
 
 										<Box display='flex' gap={2}>
 											<div style={{ width: "100%" }}>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Instructions
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -629,10 +592,7 @@ function FormRecipe(props) {
 										<Stack direction='row' gap={2}>
 											{/* */}
 											<div>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Servings
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -642,18 +602,13 @@ function FormRecipe(props) {
 														value={servingsCount}
 														onChange={(event) => {
 															setServingsCount(event.target.value);
-
-															//console.log("onChangeFeeds", event.target.value);
 														}}
 														size='small'
 													/>
 												</Box>
 											</div>
 											<div>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Unit Cost
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -665,10 +620,7 @@ function FormRecipe(props) {
 												</Box>
 											</div>
 											<div>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Total Cost
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -680,10 +632,7 @@ function FormRecipe(props) {
 												</Box>
 											</div>
 											<div>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Premium
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -691,10 +640,7 @@ function FormRecipe(props) {
 												</Box>
 											</div>
 											<div>
-												<InputLabel
-													sx={{ textAlign: "left" }}
-													className={classes.label}
-												>
+												<InputLabel sx={{ textAlign: "left" }}>
 													Unit Price
 												</InputLabel>
 												<Box bgcolor='primary.light' p={0}>
@@ -703,10 +649,7 @@ function FormRecipe(props) {
 											</div>
 										</Stack>
 										<div>
-											<InputLabel
-												sx={{ textAlign: "left" }}
-												className={classes.label}
-											>
+											<InputLabel sx={{ textAlign: "left" }}>
 												Website (optional)
 											</InputLabel>
 											<Box bgcolor='primary.light' p={0}>

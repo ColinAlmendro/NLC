@@ -3,38 +3,20 @@ import {
 	Typography,
 	Box,
 	Divider,
-	// Dialog,
-	// DialogTitle,
-	// DialogContent,
-	// DialogContentText,
-	// DialogActions,
 	Container,
 	Paper,
 	Stack,
 	TextField,
 	InputLabel,
 	Button,
-	//IconButton,
 	MenuItem,
-	// FormLabel,
-	// FormControl,
-	// List,
-	// ListItem,
-	// ListItemText,
-	// ListItemButton,
-	// ListSubheader,
 	Tabs,
 	Tab,
 	Grid,
-	// GridItem,
-	// Card,
-	// CardMedia,
 	CircularProgress,
-	//Collapse,
+
 } from "@mui/material";
-// import ExpandLess from "@mui/icons-material/ExpandLess";
-// import ExpandMore from "@mui/icons-material/ExpandMore";
-//import DeleteIcon from "@mui/icons-material/Delete";
+
 import OrderDay from "./OrderDay.jsx";
 import OrderPromotion from "./OrderPromotion.jsx";
 import * as Yup from "yup";
@@ -47,7 +29,7 @@ import Cart from "./Cart";
 import CartContext from "../../shared/context/cart-context";
 import CartList from "./CartList";
 import CartPopup from "./CartPopup.js";
-// import FieldInputTextarea from "./FieldInputTextarea";
+
 
 import {
 	FormProvider,
@@ -60,24 +42,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 
 import "./Listitem.css";
-import { makeStyles } from "@mui/styles";
+
 import { toast } from "sonner";
 
-const useStyles = makeStyles({
-	label: {
-		color: "#212121",
-		"&.Mui-focused": {
-			color: "darkred",
-		},
-	},
-});
+
 
 const validationSchema = Yup.object()
 	.shape({})
 	.required();
 
 function OrdersForm(props) {
-	const classes = useStyles();
+	
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [disableMenu, setDisableMenu] = useState(true);
@@ -283,7 +258,7 @@ function OrdersForm(props) {
 															<>
 																<InputLabel
 																	sx={{ textAlign: "left" }}
-																	className={classes.label}
+																//	className={classes.label}
 																>
 																	Customer
 																</InputLabel>
@@ -336,7 +311,7 @@ function OrdersForm(props) {
 															<>
 																<InputLabel
 																	sx={{ textAlign: "left" }}
-																	className={classes.label}
+																	//className={classes.label}
 																>
 																	Menu
 																</InputLabel>
@@ -391,7 +366,7 @@ function OrdersForm(props) {
 										<Grid item xs={12} lg={12} padding={0}>
 											<InputLabel
 												sx={{ textAlign: "left" }}
-												className={classes.label}
+												//className={classes.label}
 											>
 												Note
 											</InputLabel>

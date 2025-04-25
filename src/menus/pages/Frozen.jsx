@@ -23,8 +23,6 @@ import {
 	useFieldArray,
 	Controller,
 } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import { DevTool } from "@hookform/devtools";
 
 import "./Listitem.css";
 
@@ -268,7 +266,6 @@ const Frozen = ({ weekday }) => {
 												sidename: "",
 												sidedescription: "",
 											}),
-											console.log("appendedmeal", meal),
 											(document.getElementById("dayMainDescInput").value = ""),
 											(document.getElementById("daySideDescInput").value = "");
 									}}
@@ -300,9 +297,6 @@ const Frozen = ({ weekday }) => {
 								},
 								index
 							) => {
-								{
-									/* console.log("List", fields[0]); */
-								}
 								return (
 									<ListItem key={index}>
 										<Grid width='95%'>
@@ -348,7 +342,6 @@ const Frozen = ({ weekday }) => {
 															color='error'
 															type='button'
 															onClick={() => {
-																// console.log("index", id),
 																remove(main),
 																	setMeal({
 																		image: "",
@@ -359,7 +352,6 @@ const Frozen = ({ weekday }) => {
 																		sidename: "",
 																		sidedescription: "",
 																	}),
-																	//	console.log("appendedmeal", meal),
 																	(document.getElementById(
 																		"dayMainDescInput"
 																	).value = ""),
