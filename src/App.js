@@ -46,7 +46,7 @@ const theme = createTheme({
 			light: "#f8324526",
 		},
 		background: {
-			default: "#f7ffbf",
+			default: "#E4E4E4",
 		},
 	},
 	overrides: {
